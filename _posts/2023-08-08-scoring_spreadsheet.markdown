@@ -3,16 +3,14 @@ layout: post
 title:  Scoring Spreadsheet
 date:   2023-08-08 17:40:30 -0500
 category: scioly
+author: lastlegume
+tags: scioly
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
-Jekyll requires blog post files to be named according to the following format:
+A [spreadsheet]() that automates many parts of tournament scoring in Science Olympiad.
 
-`YEAR-MONTH-DAY-title.MARKUP`
+Note: The [spreadsheet made by Chalker](https://sourceforge.net/projects/soscoring/) is similar, is updated to each year's events, and has some unique features, so it is also a good resource to consider for scoring. However, it lacks the template-based automatic award slideshow generation and histogram generation of the Google Sheets spreadsheet shown here. 
 
-Where `YEAR` is a four-digit number, `MONTH` and `DAY` are both two-digit numbers, and `MARKUP` is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.
-
-Jekyll also offers powerful support for code snippets:
 
 {% highlight ruby %}
 def print_hi(name)
@@ -21,9 +19,3 @@ end
 print_hi('Tom')
 #=> prints 'Hi, Tom' to STDOUT.
 {% endhighlight %}
-
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
