@@ -2,6 +2,7 @@
 layout: default
 title: Blog
 permalink: /blog/
+header: true
 ---
 
 # Blog
@@ -15,3 +16,4 @@ permalink: /blog/
     </li>
   {% endfor %}
 </ul>
+

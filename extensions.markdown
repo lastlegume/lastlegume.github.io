@@ -2,6 +2,7 @@
 layout: default
 title: Extensions
 permalink: /extensions/
+header: true
 ---
 
 # My Extensions

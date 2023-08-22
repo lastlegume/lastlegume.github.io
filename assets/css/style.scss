@@ -4,7 +4,7 @@
 @import "{{ site.theme }}";
 
 .extension-link{
-    color: lawngreen;
+    color: #B5E853
 }
 body{
     padding-bottom: 15%;
@@ -12,5 +12,11 @@ body{
 footer{
     color: #B5E853;
     text-align: center;
+}
+header h1:before{
+    content: "";
+}
+header h1{
+    margin: 0 0 0 0px;
 }
 
