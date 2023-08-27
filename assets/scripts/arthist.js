@@ -27,7 +27,7 @@ function check() {
 }
 function readCSV() {
     console.log(this.responseText);
-    identifiers = this.responseText.split("\r\n");
+    identifiers = this.responseText.split("\n");
     identifiers.pop(identifiers.length - 1);
     for (let i = 0; i < identifiers.length; i++) {
         var string = identifiers[i]; 
