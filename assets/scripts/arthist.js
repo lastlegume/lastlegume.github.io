@@ -26,6 +26,7 @@ function check() {
     makeQuestion();
 }
 function readCSV() {
+    console.log(this.responseText);
     identifiers = this.responseText.split("\r\n");
     identifiers.pop(identifiers.length - 1);
     for (let i = 0; i < identifiers.length; i++) {
