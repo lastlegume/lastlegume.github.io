@@ -15,7 +15,7 @@ const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
 
 const request = new XMLHttpRequest();
 request.addEventListener('load', readCSV);
-request.open("GET", "/assets/arthist/arthistidentifiers.csv");
+request.open("GET", "https://lastlegume.github.io/assets/arthist/arthistidentifiers.csv");
 request.send();
 
 function check() {
@@ -71,6 +71,6 @@ function makeQuestion() {
     identifier = Math.floor(Math.random() * (identifiers[0].length - 2)) + 1;
     question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1
-    work.src = "/assets/arthist/artimages/" + identifiers[workIndex][0];
+    work.src = "https://lastlegume.github.io/assets/arthist/artimages/" + identifiers[workIndex][0];
 
 }
