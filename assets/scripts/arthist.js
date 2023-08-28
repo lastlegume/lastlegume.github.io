@@ -21,11 +21,11 @@ request.send();
 function check() {
     if (answer.value.toLowerCase().trim() === identifiers[workIndex][identifier].toLowerCase().trim()){
         reply.textContent = "Correct! The " + identifiers[0][identifier].toLowerCase() + " of " + identifiers[workIndex][1] + " is " + identifiers[workIndex][identifier] + ".";
-        reply.style.setProperty('background-color', 'palegreen');
+        reply.style.setProperty('background-color', 'darkseagreen');
     }
     else{
         reply.textContent = "Incorrect. The " + identifiers[0][identifier].toLowerCase() + " of " + identifiers[workIndex][1] + " is " + identifiers[workIndex][identifier] + ".";
-        reply.style.setProperty('background-color', 'lightcoral');
+        reply.style.setProperty('background-color', 'crimson');
     }
 
     makeQuestion();
