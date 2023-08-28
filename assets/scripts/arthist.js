@@ -98,7 +98,7 @@ function equals(one, two){
             dateLimits[1] = dateLimits[1].trim().substring(0, dateLimits[1].length-3);  
             ce = false;
         }
-        return (dateLimits[0]<=one&&one<=dateLimits[1])&&(ce||one.trim().substring(one.length-3).toLowerCase()==="bce");
+        return (dateLimits[0]<=one.substring(0, one.length-3).trim()*1&&one.substring(0, one.length-3).trim()*1<=dateLimits[1])&&(ce||one.trim().substring(one.length-3).toLowerCase()==="bce");
     
     }
     return one===two;
