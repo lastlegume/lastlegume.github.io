@@ -75,7 +75,6 @@ function makeQuestion() {
     var unit = Math.floor(Math.random() * units.length);
     //does nothing right now, will be added once more than one unit is in the system
     identifier = Math.floor(Math.random() * (identifiers[0].length - 2)) + 1;
-    identifier = 3;
     question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1
     work.src = "https://lastlegume.github.io/assets/arthist/artimages/" + identifiers[workIndex][0];
@@ -87,16 +86,20 @@ function equals(one, two){
     if(identifier==3){
         if(two.split("-").length==1)
             return one===two;
-        if(one.substring(one.length-3)==="bce")
-            one = "-"+one.substring(0, one.length-3);
-        if(two.substring(two.length-3)==="bce")
-            two = "-"+two.substring(0, two.length-3);
-        if(!range.checked||one.split("-").length==3){
-            
+
+        if(one.substring(0,1)==="-")
+            one = one.substring(1).trim()+" bce";
+        if(!range.checked||one.split("-").length==2){
             return one===two;
         }
-        var dateLimits = two.substring((two.substring(0,1)==="-")?1:0).split("-");
-        return dateLimits[0]*(two.substring(0,1)==="-"?-1:1)<=one&&one<=dateLimits[1]*(two.substring(0,1)==="-"?-1:1);
+        var dateLimits = two.split("-");
+        var ce = true;
+        if(dateLimits[1].substring(dateLimits[1].length-3).trim().toLowerCase()==="bce"){
+            dateLimits[1] = dateLimits[1].trim().substring(0, dateLimits[1].length-3);  
+            ce = false;
+        }
+        return (dateLimits[0]<=one&&one<=dateLimits[1])&&(ce||one.trim().substring(one.length-3).toLowerCase()==="bce");
+    
     }
     return one===two;
 }
