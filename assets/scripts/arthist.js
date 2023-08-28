@@ -6,7 +6,7 @@ var identifiers = [];
 const work = document.getElementById("work");
 const question = document.getElementById("question");
 const answer = document.getElementById("answer");
-const reply = document.getElementById("response");
+var reply = document.getElementById("response");
 
 var workIndex = 0;
 var identifier = "";
@@ -19,14 +19,20 @@ request.open("GET", "https://lastlegume.github.io/assets/arthist/arthistidentifi
 request.send();
 
 function check() {
-    if (answer.value.toLowerCase().trim() === identifiers[workIndex][identifier].toLowerCase().trim())
+    if (answer.value.toLowerCase().trim() === identifiers[workIndex][identifier].toLowerCase().trim()){
         reply.textContent = "Correct! The " + identifiers[0][identifier].toLowerCase() + " of " + identifiers[workIndex][1] + " is " + identifiers[workIndex][identifier] + ".";
-    else
+        reply.style.setProperty('color', 'palegreen');
+    }
+    else{
+        reply.style.setProperty('color', 'lightcoral');
+
         reply.textContent = "Incorrect. The " + identifiers[0][identifier].toLowerCase() + " of " + identifiers[workIndex][1] + " is " + identifiers[workIndex][identifier] + ".";
+    }
+    reply.style.setProperty('color', 'lightcoral');
+
     makeQuestion();
 }
 function readCSV() {
-    console.log(this.responseText);
     identifiers = this.responseText.split("\n");
     identifiers.pop(identifiers.length - 1);
     for (let i = 0; i < identifiers.length; i++) {
@@ -49,7 +55,6 @@ function readCSV() {
             }
         }
     }
-    console.log(identifiers);
     makeQuestion();
 
     //  console.log(identifiers);
