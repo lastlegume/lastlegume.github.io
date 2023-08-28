@@ -85,14 +85,17 @@ function equals(one, two){
     if(strict.checked)
         return one===two;
     if(identifier==3){
+        if(two.split("-").length==1)
+            return one===two;
         if(one.substring(one.length-3)==="bce")
             one = "-"+one.substring(0, one.length-3);
         if(two.substring(two.length-3)==="bce")
             two = "-"+two.substring(0, two.length-3);
-        if(!range.checked||one.split("-").length==3)
+        if(!range.checked||one.split("-").length==3){
+            
             return one===two;
-        
-        var dateLimits = two.substring(1).split("-");
+        }
+        var dateLimits = two.substring((two.substring(0,1)==="-")?1:0).split("-");
         return dateLimits[0]*(two.substring(0,1)==="-"?-1:1)<=one&&one<=dateLimits[1]*(two.substring(0,1)==="-"?-1:1);
     }
     return one===two;
