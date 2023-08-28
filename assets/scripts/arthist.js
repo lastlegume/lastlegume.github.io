@@ -6,7 +6,9 @@ var identifiers = [];
 const work = document.getElementById("work");
 const question = document.getElementById("question");
 const answer = document.getElementById("answer");
-var reply = document.getElementById("response");
+var reply = document.getElementById("reply");
+var strict = document.getElementById("strict");
+var range = document.getElementById("range");
 
 var workIndex = 0;
 var identifier = "";
@@ -19,7 +21,7 @@ request.open("GET", "https://lastlegume.github.io/assets/arthist/arthistidentifi
 request.send();
 
 function check() {
-    if (answer.value.toLowerCase().trim() === identifiers[workIndex][identifier].toLowerCase().trim()){
+    if (equals(answer.value.toLowerCase().trim(), identifiers[workIndex][identifier].toLowerCase().trim())){
         reply.textContent = "Correct! The " + identifiers[0][identifier].toLowerCase() + " of " + identifiers[workIndex][1] + " is " + identifiers[workIndex][identifier] + ".";
         reply.style.setProperty('background-color', 'darkseagreen');
     }
@@ -73,8 +75,25 @@ function makeQuestion() {
     var unit = Math.floor(Math.random() * units.length);
     //does nothing right now, will be added once more than one unit is in the system
     identifier = Math.floor(Math.random() * (identifiers[0].length - 2)) + 1;
+    identifier = 3;
     question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1
     work.src = "https://lastlegume.github.io/assets/arthist/artimages/" + identifiers[workIndex][0];
 
+}
+function equals(one, two){
+    if(strict.checked)
+        return one===two;
+    if(identifier==3){
+        if(one.substring(one.length-3)==="bce")
+            one = "-"+one.substring(0, one.length-3);
+        if(two.substring(two.length-3)==="bce")
+            two = "-"+two.substring(0, two.length-3);
+        if(!range.checked||one.split("-").length==3)
+            return one===two;
+        
+        var dateLimits = two.substring(1).split("-");
+        return dateLimits[0]*(two.substring(0,1)==="-"?-1:1)<=one&&one<=dateLimits[1]*(two.substring(0,1)==="-"?-1:1);
+    }
+    return one===two;
 }
