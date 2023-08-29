@@ -19,9 +19,9 @@ const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
 
 const request = new XMLHttpRequest();
 request.addEventListener('load', readCSV);
-request.open("GET", "https://lastlegume.github.io/assets/arthist/arthistidentifiers.csv");
+request.open("GET", "/assets/arthist/arthistidentifiers.csv");
 request.send();
-
+//https://lastlegume.github.io
 function check() {
     if (equals(answer.value.toLowerCase().trim(), identifiers[workIndex][identifier].toLowerCase().trim())){
         reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of " + identifiers[workIndex][1] + " is " + identifiers[workIndex][identifier] + ".";
@@ -83,11 +83,12 @@ function makeQuestion() {
     if (ids.length == 0)
         ids.push(1);
     identifier = ids[Math.floor(Math.random() * ids.length)];
+    console.log(identifier);
     //identifier = Math.floor(Math.random() * (identifiers[0].length - 2)) + 1;
     question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1
-    work.src = "https://lastlegume.github.io/assets/arthist/artimages/" + identifiers[workIndex][0];
-
+    work.src = "/assets/arthist/artimages/" + identifiers[workIndex][0];
+//https://lastlegume.github.io
 }
 function equals(one, two){
     if(strict.checked)
