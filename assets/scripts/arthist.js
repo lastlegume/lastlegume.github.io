@@ -73,8 +73,7 @@ function makeQuestion() {
     //pick a random period
     if (units.length == 0)
         units.push(1);
-    var unit = units[Math.floor(Math.random() * units.length)];
-    //does nothing right now, will be added once more than one unit is in the system
+    //var unit = units[Math.floor(Math.random() * units.length)];
     var ids = [];
     for (let i = 0; i < idBoxes.length; i++) {
         if (idBoxes[i].checked)
@@ -85,9 +84,10 @@ function makeQuestion() {
     identifier = ids[Math.floor(Math.random() * ids.length)];
     //identifier = Math.floor(Math.random() * (identifiers[0].length - 2)) + 1;
     question.textContent = identifiers[0][identifier] + "?";
-    workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1
+    workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
+    while(!contains(units, identifiers[workIndex][identifiers[workIndex].length-1]))
+        workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
     work.src = "/assets/arthist/artimages/" + identifiers[workIndex][0];
-//https://lastlegume.github.io
 }
 function equals(one, two){
     if(strict.checked)
@@ -128,4 +128,11 @@ function betweenRange(ones, twos, inmiddle){
     if(inmiddle&&twos.length==2)
         return ones[0]<=twos[1]&&ones[0]>=twos[0]&&((ones.length==1)||(ones[1]<=twos[1]&&ones[1]>=twos[0]));
     return ones[0]==twos[0]&&((ones.length==1)||ones[1]==twos[1]);
+}
+function contains(arr, val){
+    arr.forEach(element => {
+        if(element===val)
+            return true;
+    });
+    return false;
 }
