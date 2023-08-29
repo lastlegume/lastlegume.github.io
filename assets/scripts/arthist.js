@@ -84,22 +84,38 @@ function equals(one, two){
     if(strict.checked)
         return one===two;
     if(identifier==3){
-        if(two.split("-").length==1)
-            return one===two;
-
-        if(one.substring(0,1)==="-")
-            one = one.substring(1).trim()+" bce";
-        if(!range.checked||one.split("-").length==2){
-            return one===two;
+        one = one.trim();
+        var dateIsBCE = two.trim().substring(two.length-3).toLowerCase()==="bce";
+        if((one.substring(one.length-3).toLowerCase()==="bce"||one.substring(0,1)==="-")==(dateIsBCE)){
+            if(one===two)
+                return true;
+            if(dateIsBCE){
+                if(one.substring(0,1)==="-")
+                one = one.substring(1);
+                if(one.substring(one.length-3).toLowerCase()==="bce")
+                one = one.substring(0,one.length-3).trim();
+                two = two.substring(0,two.length-3).trim();
+                
+            }
+           return betweenRange(one.split(','), two.split(','), range.checked);
+            
         }
-        var dateLimits = two.split("-");
-        var ce = true;
-        if(dateLimits[1].substring(dateLimits[1].length-3).trim().toLowerCase()==="bce"){
-            dateLimits[1] = dateLimits[1].trim().substring(0, dateLimits[1].length-3);  
-            ce = false;
-        }
-        return (dateLimits[0]<=one.substring(0, one.length-3).trim()*1&&one.substring(0, one.length-3).trim()*1<=dateLimits[1])&&(ce||one.trim().substring(one.length-3).toLowerCase()==="bce");
-    
+        else
+            return false;    
     }
     return one===two;
+}
+function betweenRange(ones, twos, inmiddle){
+    
+    for(let i = 0;i<Math.max(ones.length, twos.length); i++){
+        if(i<ones.length)
+            ones[i] = ones[i].trim()*1;
+        if(i<twos.length)
+            twos[i] = twos[i].trim()*1;
+    }
+    ones.sort();
+    twos.sort();
+    if(inmiddle&&twos.length==2)
+        return ones[0]<=twos[1]&&ones[0]>=twos[0]&&((ones.length==1)||(ones[1]<=twos[1]&&ones[1]>=twos[0]));
+    return ones[0]==twos[0]&&((ones.length==1)||ones[1]==twos[1]);
 }
