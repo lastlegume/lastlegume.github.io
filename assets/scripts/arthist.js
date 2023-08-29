@@ -13,6 +13,8 @@ var range = document.getElementById("range");
 var workIndex = 0;
 var identifier = "";
 const unitBoxes = document.getElementsByClassName("unit-checkbox");
+const idBoxes = document.getElementsByClassName("identifier-checkbox");
+
 const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
 
 const request = new XMLHttpRequest();
@@ -22,7 +24,7 @@ request.send();
 
 function check() {
     if (equals(answer.value.toLowerCase().trim(), identifiers[workIndex][identifier].toLowerCase().trim())){
-        reply.textContent = "Correct! The " + identifiers[0][identifier].toLowerCase() + " of " + identifiers[workIndex][1] + " is " + identifiers[workIndex][identifier] + ".";
+        reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of " + identifiers[workIndex][1] + " is " + identifiers[workIndex][identifier] + ".";
         reply.style.setProperty('background-color', 'darkseagreen');
     }
     else{
@@ -64,17 +66,24 @@ function makeQuestion() {
     answer.value="";
     //make checkboxes of class period and then iterate through with for loop. for each that is true, add i+1 to the list
     var units = [];
-    //unitBoxes.length
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < unitBoxes.length; i++) {
         if (unitBoxes[i].checked)
             units.push(i + 1);
     }
     //pick a random period
     if (units.length == 0)
         units.push(1);
-    var unit = Math.floor(Math.random() * units.length);
+    var unit = units[Math.floor(Math.random() * units.length)];
     //does nothing right now, will be added once more than one unit is in the system
-    identifier = Math.floor(Math.random() * (identifiers[0].length - 2)) + 1;
+    var ids = [];
+    for (let i = 0; i < idBoxes.length; i++) {
+        if (idBoxes[i].checked)
+            ids.push(i+1);
+    }
+    if (ids.length == 0)
+        ids.push(1);
+    identifier = ids[Math.floor(Math.random() * ids.length)];
+    //identifier = Math.floor(Math.random() * (identifiers[0].length - 2)) + 1;
     question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1
     work.src = "https://lastlegume.github.io/assets/arthist/artimages/" + identifiers[workIndex][0];
