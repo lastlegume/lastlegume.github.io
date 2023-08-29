@@ -85,8 +85,11 @@ function makeQuestion() {
     //identifier = Math.floor(Math.random() * (identifiers[0].length - 2)) + 1;
     question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
-    while(!contains(units, identifiers[workIndex][identifiers[workIndex].length-1]))
+    let n = 0;
+    while(!contains(units, identifiers[workIndex][identifiers[workIndex].length-1])&&n<100){
         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
+        n++;
+    }
     work.src = "/assets/arthist/artimages/" + identifiers[workIndex][0];
 }
 function equals(one, two){
@@ -129,10 +132,11 @@ function betweenRange(ones, twos, inmiddle){
         return ones[0]<=twos[1]&&ones[0]>=twos[0]&&((ones.length==1)||(ones[1]<=twos[1]&&ones[1]>=twos[0]));
     return ones[0]==twos[0]&&((ones.length==1)||ones[1]==twos[1]);
 }
-function contains(arr, val){
-    arr.forEach(element => {
-        if(element===val)
-            return true;
-    });
-    return false;
-}
+    function contains(arr, val){
+        var bool = false;
+        arr.forEach(element => {
+            if(element===val)
+                bool = true;
+        });
+        return bool;
+    }
