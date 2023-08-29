@@ -24,11 +24,11 @@ request.send();
 //https://lastlegume.github.io
 function check() {
     if (equals(answer.value.toLowerCase().trim(), identifiers[workIndex][identifier].toLowerCase().trim())){
-        reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of " + identifiers[workIndex][1] + " is " + identifiers[workIndex][identifier] + ".";
+        reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + identifiers[workIndex][1] + "</span> is <span style = \"color: forestgreen;\">" + identifiers[workIndex][identifier] + "</span>.";
         reply.style.setProperty('background-color', 'darkseagreen');
     }
     else{
-        reply.textContent = "Incorrect. The " + identifiers[0][identifier].toLowerCase() + " of " + identifiers[workIndex][1] + " is " + identifiers[workIndex][identifier] + ".";
+        reply.innerHTML = "Incorrect. The <span style = \"color: lightsalmon;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: lightsalmon;\">" + identifiers[workIndex][1] + "</span> is <span style = \"color: lightsalmon;\">" + identifiers[workIndex][identifier] + "</span>.";
         reply.style.setProperty('background-color', 'crimson');
     }
 
@@ -83,7 +83,6 @@ function makeQuestion() {
     if (ids.length == 0)
         ids.push(1);
     identifier = ids[Math.floor(Math.random() * ids.length)];
-    console.log(identifier);
     //identifier = Math.floor(Math.random() * (identifiers[0].length - 2)) + 1;
     question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1
@@ -105,9 +104,9 @@ function equals(one, two){
                 if(one.substring(one.length-3).toLowerCase()==="bce")
                 one = one.substring(0,one.length-3).trim();
                 two = two.substring(0,two.length-3).trim();
-                
+                // console.log(one+" "+two);
             }
-           return betweenRange(one.split(','), two.split(','), range.checked);
+           return betweenRange(one.split('-'), two.split('-'), range.checked);
             
         }
         else
@@ -125,6 +124,7 @@ function betweenRange(ones, twos, inmiddle){
     }
     ones.sort();
     twos.sort();
+    // console.log(ones+" "+twos);
     if(inmiddle&&twos.length==2)
         return ones[0]<=twos[1]&&ones[0]>=twos[0]&&((ones.length==1)||(ones[1]<=twos[1]&&ones[1]>=twos[0]));
     return ones[0]==twos[0]&&((ones.length==1)||ones[1]==twos[1]);
