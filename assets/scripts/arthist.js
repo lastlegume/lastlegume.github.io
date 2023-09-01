@@ -43,7 +43,7 @@ function readCSV() {
     identifiers.pop(identifiers.length - 1);
     for (let i = 0; i < identifiers.length; i++) {
         var string = identifiers[i].replaceAll("\r", "");
-        console.log(string);
+        // console.log(string);
         identifiers[i] = [];
         var start = 0;
         for (let j = 0; j < string.length; j++) {
@@ -72,11 +72,19 @@ function makeQuestion() {
     answer.value = "";
     //make checkboxes of class period and then iterate through with for loop. for each that is true, add i+1 to the list
     var units = [];
-    for (let i = 0; i < unitBoxes.length; i++) {
-        if (unitBoxes[i].checked)
-            units.push(i + 1);
+    if (allWorks.checked) {
+        var workboxes = document.getElementsByClassName("workboxes");
+        for (let i = 0; i < workboxes.length; i++) {
+            if (workboxes[i].checked)
+                units.push(i+1);
+        }  
+    } else {
+        for (let i = 0; i < unitBoxes.length; i++) {
+            if (unitBoxes[i].checked)
+                units.push(i + 1);
+        }        
     }
-    //pick a random period
+    // console.log(units);
     if (units.length == 0)
         units.push(1);
     //var unit = units[Math.floor(Math.random() * units.length)];
@@ -92,7 +100,7 @@ function makeQuestion() {
     question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
     let n = 0;
-    while (!contains(units, identifiers[workIndex][identifiers[workIndex].length - 1]) && n < 100) {
+    while (!(allWorks.checked?contains(units, workIndex):contains(units, identifiers[workIndex][identifiers[workIndex].length - 1])) && n < 100) {
         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
         n++;
     }
@@ -152,20 +160,19 @@ function process(event) {
     if (event.key === "Enter")
         check();
 }
-function showAllWorks(){
-     var workDivs = document.getElementsByClassName("workDivs");
-     if(workDivs.length>=identifiers.length-1){
-         for(let i = 0;i<workDivs.length;i++)
-            workDivs[i].className = "workDivs"+(allWorks.checked?"":" hide");
+function showAllWorks() {
+    var workDivs = document.getElementsByClassName("workDivs");
+    if (workDivs.length >= identifiers.length - 1) {
+        for (let i = 0; i < workDivs.length; i++)
+            workDivs[i].className = "workDivs" + (allWorks.checked ? "" : " hide");
         return;
     }
     var lengthOfIdentifiers = identifiers[0].length;
-    console.log(identifiers);
-    for(let i = 1;i<identifiers.length;i++){
+    for (let i = 1; i < identifiers.length; i++) {
         let tempDiv = document.createElement("div");
         tempDiv.className = "workDivs";
-        let tempUnit = identifiers[i][lengthOfIdentifiers-1]-1;
-        tempDiv.innerHTML = "<label><input type=\"checkbox\" class = \"workboxes\""+(unitBoxes[tempUnit].checked?" checked":"")+"> "+identifiers[i][1]+" </label>";
+        let tempUnit = identifiers[i][lengthOfIdentifiers - 1] - 1;
+        tempDiv.innerHTML = "<label><input type=\"checkbox\" class = \"workboxes\"" + (unitBoxes[tempUnit].checked ? " checked" : "") + "> " + identifiers[i][1] + " </label>";
         unitDivs[tempUnit].appendChild(tempDiv);
     }
 }
