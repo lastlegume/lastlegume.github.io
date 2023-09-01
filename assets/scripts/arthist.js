@@ -84,7 +84,7 @@ function makeQuestion() {
                 units.push(i + 1);
         }        
     }
-    // console.log(units);
+    //console.log(units);
     if (units.length == 0)
         units.push(1);
     //var unit = units[Math.floor(Math.random() * units.length)];
@@ -100,10 +100,14 @@ function makeQuestion() {
     question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
     let n = 0;
-    while (!(allWorks.checked?contains(units, workIndex):contains(units, identifiers[workIndex][identifiers[workIndex].length - 1])) && n < 100) {
+    let unitIDlistIndex = identifiers[0].length - 1;
+    while (!((allWorks.checked&&contains(units, workIndex*1))||(!allWorks.checked&&contains(units, identifiers[workIndex][unitIDlistIndex]*1))) && n < 100) {
         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
         n++;
     }
+    // console.log(identifiers[workIndex][unitIDlistIndex]);
+    // console.log((contains(units, identifiers[workIndex][unitIDlistIndex]*1)));
+
     let path = identifiers[workIndex][0].split("/");
     work.src = "/assets/arthist/artimages/" + path[Math.floor(Math.random() * path.length)];
 }
