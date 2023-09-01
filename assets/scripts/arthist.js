@@ -1,5 +1,7 @@
 const checkButton = document.getElementById("checkIdentifier");
 checkButton.addEventListener('click', () => check());
+const allWorks = document.getElementById("allWorks");
+allWorks.addEventListener('change', () => showAllWorks())
 
 var identifiers = [];
 
@@ -13,11 +15,12 @@ var range = document.getElementById("range");
 var workIndex = 0;
 var identifier = "";
 const unitBoxes = document.getElementsByClassName("unit-checkbox");
+const unitDivs = document.getElementsByClassName("unit-div");
 const idBoxes = document.getElementsByClassName("identifier-checkbox");
 
 const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
 
-answer.addEventListener("keydown", (e)=>process(e));
+answer.addEventListener("keydown", (e) => process(e));
 const request = new XMLHttpRequest();
 request.addEventListener('load', readCSV);
 request.open("GET", "/assets/arthist/arthistidentifiers.csv");
@@ -39,7 +42,8 @@ function readCSV() {
     identifiers = this.responseText.split("\n");
     identifiers.pop(identifiers.length - 1);
     for (let i = 0; i < identifiers.length; i++) {
-        var string = identifiers[i];
+        var string = identifiers[i].replaceAll("\r", "");
+        console.log(string);
         identifiers[i] = [];
         var start = 0;
         for (let j = 0; j < string.length; j++) {
@@ -57,6 +61,7 @@ function readCSV() {
                 }
             }
         }
+        identifiers[i].push(string.substring(start));
     }
     makeQuestion();
 
@@ -91,7 +96,8 @@ function makeQuestion() {
         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
         n++;
     }
-    work.src = "/assets/arthist/artimages/" + identifiers[workIndex][0];
+    let path = identifiers[workIndex][0].split("/");
+    work.src = "/assets/arthist/artimages/" + path[Math.floor(Math.random() * path.length)];
 }
 function equals(one, two) {
     if (strict.checked)
@@ -142,7 +148,24 @@ function contains(arr, val) {
     return bool;
 }
 function process(event) {
-   // console.log(event.key);
-    if(event.key==="Enter")
+    // console.log(event.key);
+    if (event.key === "Enter")
         check();
+}
+function showAllWorks(){
+     var workDivs = document.getElementsByClassName("workDivs");
+     if(workDivs.length>=identifiers.length-1){
+         for(let i = 0;i<workDivs.length;i++)
+            workDivs[i].className = "workDivs"+(allWorks.checked?"":" hide");
+        return;
+    }
+    var lengthOfIdentifiers = identifiers[0].length;
+    console.log(identifiers);
+    for(let i = 1;i<identifiers.length;i++){
+        let tempDiv = document.createElement("div");
+        tempDiv.className = "workDivs";
+        let tempUnit = identifiers[i][lengthOfIdentifiers-1]-1;
+        tempDiv.innerHTML = "<label><input type=\"checkbox\" class = \"workboxes\""+(unitBoxes[tempUnit].checked?" checked":"")+"> "+identifiers[i][1]+" </label>";
+        unitDivs[tempUnit].appendChild(tempDiv);
+    }
 }

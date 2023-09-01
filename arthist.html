@@ -3,74 +3,117 @@ permalink: /arthist
 layout: default
 ---
 
-<script defer src = "assets/scripts/arthist.js"></script>
+<script defer src="assets/scripts/arthist.js"></script>
 <style type="text/css" media="screen">
-    .settings{
-        z-index: 1;
-        position: relative;
-        background-color: rgb(56, 56, 56);
-        padding: 10px;
-        overflow: hidden;
-        font-size: smaller;
-    }
-    h1, h2{
-      margin: 30px 0;
-      font-size: 4em;
-      line-height: 1;
-      letter-spacing: -1px;
-      color: darkgoldenrod;
-    }
-    h5{
-      color: goldenrod;
-    }
-    #reply{
-      padding-top: 20px;
-      padding-bottom: 20px;
-      padding: 5px;
-      outline: 1px black;
-    }
-    img{
-      max-height: 300px;
-      min-height: 300px;
-    }
-    
-    
-  </style>
-  
-  <div class="container">
-    
-    <h1>Art History ID</h1>
-    
-    <p>This will quiz you on the identifiers of the 250 works needed for AP art history. All images are from the 250 images selected by the College Board. </p>
+  .settings {
+    z-index: 1;
+    position: relative;
+    background-color: rgb(56, 56, 56);
+    padding: 10px;
+    overflow: hidden;
+    font-size: smaller;
+  }
 
-    <img id = "work" ><br>
-    <div id = "question"></div><input id = "answer" type="text"> <button id = "checkIdentifier">Check</button>
-    <p id = "reply"></p>
-        
-   
-  </div>
-  <div class = "settings"><h2>Settings</h2>
-    <h5>Units (only unit 1 supported right now)</h5>
-    <label><input type="checkbox" class = "unit-checkbox" checked> Unit 1: Global Prehistory, 30,000–500 BCE </label><br>
-    <label hidden><input type="checkbox" class = "unit-checkbox" checked> Unit 2: Ancient Mediterranean, 3500 BCE–300 CE </label><br>
-    <label hidden><input type="checkbox" class = "unit-checkbox" checked> Unit 3: Early Europe and Colonial Americas, 200–1750 CE </label><br>
-    <label hidden><input type="checkbox" class = "unit-checkbox" checked> Unit 4: Later Europe and Americas, 1750–1980 CE </label><br>
-    <label hidden><input type="checkbox" class = "unit-checkbox" checked> Unit 5: Indigenous Americas, 1000 BCE–1980 CE </label><br>
-    <label hidden><input type="checkbox" class = "unit-checkbox" checked> Unit 6: Africa, 1100–1980 CE </label><br>
-    <label hidden><input type="checkbox" class = "unit-checkbox" checked> Unit 7: West and Central Asia, 500 BCE–1980 CE </label><br>
-    <label hidden><input type="checkbox" class = "unit-checkbox" checked> Unit 8: South, East, and Southeast Asia, 300 BCE–1980 CE </label><br>
-    <label hidden><input type="checkbox" class = "unit-checkbox" checked> Unit 9: The Pacific, 700-1980 C.E. </label><br>
-    <label hidden><input type="checkbox" class = "unit-checkbox" checked> Unit 10: Global Contemporary, 1980 C.E. to Present </label>
-    <h5>Identifiers</h5>
-    <label><input type="checkbox" class = "identifier-checkbox" checked> Title </label><br>
-    <label><input type="checkbox" class = "identifier-checkbox" checked> Author </label><br>
-    <label><input type="checkbox" class = "identifier-checkbox" checked> Date </label><br>
-    <label><input type="checkbox" class = "identifier-checkbox" checked> Period </label><br>
-    <label><input type="checkbox" class = "identifier-checkbox" checked> Culture of Origin </label><br>
-    <label><input type="checkbox" class = "identifier-checkbox" checked> Materials </label>
-    <h5>Other settings</h5>
-    <label><input type="checkbox" id = "strict"> Strict spelling </label><br>
-    <label><input type="checkbox" id = "range"> Allow any year within the range of years </label><br>
-  </div>
-  
-  
+  h1,
+  h2 {
+    margin: 30px 0;
+    font-size: 4em;
+    line-height: 1;
+    letter-spacing: -1px;
+    color: darkgoldenrod;
+    padding-bottom: 5px;
+  }
+
+  h5 {
+    color: goldenrod;
+    padding-top: 5px;
+  }
+
+  #reply {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding: 5px;
+    outline: 1px black;
+  }
+  .workDivs{
+    padding-left: 10px;
+    font-size: x-small;
+  }
+
+  .hide {
+    display: none;
+    font-size: 0;
+  }
+
+  img {
+    max-height: 300px;
+    min-height: 300px;
+  }
+
+  br.hide {
+    display: none;
+  }
+</style>
+
+<div class="container">
+
+  <h1>Art History ID</h1>
+
+  <p>This will quiz you on the identifiers of the 250 works needed for AP art history. All images are from the 250
+    images selected by the College Board. </p>
+
+  <img id="work"><br>
+  <div id="question"></div><input id="answer" type="text"> <button id="checkIdentifier">Check</button>
+  <p id="reply"></p>
+
+
+</div>
+<div class="settings">
+  <h2>Settings</h2>
+  <h5>Units <label><input type="checkbox" id="allWorks"> Show individual works </label></h5>
+  <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 1: Global Prehistory,
+      30,000–500 BCE </label></div>
+  <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 2: Ancient Mediterranean, 3500
+      BCE–300 CE</label></div>
+  <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 3:
+      Early Europe and Colonial
+      Americas,
+      200–1750 CE </label></div>
+  <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 4:
+      Later Europe and Americas,
+      1750–1980 CE
+    </label></div>
+  <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit
+    5: Indigenous Americas, 1000
+    BCE–1980 CE
+  </label>
+</div>
+<div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 6:
+    Africa, 1100–1980 CE
+  </label></div>
+<div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 7: West
+    and Central Asia, 500
+    BCE–1980 CE
+  </label></div>
+<div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 8: South,
+    East, and Southeast
+    Asia, 300
+    BCE–1980 CE </label></div>
+<div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 9: The
+    Pacific, 700-1980 C.E.
+  </label></div>
+<div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 10:
+    Global Contemporary, 1980 C.E.
+    to Present
+  </label></div>
+<h5>Identifiers</h5>
+<label><input type="checkbox" class="identifier-checkbox" checked> Title </label><br>
+<label><input type="checkbox" class="identifier-checkbox" checked> Author </label><br>
+<label><input type="checkbox" class="identifier-checkbox" checked> Date </label><br>
+<label><input type="checkbox" class="identifier-checkbox" checked> Period </label><br>
+<label><input type="checkbox" class="identifier-checkbox" checked> Culture of Origin </label><br>
+<label><input type="checkbox" class="identifier-checkbox" checked> Materials </label>
+<h5>Other settings</h5>
+<label><input type="checkbox" id="strict"> Strict spelling </label><br>
+<label><input type="checkbox" id="range"> Allow any year within the range of years </label><br>
+</div>

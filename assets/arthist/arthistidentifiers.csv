@@ -1,12 +1,21 @@
-﻿File,Title,Name of Author,Date,Period,Culture of Origin,Materials,Size,Unit
-1.jpg,Apollo 11 Stones,Unknown,25500-25300 bce,Paleolithic,Namibia,Charcoal on stone,"4.5h,5w",1
-2.jpg,Great Hall of the Bulls,Unknown,15000-13000 bce,Paleolithic,"Lascaux, France",Rock Painting,,1
-3.jpg,Camelid Sacrum in the shape of a Canine,Unknown,14000-7000 bce,Paleolithic,"Tequixquiac, Central Mexico",Bone,,1
-4.jpg,Running Horned Woman,Unknown,6000-4000 bce,Neolithic,"Tassili n""Ajjer, Algeria",Pigment on Stone,,1
-5.webp,Beaker with ibex motifs,Unknown,4200-3500 bce,Neolithic,"Susa, Iran",Painted Terracotta,12h,1
-6.jpg,Anthropomorphic stele,Unknown,3900-3000 bce,Neolithic,Arabian Peninsula,Sandstone,3h,1
-7.jpg,Jade Cong,Unknown,3300-2200 bce,Neolithic,"Liangzhu, China",Jade,,1
-8.jpg,Stonehenge,Unknown,2500-1600 bce,Neolithic,"Wiltshire, United Kingdom",Sandstone,97diameter,1
-9.jpg,The Ambum Stone,Unknown,1500 bce,Bronze Age,"Ambum Valley, Enga Province, Papua New Guinea",Greywacke (stone),4h,1
-10.jpg,Tlatilco female figurine,Unknown,1200-900 bce,Bronze Age,"Central Mexico, site of Tlatilco",Ceramic,3.5h,1
-11.jpg,Lapita Terra Cotta Fragment,Unknown,1000 bce,Bronze Age,"Solomon Islands, Reef Islands",Terracotta,3h,1
+﻿File,Title,Name of Author,Period,Date,Culture of Origin,Materials,Unit
+1.jpg,Apollo 11 Stones,Unknown,Paleolithic,25500-25300 BCE,Namibia,Charcoal on stone,1
+2.png,Great Hall of the Bulls,Unknown,Paleolithic,15000-13000 BCE,"Lascaux, France",Rock Painting,1
+3.png,Camelid Sacrum in the shape of a Canine,Unknown,Paleolithic,14000-7000 BCE,"Tequixquiac, Central Mexico",Bone,1
+4.jpg,Running Horned Woman,Unknown,Neolithic,6000-4000 BCE,"Tassili n""Ajjer, Algeria",Pigment on Stone,1
+5.png,Beaker with ibex motifs,Unknown,Neolithic,4200-3500 BCE,"Susa, Iran",Painted Terracotta,1
+6.jpg,Anthropomorphic stele,Unknown,Neolithic,3900-3000 BCE,Arabian Peninsula,Sandstone,1
+7.jpg,Jade Cong,Unknown,Neolithic,3300-2200 BCE,"Liangzhu, China",Jade,1
+8a.png/8b.png/8c.jpg,Stonehenge,Unknown,Neolithic,2500-1600 BCE,"Wiltshire, United Kingdom",Sandstone,1
+9.jpg,The Ambum Stone,Unknown,Bronze Age,1500 BCE,"Ambum Valley, Enga Province, Papua New Guinea",Greywacke (stone),1
+10.jpg,Tlatilco female figurine,Unknown,Bronze Age,1200-900 BCE,"Central Mexico, site of Tlatilco",Ceramic,1
+11.jpg,Lapita Terra Cotta Fragment,Unknown,Bronze Age,1000 BCE,"Solomon Islands, Reef Islands",Terracotta,1
+12.webp/12b.png,White Temple and its ziggurat,Unknown,Sumerian,3500-3000 BCE,"Uruk,modern Warka, Iraq",Mud brick,2
+13.jpg,Paleete of King Narmer,Unknown,Predynastic Egypt,3000-2920 BCE,Egypt,Greywacke (stone),2
+14.jpg,Statues of votive figures from the Square Temple at Eshnunna,Unknown,Sumerian,2700 BCE,"modern Tell Asmar, Iraq",Gypsum inlaid with shell and black limestone,2
+15.png,Seated Scribe,Unknown,"Old Kingdom, Fourth Dynasty",2620-2500 BCE,"Saqquara, Egypt",Painted Limestone,2
+16.jpg,The Standard of Ur from Royal Tombs at Ur,Unknown,Sumerian,2600-2400 BCE,"modern Tell el-Muqayyar, Iraq","Wood inlaid with shell, lapis lazuli, and red limestone",2
+17a.jpg/17b.png,"The Great Pyramids (Menkaura, Khafre, Khufu) and Great Sphinx",Unknown,"Old Kingdom, Fourth Dynasty",2550-2490 BCE,"Giza, Egypt",Limestone,2
+18.jpg,King Menkaura and Queen,Unknown,"Old Kingdom, Fourth Dynasty",2490-2472 BCE,Egyptian,f,2
+19.png,The Code of Hammurabi,Unknown,Babylonian,1792-1750 BCE,"modern Iran, Susian",Basalt,2
+20a.png/20b.ppng/20c.png,Temple of Amun-Re and Hypostyle Hall,Unknown,"New Kingdom, 18th and 19th Dynasties",1550 BCE/1250 BCE,"Luxor, Egypt",f,2
