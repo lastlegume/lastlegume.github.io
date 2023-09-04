@@ -76,13 +76,13 @@ function makeQuestion() {
         var workboxes = document.getElementsByClassName("workboxes");
         for (let i = 0; i < workboxes.length; i++) {
             if (workboxes[i].checked)
-                units.push(i+1);
-        }  
+                units.push(i + 1);
+        }
     } else {
         for (let i = 0; i < unitBoxes.length; i++) {
             if (unitBoxes[i].checked)
                 units.push(i + 1);
-        }        
+        }
     }
     //console.log(units);
     if (units.length == 0)
@@ -101,7 +101,7 @@ function makeQuestion() {
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
     let n = 0;
     let unitIDlistIndex = identifiers[0].length - 1;
-    while (!((allWorks.checked&&contains(units, workIndex*1))||(!allWorks.checked&&contains(units, identifiers[workIndex][unitIDlistIndex]*1))) && n < 100) {
+    while (!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) && n < 100 && identifiers[workIndex][1]!=="") {
         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
         n++;
     }
@@ -173,10 +173,13 @@ function showAllWorks() {
     }
     var lengthOfIdentifiers = identifiers[0].length;
     for (let i = 1; i < identifiers.length; i++) {
-        let tempDiv = document.createElement("div");
-        tempDiv.className = "workDivs";
-        let tempUnit = identifiers[i][lengthOfIdentifiers - 1] - 1;
-        tempDiv.innerHTML = "<label><input type=\"checkbox\" class = \"workboxes\"" + (unitBoxes[tempUnit].checked ? " checked" : "") + "> " + identifiers[i][1] + " </label>";
-        unitDivs[tempUnit].appendChild(tempDiv);
+        if (identifiers[i][1] !== "") {
+            let tempDiv = document.createElement("div");
+            tempDiv.className = "workDivs";
+            let tempUnit = identifiers[i][lengthOfIdentifiers - 1] - 1;
+            tempDiv.innerHTML = "<label><input type=\"checkbox\" class = \"workboxes\"" + (unitBoxes[tempUnit].checked ? " checked" : "") + "> " + identifiers[i][1] + " </label>";
+            unitDivs[tempUnit].appendChild(tempDiv);
+        }
+
     }
 }
