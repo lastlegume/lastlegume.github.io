@@ -101,10 +101,12 @@ function makeQuestion() {
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
     let n = 0;
     let unitIDlistIndex = identifiers[0].length - 1;
-    while (!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) && n < 100 && identifiers[workIndex][1]!=="") {
+
+    while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "") && n < 100) {
         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
         n++;
     }
+    //console.log(identifiers[workIndex][1]==="");
     // console.log(identifiers[workIndex][unitIDlistIndex]);
     // console.log((contains(units, identifiers[workIndex][unitIDlistIndex]*1)));
 
