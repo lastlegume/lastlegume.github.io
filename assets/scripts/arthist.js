@@ -17,7 +17,9 @@ var identifier = "";
 const unitBoxes = document.getElementsByClassName("unit-checkbox");
 const unitDivs = document.getElementsByClassName("unit-div");
 const idBoxes = document.getElementsByClassName("identifier-checkbox");
-
+for (let i = 0; i < unitBoxes.length; i++) {
+    unitBoxes[i].addEventListener('change', () => update());
+}
 const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
 
 answer.addEventListener("keydown", (e) => process(e));
@@ -116,9 +118,10 @@ function makeQuestion() {
 function equals(one, two) {
     if (strict.checked)
         return one === two;
-    if (identifier == 3) {
+    if (identifier == 4) {
         one = one.trim();
         var dateIsBCE = two.trim().substring(two.length - 3).toLowerCase() === "bce";
+        // console.log(dateIsBCE);
         if ((one.substring(one.length - 3).toLowerCase() === "bce" || one.substring(0, 1) === "-") == (dateIsBCE)) {
             if (one === two)
                 return true;
@@ -148,7 +151,7 @@ function betweenRange(ones, twos, inmiddle) {
     }
     ones.sort();
     twos.sort();
-    // console.log(ones+" "+twos);
+    // console.log(ones + " " + twos);
     if (inmiddle && twos.length == 2)
         return ones[0] <= twos[1] && ones[0] >= twos[0] && ((ones.length == 1) || (ones[1] <= twos[1] && ones[1] >= twos[0]));
     return ones[0] == twos[0] && ((ones.length == 1) || ones[1] == twos[1]);
@@ -168,7 +171,7 @@ function process(event) {
 }
 function showAllWorks() {
     var workDivs = document.getElementsByClassName("workDivs");
-    if (workDivs.length >= identifiers.length - 1) {
+    if (workDivs.length >= 4) {
         for (let i = 0; i < workDivs.length; i++)
             workDivs[i].className = "workDivs" + (allWorks.checked ? "" : " hide");
         return;
@@ -184,4 +187,9 @@ function showAllWorks() {
         }
 
     }
+}
+function update() {
+    var workDivs = document.getElementsByClassName("workDivs");
+    for (let i = 0; i < workDivs.length; i++)
+        workDivs[i].children[0].children[0].checked = unitBoxes[identifiers[i + 1][identifiers[0].length - 1] - 1].checked;
 }
