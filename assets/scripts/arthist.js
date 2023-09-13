@@ -21,7 +21,7 @@ for (let i = 0; i < unitBoxes.length; i++) {
     unitBoxes[i].addEventListener('change', () => update());
 }
 const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
-
+var subtype = 0;
 answer.addEventListener("keydown", (e) => process(e));
 const request = new XMLHttpRequest();
 request.addEventListener('load', readCSV);
@@ -29,7 +29,10 @@ request.open("GET", "/assets/arthist/arthistidentifiers.csv");
 request.send();
 //https://lastlegume.github.io
 function check() {
-    if (equals(answer.value.toLowerCase().trim(), identifiers[workIndex][identifier].toLowerCase().trim())) {
+    var correctAnswer = identifiers[workIndex][identifier].toLowerCase().trim();
+    if(workIndex==21&&identifiers[0][identifier]==="Date")
+        correctAnswer = correctAnswer.split("/")[subtype];
+    if (equals(answer.value.toLowerCase().trim(), correctAnswer)) {
         reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + identifiers[workIndex][1] + "</span> is <span style = \"color: forestgreen;\">" + identifiers[workIndex][identifier] + "</span>.";
         reply.style.setProperty('background-color', 'darkseagreen');
     }
@@ -111,14 +114,18 @@ function makeQuestion() {
     //console.log(identifiers[workIndex][1]==="");
     // console.log(identifiers[workIndex][unitIDlistIndex]);
     // console.log((contains(units, identifiers[workIndex][unitIDlistIndex]*1)));
-
+    // special cases
+    if(workIndex == 21&&identifiers[0][identifier]==="Date"){
+        subtype=Math.floor(Math.random()*2)
+        question.textContent = question.textContent +(subtype==0?" (temple)": " (hall)");
+    }
     let path = identifiers[workIndex][0].split("/");
     work.src = "/assets/arthist/artimages/" + path[Math.floor(Math.random() * path.length)];
 }
 function equals(one, two) {
     if (strict.checked)
         return one === two;
-    if (identifier == 4) {
+    if (identifiers[0][identifier] === "Date") {
         one = one.trim();
         var dateIsBCE = two.trim().substring(two.length - 3).toLowerCase() === "bce";
         // console.log(dateIsBCE);
