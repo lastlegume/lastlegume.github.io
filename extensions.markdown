@@ -14,7 +14,7 @@ header: true
 A Firefox exclusive extension that tracks which sites you spend your time on and which hours of the day you use your browser. The extension tracks the usage data for the day, week, month, and total and stores it locally. Data is displayed in clear, easy to understand charts using [Chart.js](https://www.chartjs.org/ "Chart.js"), and the extension icon shows the time spent on the current site during the current day.  
 
 <div style="text-align: right">  
-<a href = "https://addons.mozilla.org/en-US/firefox/addon/website-time-tracker/"><img src = "/assets/images/get-the-addon.webp" title = "Get the extension"></a>
+<a href="https://github.com/lastlegume/WebsiteTimeTracker" class="btn btn-github"><span class="icon"></span>View on GitHub</a> <a href = "https://addons.mozilla.org/en-US/firefox/addon/website-time-tracker/"><img src = "/assets/images/get-the-addon.webp" title = "Get the extension"></a>
 </div>
 
 ---
