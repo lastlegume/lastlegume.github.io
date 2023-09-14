@@ -28,8 +28,6 @@ An extension that counts down until a certain date and time. You can add as many
 
 </div>
 
-<div style="text-align: right">  </div>
-
 ---
 
 ### ExCiter
