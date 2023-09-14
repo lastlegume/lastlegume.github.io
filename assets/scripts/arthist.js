@@ -29,15 +29,15 @@ request.open("GET", "/assets/arthist/arthistidentifiers.csv");
 request.send();
 //https://lastlegume.github.io
 function check() {
-    var correctAnswer = identifiers[workIndex][identifier].toLowerCase().trim();
-    if(workIndex==21&&identifiers[0][identifier]==="Date")
+    var correctAnswer = identifiers[workIndex][identifier].trim();
+    if(workIndex==20&&identifiers[0][identifier]==="Date")
         correctAnswer = correctAnswer.split("/")[subtype];
-    if (equals(answer.value.toLowerCase().trim(), correctAnswer)) {
-        reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + identifiers[workIndex][1] + "</span> is <span style = \"color: forestgreen;\">" + identifiers[workIndex][identifier] + "</span>.";
+    if (equals(answer.value.toLowerCase().trim(), correctAnswer.toLowerCase())) {
+        reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + identifiers[workIndex][1] + "</span> is <span style = \"color: forestgreen;\">" + correctAnswer + "</span>.";
         reply.style.setProperty('background-color', 'darkseagreen');
     }
     else {
-        reply.innerHTML = "Incorrect. The <span style = \"color: lightsalmon;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: lightsalmon;\">" + identifiers[workIndex][1] + "</span> is <span style = \"color: lightsalmon;\">" + identifiers[workIndex][identifier] + "</span>.";
+        reply.innerHTML = "Incorrect. The <span style = \"color: lightsalmon;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: lightsalmon;\">" + identifiers[workIndex][1] + "</span> is <span style = \"color: lightsalmon;\">" + correctAnswer + "</span>.";
         reply.style.setProperty('background-color', 'crimson');
     }
 
@@ -115,7 +115,7 @@ function makeQuestion() {
     // console.log(identifiers[workIndex][unitIDlistIndex]);
     // console.log((contains(units, identifiers[workIndex][unitIDlistIndex]*1)));
     // special cases
-    if(workIndex == 21&&identifiers[0][identifier]==="Date"){
+    if(workIndex == 20&&identifiers[0][identifier]==="Date"){
         subtype=Math.floor(Math.random()*2)
         question.textContent = question.textContent +(subtype==0?" (temple)": " (hall)");
     }
@@ -146,7 +146,8 @@ function equals(one, two) {
         else
             return false;
     }
-    return one === two;
+    //fuzzyEquals(one.split(","), two.split(","))
+    return one===two;
 }
 function betweenRange(ones, twos, inmiddle) {
 
@@ -199,4 +200,23 @@ function update() {
     var workDivs = document.getElementsByClassName("workDivs");
     for (let i = 0; i < workDivs.length; i++)
         workDivs[i].children[0].children[0].checked = unitBoxes[identifiers[i + 1][identifiers[0].length - 1] - 1].checked;
+}
+function fuzzyEquals(ones, twos){
+    for(let i = 0;i<ones.length;i++){
+        for(let j = 0;j<twos.length;j++){
+            let n = 0;
+            let sumOfSpans = 0;
+            let len = 0;
+            while(n<ones[i].length){
+                while(ones[i].substring(n, n+1)===twos[j].substring(n, n+1)){
+                    len++;
+                    n++;
+                }
+                if(len>1)
+                    sumOfSpans+=len;
+                len = 0;
+            }
+        }
+    }
+    
 }
