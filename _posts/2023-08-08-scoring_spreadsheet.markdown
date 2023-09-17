@@ -15,6 +15,30 @@ I've also chosen to not include automatic tiebreaking; however, ties are marked 
 
 To see how to use it, check [this link](https://docs.google.com/document/d/1CCglZCkHo_RaGaMjVx0MpuHMKf2cjOdX48RMITGZ7OU/edit?usp=sharing).   
 
-Note: The [spreadsheet made by Chalker](https://sourceforge.net/projects/soscoring/) is similar, is updated to each year's events, and has some unique features, so it is also a good resource to consider for scoring. However, it lacks the template-based automatic award slideshow generation and histogram generation of the Google Sheets spreadsheet shown here. Use your own discretion to decide which spreadsheet better fits your own needs.  
+Note: The [spreadsheet made by Chalker](https://sourceforge.net/projects/soscoring/) is similar, is updated to each year's events, and has some unique features, so it is also a good resource to consider for scoring. However, it lacks the template-based automatic award slideshow generation and histogram generation of the Google Sheets spreadsheet shown here. It's also easier to collaborate with a large group of people in Google Sheets than Excel. Use your own discretion to decide which spreadsheet better fits your own needs.  
 
-The way that tiers are calculated, if teams have scores above 10000000 (10 million or 10^7), tiers may no longer function properly. Some parts of the spreadsheet might also be slightly unintuitive due to my wish to prioritize customizability over simplicity. 
+Because of the way that tiers are calculated, if teams have raw scores above 10000000 (10 million or 10^7) in an event, tiers may no longer function properly. Some parts of the spreadsheet might also be slightly unintuitive due to my wish to prioritize customizability over simplicity. 
+
+### Guide to the custom formats of the slideshow generator
+
+The slideshow generator attempts to provide as much flexibility as possible. As a result, the phrase in the textboxes for placements is customizable using custom formats. 
+When writing a custom format for the slideshow generator, everything that is not a special key will remain constant in every text box. A list of the keys is below:  
+
+Key | Meaning
+---|---
+#N# | Place number (1, 2, 3, etc.)
+#P# | Place (1st, 2nd, 3rd, 4th, etc.)
+#TN# | Team Number 
+#NAME# | Team Name
+
+With these keys, it's possible to easily create simple formats for the slideshow. For example, a format `#P#. #TN# - #NAME#` could be used. With the previous example, if the winning team was Random High School (Team number C5), what would the resulting phrase be?  
+
+<details>
+    <summary>Answer</summary>
+    1st. C5 - Random High School
+</details>
+
+
+
+
+  
