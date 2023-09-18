@@ -30,7 +30,7 @@ request.send();
 //https://lastlegume.github.io
 function check() {
     var correctAnswer = identifiers[workIndex][identifier].trim();
-    if(workIndex==20&&identifiers[0][identifier]==="Date")
+    if (workIndex == 20 && identifiers[0][identifier] === "Date")
         correctAnswer = correctAnswer.split("/")[subtype];
     if (equals(answer.value.toLowerCase().trim(), correctAnswer.toLowerCase())) {
         reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + identifiers[workIndex][1] + "</span> is <span style = \"color: forestgreen;\">" + correctAnswer + "</span>.";
@@ -115,9 +115,9 @@ function makeQuestion() {
     // console.log(identifiers[workIndex][unitIDlistIndex]);
     // console.log((contains(units, identifiers[workIndex][unitIDlistIndex]*1)));
     // special cases
-    if(workIndex == 20&&identifiers[0][identifier]==="Date"){
-        subtype=Math.floor(Math.random()*2)
-        question.textContent = question.textContent +(subtype==0?" (temple)": " (hall)");
+    if (workIndex == 20 && identifiers[0][identifier] === "Date") {
+        subtype = Math.floor(Math.random() * 2)
+        question.textContent = question.textContent + (subtype == 0 ? " (temple)" : " (hall)");
     }
     let path = identifiers[workIndex][0].split("/");
     work.src = "/assets/arthist/artimages/" + path[Math.floor(Math.random() * path.length)];
@@ -125,13 +125,24 @@ function makeQuestion() {
 function equals(one, two) {
     if (strict.checked)
         return one === two;
+    if (one === two)
+        return true;
     if (identifiers[0][identifier] === "Date") {
         one = one.trim();
         var dateIsBCE = two.trim().substring(two.length - 3).toLowerCase() === "bce";
         // console.log(dateIsBCE);
         if ((one.substring(one.length - 3).toLowerCase() === "bce" || one.substring(0, 1) === "-") == (dateIsBCE)) {
-            if (one === two)
-                return true;
+            if (two.substring(5, 8) === "BCE") {
+                var rangeBwBCEandCE = one.split("-");
+                for (let i = 0; i < rangeBwBCEandCE.length; i++) {
+                    rangeBwBCEandCE[i] = rangeBwBCEandCE[i].trim();
+                    if (rangeBwBCEandCE[i].substring(rangeBwBCEandCE[i].length - 3).toLowerCase() === "bce")
+                        rangeBwBCEandCE[i] = rangeBwBCEandCE[i].substring(0, rangeBwBCEandCE[i].length - 3).trim() * -1;
+                    if (rangeBwBCEandCE[i].substring(rangeBwBCEandCE[i].length - 2).toLowerCase() === "ce")
+                        rangeBwBCEandCE[i] = rangeBwBCEandCE[i].substring(0, rangeBwBCEandCE[i].length - 2).trim() * 1;
+                }
+                betweenRange(rangeBwBCEandCE, [-600, 150], range.checked);
+            }
             if (dateIsBCE) {
                 if (one.substring(0, 1) === "-")
                     one = one.substring(1);
@@ -147,7 +158,7 @@ function equals(one, two) {
             return false;
     }
     //fuzzyEquals(one.split(","), two.split(","))
-    return one===two;
+    return one === two;
 }
 function betweenRange(ones, twos, inmiddle) {
 
@@ -201,22 +212,22 @@ function update() {
     for (let i = 0; i < workDivs.length; i++)
         workDivs[i].children[0].children[0].checked = unitBoxes[identifiers[i + 1][identifiers[0].length - 1] - 1].checked;
 }
-function fuzzyEquals(ones, twos){
-    for(let i = 0;i<ones.length;i++){
-        for(let j = 0;j<twos.length;j++){
+function fuzzyEquals(ones, twos) {
+    for (let i = 0; i < ones.length; i++) {
+        for (let j = 0; j < twos.length; j++) {
             let n = 0;
             let sumOfSpans = 0;
             let len = 0;
-            while(n<ones[i].length){
-                while(ones[i].substring(n, n+1)===twos[j].substring(n, n+1)){
+            while (n < ones[i].length) {
+                while (ones[i].substring(n, n + 1) === twos[j].substring(n, n + 1)) {
                     len++;
                     n++;
                 }
-                if(len>1)
-                    sumOfSpans+=len;
+                if (len > 1)
+                    sumOfSpans += len;
                 len = 0;
             }
         }
     }
-    
+
 }
