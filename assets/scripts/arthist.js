@@ -107,7 +107,7 @@ function makeQuestion() {
     let n = 0;
     let unitIDlistIndex = identifiers[0].length - 1;
 
-    while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "") && n < 100) {
+    while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "") && n < 100 && identifiers[workIndex][identifier] !== "") {
         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
         n++;
     }
