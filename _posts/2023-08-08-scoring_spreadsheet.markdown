@@ -40,5 +40,19 @@ With these keys, it's possible to easily create simple formats for the slideshow
 
 
 
+### Justifications for the Permissions for the App Scripts
+
+To use the scripts, you need to authorize the scripts to use a lot of permissions. Here, I'll go over why I used each of these permissions.
+<ul>
+<li> <span style="color:goldenrod;">See, edit, create, and delete all of your Google Drive files: </span>This is used by the histogram generator. All the program does with this permission is create a folder for all of the histograms. No files are deleted or edited, but some image files for the histograms are created and placed into the new folder.
+<li> <span style="color:goldenrod;">See, edit, create, and delete all your Google Slides presentations: </span>This is used by the slideshow generator. The code needs to read the template slideshow and create a new slideshow. It does not delete anything.
+<li> <span style="color:goldenrod;">See, edit, create, and delete all your Google Docs documents: </span>This is used by the change events function. The code only reads from the file with the events list. No files are created or deleted.
+<li> <span style="color:goldenrod;">See, edit, create, and delete all your Google Sheets spreadsheets: </span>This is used for a lot of internal functions to access the spreadsheet itself and create the scoresheet. It allows methods to access the data in the spreadsheet, making all of the other functions possible.
+<li> <span style="color:goldenrod;">Display and run third-party web content in prompts and sidebars inside Google applications: </span>The slideshow generator and scoresheet generator both use this permission. This allows the programs to create sidebars with additional options that would be hard to add without the sidebar. 
+
+
+
+
+
 
   

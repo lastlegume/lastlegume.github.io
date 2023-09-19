@@ -36,7 +36,7 @@ An extension that counts down until a certain date and time. You can add as many
 
 ### ExCiter
 
-An extension that removes the citations from [Wikipedia](https://www.wikipedia.org/) and the [USDA FEIS database](https://www.feis-crs.org/feis/) to clean up reading. Also has additional options for cleaning that may not work on many sites such as removing APA citations.
+An extension that removes the citations from websites to clean up reading. Also has additional options for cleaning that may not work on many sites such as removing APA citations. Specifically tested and designed for both [Wikipedia](https://www.wikipedia.org/) and the [USDA FEIS database](https://www.feis-crs.org/feis/) species reviews. Chrome version pending review.
 
 <a href="https://github.com/lastlegume/ExCiter" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
