@@ -4,6 +4,7 @@ const allWorks = document.getElementById("allWorks");
 allWorks.addEventListener('change', () => showAllWorks())
 
 var identifiers = [];
+var previousWork = 0;
 
 const work = document.getElementById("work");
 const question = document.getElementById("question");
@@ -11,6 +12,7 @@ const answer = document.getElementById("answer");
 var reply = document.getElementById("reply");
 var strict = document.getElementById("strict");
 var range = document.getElementById("range");
+var includeExtras = document.getElementById("includeExtras");
 
 var workIndex = 0;
 var identifier = "";
@@ -21,6 +23,7 @@ for (let i = 0; i < unitBoxes.length; i++) {
     unitBoxes[i].addEventListener('change', () => update());
 }
 const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
+const specialNameCases = [21, 35];
 var subtype = 0;
 answer.addEventListener("keydown", (e) => process(e));
 const request = new XMLHttpRequest();
@@ -29,15 +32,23 @@ request.open("GET", "/assets/arthist/arthistidentifiers.csv");
 request.send();
 //https://lastlegume.github.io
 function check() {
+    previousWork = workIndex;
     var correctAnswer = identifiers[workIndex][identifier].trim();
-    if (workIndex == 20 && identifiers[0][identifier] === "Date")
+    var nameOfWork = identifiers[workIndex][1];
+    //special cases
+    let specialCase = isSpecialCase();
+    if (specialCase > 0) {
         correctAnswer = correctAnswer.split("/")[subtype];
+    }
+    if (contains(specialNameCases, workIndex)) {
+        nameOfWork = nameOfWork.split("/")[subtype];
+    }
     if (equals(answer.value.toLowerCase().trim(), correctAnswer.toLowerCase())) {
-        reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + identifiers[workIndex][1] + "</span> is <span style = \"color: forestgreen;\">" + correctAnswer + "</span>.";
+        reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + nameOfWork + "</span> is <span style = \"color: forestgreen;\">" + correctAnswer + "</span>.";
         reply.style.setProperty('background-color', 'darkseagreen');
     }
     else {
-        reply.innerHTML = "Incorrect. The <span style = \"color: lightsalmon;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: lightsalmon;\">" + identifiers[workIndex][1] + "</span> is <span style = \"color: lightsalmon;\">" + correctAnswer + "</span>.";
+        reply.innerHTML = "Incorrect. The <span style = \"color: lightsalmon;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: lightsalmon;\">" + nameOfWork + "</span> is <span style = \"color: lightsalmon;\">" + correctAnswer + "</span>.";
         reply.style.setProperty('background-color', 'crimson');
     }
 
@@ -78,10 +89,18 @@ function makeQuestion() {
     //make checkboxes of class period and then iterate through with for loop. for each that is true, add i+1 to the list
     var units = [];
     if (allWorks.checked) {
+        var workDivs = document.getElementsByClassName("workDivs");
         var workboxes = document.getElementsByClassName("workboxes");
         for (let i = 0; i < workboxes.length; i++) {
-            if (workboxes[i].checked)
-                units.push(i + 1);
+            if (workboxes[i].checked) {
+                let idxOf = indexOfIdentifier(workDivs[i].innerText.trim(), "Title");
+                // console.log(workDivs[i].innerText.trim());
+                // console.log(idxOf);
+                if (idxOf == -1)
+                    units.push(i + 1);
+                else
+                    units.push(idxOf);
+            }
         }
     } else {
         for (let i = 0; i < unitBoxes.length; i++) {
@@ -106,21 +125,36 @@ function makeQuestion() {
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
     let n = 0;
     let unitIDlistIndex = identifiers[0].length - 1;
-
-    while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "") && n < 100 && identifiers[workIndex][identifier] !== "") {
+    if (allWorks.checked && units.length == 1) {
+        workIndex = units[0];
+        previousWork = -1;
+        n = 100000000;
+    }
+    //if the stuff in the parenthesis with OR is true, we need to continue searching
+    while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || (!includeExtras.checked && workIndex > 251) || workIndex == previousWork) && n < 100000) {
         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
         n++;
     }
-    //console.log(identifiers[workIndex][1]==="");
-    // console.log(identifiers[workIndex][unitIDlistIndex]);
+    console.log("work: " + workIndex + ", identifier: " + identifier);
+    // console.log(identifiers[workIndex]);
+    // console.log(identifiers[workIndex][1]==="");
+    //  console.log(identifiers[workIndex][unitIDlistIndex]);
     // console.log((contains(units, identifiers[workIndex][unitIDlistIndex]*1)));
-    // special cases
-    if (workIndex == 20 && identifiers[0][identifier] === "Date") {
-        subtype = Math.floor(Math.random() * 2)
-        question.textContent = question.textContent + (subtype == 0 ? " (temple)" : " (hall)");
-    }
+
     let path = identifiers[workIndex][0].split("/");
-    work.src = "/assets/arthist/artimages/" + path[Math.floor(Math.random() * path.length)];
+    var imgIndex = Math.floor(Math.random() * path.length);
+    // special cases
+    let specialCase = isSpecialCase();
+    if (specialCase > 0) {
+        if (specialCase == 1) {
+            subtype = Math.floor(Math.random() * 2)
+            question.textContent = question.textContent + (subtype == 0 ? " (temple)" : " (hall)");
+        }
+    }
+    if (contains(specialNameCases, workIndex)) {
+        subtype = imgIndex;
+    }
+    work.src = "/assets/arthist/artimages/" + path[imgIndex];
 }
 function equals(one, two) {
     if (strict.checked)
@@ -215,19 +249,35 @@ function update() {
 function fuzzyEquals(ones, twos) {
     for (let i = 0; i < ones.length; i++) {
         for (let j = 0; j < twos.length; j++) {
-            let n = 0;
-            let sumOfSpans = 0;
-            let len = 0;
-            while (n < ones[i].length) {
-                while (ones[i].substring(n, n + 1) === twos[j].substring(n, n + 1)) {
-                    len++;
-                    n++;
-                }
-                if (len > 1)
-                    sumOfSpans += len;
-                len = 0;
-            }
+            if (fuzzy(ones[i], twos[j]))
+                return true;
         }
     }
+    return false;
 
+}
+function fuzzy(one, two) {
+    //placeholder 
+    return one === two;
+}
+function isSpecialCase() {
+    if (workIndex == 20 && identifiers[0][identifier] === "Date")
+        return 1;
+    if (workIndex == 21 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"))
+        return 2;
+    if (workIndex == 35 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Name of Author"))
+        return 2;
+    return -1;
+}
+function indexOfIdentifier(name, id) {
+    var idIdx = 0;
+    for (let i = 0; i < identifiers[0].length; i++) {
+        if (identifiers[0][i] === id)
+            idIdx = i;
+    }
+    for (let i = 0; i < identifiers.length; i++) {
+        if (identifiers[i][idIdx] === name)
+            return i;
+    }
+    return -1;
 }
