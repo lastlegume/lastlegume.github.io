@@ -40,7 +40,8 @@ An extension that removes the citations from websites to clean up reading. Also 
 
 <a href="https://github.com/lastlegume/ExCiter" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
-<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/exciter/"><img src = "/assets/images/get-the-addon.webp"></a> </div>
+<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/exciter/eajamcgdondjhilgabhnebphhlnbdhnf"><img src = "/assets/images/available-in-chrome.png"></a>
+<a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/exciter/"><img src = "/assets/images/get-the-addon.webp"></a> </div>
 
 ---
 
