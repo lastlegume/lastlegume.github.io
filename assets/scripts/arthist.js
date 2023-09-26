@@ -48,9 +48,6 @@ function check() {
             nameOfWork += (subtype == 0 ? " (temple)" : " (hall)");
         }else if(specialCase ==2){
             nameOfWork +=(subtype == 0 ? " (built)" : " (rebuilt)");
-        }else if(specialCase ==3){
-            nameOfWork += (identifiers[0][identifier] === "Date" ? (subtype == 0 ? " (Column completed)" : " (Forum and markets)") : (subtype == 0 ? " (Column)" : " (Architecture)"));
-            ;
         }
     }
 
@@ -88,8 +85,7 @@ function readCSV() {
                 }
             }
         }
-        if (start < string.length - 2)
-            identifiers[i].push(string.substring(start));
+        identifiers[i].push(string.substring(start));
     }
     for (let i = 0; i < identifiers[0].length; i++)
         unitIdx += (identifiers[0][i] === "Unit" ? 1 : 0) * i;
@@ -168,7 +164,7 @@ function makeQuestion() {
     var imgIndex = Math.floor(Math.random() * path.length);
     // special cases
     let specialCase = isSpecialCase();
-    console.log(specialCase);
+    // console.log(specialCase);
     if (specialCase > 0) {
         if (specialCase == 1) {
             subtype = Math.floor(Math.random() * 2);
@@ -176,9 +172,6 @@ function makeQuestion() {
         } else if (specialCase == 2) {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? " (built)" : " (rebuilt)");
-        } else if (specialCase == 3) {
-            subtype = Math.floor(Math.random() * 2);
-            question.textContent = question.textContent + (identifiers[0][identifier] === "Date" ? (subtype == 0 ? " (Column completed)" : " (Forum and markets)") : (subtype == 0 ? " (Column)" : " (Architecture)"));
         } else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
@@ -298,16 +291,21 @@ function fuzzy(one, two) {
     return one === two;
 }
 function isSpecialCase() {
-    const specialNameCases = [21, 35];
+    const specialNameCases = [21, 35, 31, 45];
     if (workIndex == 20 && identifiers[0][identifier] === "Date")
         return 1;
     if (workIndex == 39 && identifiers[0][identifier] === "Date")
         return 2;
-    if (workIndex == 45 && (identifiers[0][identifier] === "Date" || identifiers[0][identifier] === "Materials"))
-        return 3;
+
+
+    //to add a new special case of this type (multiple names and multiple answers for some identifiers), add to the number to specialNameCases and create a new if in the same format as the ones below
     if (workIndex == 21 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"))
         return 1000;
-    if (workIndex == 35 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Name of Author"))
+    else if (workIndex == 31 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"))
+        return 1000;    
+    else if (workIndex == 35 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Name of Author"))
+        return 1000;
+    else if (workIndex == 45 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"|| identifiers[0][identifier] === "Date"))
         return 1000;
     if (contains(specialNameCases, workIndex))
         return 1000.1;
