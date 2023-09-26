@@ -12,7 +12,6 @@ const answer = document.getElementById("answer");
 var reply = document.getElementById("reply");
 var strict = document.getElementById("strict");
 var range = document.getElementById("range");
-var includeExtras = document.getElementById("includeExtras");
 
 var workIndex = 0;
 var identifier = "";
@@ -23,8 +22,9 @@ for (let i = 0; i < unitBoxes.length; i++) {
     unitBoxes[i].addEventListener('change', () => update());
 }
 const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
-const specialNameCases = [21, 35];
 var subtype = 0;
+var unitIdx = 0;
+
 answer.addEventListener("keydown", (e) => process(e));
 const request = new XMLHttpRequest();
 request.addEventListener('load', readCSV);
@@ -37,12 +37,23 @@ function check() {
     var nameOfWork = identifiers[workIndex][1];
     //special cases
     let specialCase = isSpecialCase();
-    if (specialCase > 0) {
-        correctAnswer = correctAnswer.split("/")[subtype];
+    if (specialCase != -1) {
+        if (Math.round(specialCase) == specialCase) {
+            correctAnswer = correctAnswer.split("/")[subtype];
+        }
+        if (specialCase >= 1000) {
+            nameOfWork = nameOfWork.split("/")[subtype];
+        }
+        if (specialCase == 1) {
+            nameOfWork += (subtype == 0 ? " (temple)" : " (hall)");
+        }else if(specialCase ==2){
+            nameOfWork +=(subtype == 0 ? " (built)" : " (rebuilt)");
+        }else if(specialCase ==3){
+            nameOfWork += (identifiers[0][identifier] === "Date" ? (subtype == 0 ? " (Column completed)" : " (Forum and markets)") : (subtype == 0 ? " (Column)" : " (Architecture)"));
+            ;
+        }
     }
-    if (contains(specialNameCases, workIndex)) {
-        nameOfWork = nameOfWork.split("/")[subtype];
-    }
+
     if (equals(answer.value.toLowerCase().trim(), correctAnswer.toLowerCase())) {
         reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + nameOfWork + "</span> is <span style = \"color: forestgreen;\">" + correctAnswer + "</span>.";
         reply.style.setProperty('background-color', 'darkseagreen');
@@ -77,8 +88,11 @@ function readCSV() {
                 }
             }
         }
-        identifiers[i].push(string.substring(start));
+        if (start < string.length - 2)
+            identifiers[i].push(string.substring(start));
     }
+    for (let i = 0; i < identifiers[0].length; i++)
+        unitIdx += (identifiers[0][i] === "Unit" ? 1 : 0) * i;
     makeQuestion();
 
     //  console.log(identifiers);
@@ -128,31 +142,46 @@ function makeQuestion() {
     if (allWorks.checked && units.length == 1) {
         workIndex = units[0];
         previousWork = -1;
-        n = 100000000;
+        n = 10000000000;
+    }
+    if (allWorks.checked) {
+        workIndex = units[Math.floor(Math.random() * (units.length))];
+        while ((workIndex == previousWork || identifiers[workIndex][identifier] === "") && n < 10000) {
+            workIndex = units[Math.floor(Math.random() * (units.length - 1)) + 1];
+            n++;
+        }
     }
     //if the stuff in the parenthesis with OR is true, we need to continue searching
-    while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || (!includeExtras.checked && workIndex > 251) || workIndex == previousWork) && n < 100000) {
+    while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex == previousWork) && n < 10000) {
         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
         n++;
     }
+    if (identifiers[workIndex][identifier] === "")
+        workIndex = units[0];
     console.log("work: " + workIndex + ", identifier: " + identifier);
     // console.log(identifiers[workIndex]);
     // console.log(identifiers[workIndex][1]==="");
     //  console.log(identifiers[workIndex][unitIDlistIndex]);
     // console.log((contains(units, identifiers[workIndex][unitIDlistIndex]*1)));
-
+    subtype = 0;
     let path = identifiers[workIndex][0].split("/");
     var imgIndex = Math.floor(Math.random() * path.length);
     // special cases
     let specialCase = isSpecialCase();
+    console.log(specialCase);
     if (specialCase > 0) {
         if (specialCase == 1) {
-            subtype = Math.floor(Math.random() * 2)
+            subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? " (temple)" : " (hall)");
+        } else if (specialCase == 2) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (built)" : " (rebuilt)");
+        } else if (specialCase == 3) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (identifiers[0][identifier] === "Date" ? (subtype == 0 ? " (Column completed)" : " (Forum and markets)") : (subtype == 0 ? " (Column)" : " (Architecture)"));
+        } else if (specialCase >= 1000) {
+            subtype = imgIndex;
         }
-    }
-    if (contains(specialNameCases, workIndex)) {
-        subtype = imgIndex;
     }
     work.src = "/assets/arthist/artimages/" + path[imgIndex];
 }
@@ -175,6 +204,7 @@ function equals(one, two) {
                     if (rangeBwBCEandCE[i].substring(rangeBwBCEandCE[i].length - 2).toLowerCase() === "ce")
                         rangeBwBCEandCE[i] = rangeBwBCEandCE[i].substring(0, rangeBwBCEandCE[i].length - 2).trim() * 1;
                 }
+                console.log(rangeBwBCEandCE);
                 betweenRange(rangeBwBCEandCE, [-600, 150], range.checked);
             }
             if (dateIsBCE) {
@@ -184,6 +214,10 @@ function equals(one, two) {
                     one = one.substring(0, one.length - 3).trim();
                 two = two.substring(0, two.length - 3).trim();
                 // console.log(one+" "+two);
+            }else{
+                two = two.trim().substring(0, two.length-2).trim();
+                if(one.trim().substring(one.length-2).toLowerCase()=="ce")
+                    one = one.trim().substring(0,one.length-2).trim();
             }
             return betweenRange(one.split('-'), two.split('-'), range.checked);
 
@@ -229,13 +263,13 @@ function showAllWorks() {
             workDivs[i].className = "workDivs" + (allWorks.checked ? "" : " hide");
         return;
     }
-    var lengthOfIdentifiers = identifiers[0].length;
+
     for (let i = 1; i < identifiers.length; i++) {
-        if (identifiers[i][1] !== "") {
+        if (identifiers[i][1] !== "" && identifiers[i][unitIdx] > 0) {
             let tempDiv = document.createElement("div");
             tempDiv.className = "workDivs";
-            let tempUnit = identifiers[i][lengthOfIdentifiers - 1] - 1;
-            tempDiv.innerHTML = "<label><input type=\"checkbox\" class = \"workboxes\"" + (unitBoxes[tempUnit].checked ? " checked" : "") + "> " + identifiers[i][1] + " </label>";
+            let tempUnit = identifiers[i][unitIdx] - 1;
+            tempDiv.innerHTML = "<label><input type=\"checkbox\" class = \"workboxes\"" + (unitBoxes[tempUnit].checked && i <= 250 ? " checked" : "") + "> " + identifiers[i][1] + " </label>";
             unitDivs[tempUnit].appendChild(tempDiv);
         }
 
@@ -243,8 +277,11 @@ function showAllWorks() {
 }
 function update() {
     var workDivs = document.getElementsByClassName("workDivs");
-    for (let i = 0; i < workDivs.length; i++)
-        workDivs[i].children[0].children[0].checked = unitBoxes[identifiers[i + 1][identifiers[0].length - 1] - 1].checked;
+    for (let i = 0; i < workDivs.length; i++) {
+        var idxOfWorkOfDiv = indexOfIdentifier(workDivs[i].innerText.trim(), "Title");
+        if (idxOfWorkOfDiv <= 250)
+            workDivs[i].children[0].children[0].checked = unitBoxes[identifiers[idxOfWorkOfDiv][unitIdx] - 1].checked;
+    }
 }
 function fuzzyEquals(ones, twos) {
     for (let i = 0; i < ones.length; i++) {
@@ -261,12 +298,19 @@ function fuzzy(one, two) {
     return one === two;
 }
 function isSpecialCase() {
+    const specialNameCases = [21, 35];
     if (workIndex == 20 && identifiers[0][identifier] === "Date")
         return 1;
+    if (workIndex == 39 && identifiers[0][identifier] === "Date")
+        return 2;
+    if (workIndex == 45 && (identifiers[0][identifier] === "Date" || identifiers[0][identifier] === "Materials"))
+        return 3;
     if (workIndex == 21 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"))
-        return 2;
+        return 1000;
     if (workIndex == 35 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Name of Author"))
-        return 2;
+        return 1000;
+    if (contains(specialNameCases, workIndex))
+        return 1000.1;
     return -1;
 }
 function indexOfIdentifier(name, id) {
