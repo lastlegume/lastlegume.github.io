@@ -46,8 +46,8 @@ function check() {
         }
         if (specialCase == 1) {
             nameOfWork += (subtype == 0 ? " (temple)" : " (hall)");
-        }else if(specialCase ==2){
-            nameOfWork +=(subtype == 0 ? " (built)" : " (rebuilt)");
+        } else if (specialCase == 2) {
+            nameOfWork += (subtype == 0 ? " (built)" : " (rebuilt)");
         }
     }
 
@@ -67,6 +67,8 @@ function readCSV() {
     identifiers.pop(identifiers.length - 1);
     for (let i = 0; i < identifiers.length; i++) {
         var string = identifiers[i].replaceAll("\r", "");
+        if (string.substring(string.length - 1) === ",")
+            string = string.substring(0, string.length - 1);
         // console.log(string);
         identifiers[i] = [];
         var start = 0;
@@ -148,7 +150,7 @@ function makeQuestion() {
         }
     }
     //if the stuff in the parenthesis with OR is true, we need to continue searching
-    while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex == previousWork) && n < 10000) {
+    while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
         n++;
     }
@@ -185,21 +187,28 @@ function equals(one, two) {
         return true;
     if (identifiers[0][identifier] === "Date") {
         one = one.trim();
+        if (two.substring(4, 7).toUpperCase() === "BCE") {
+            var stillLooking = true;
+            for (let i = 1; i < one.length && stillLooking; i++) {
+                if (one.substring(i, i + 1) === "-") {
+                    stillLooking = false;
+                    one = one.substring(0, i) + "/" + one.substring(i + 1);
+                }
+            }
+            var rangeBwBCEandCE = one.split("/");
+
+            for (let i = 0; i < rangeBwBCEandCE.length; i++) {
+                rangeBwBCEandCE[i] = rangeBwBCEandCE[i].trim();
+                if (rangeBwBCEandCE[i].substring(rangeBwBCEandCE[i].length - 3).toLowerCase() === "bce")
+                    rangeBwBCEandCE[i] = '-' + rangeBwBCEandCE[i].substring(0, rangeBwBCEandCE[i].length - 3).trim();
+                if (rangeBwBCEandCE[i].substring(rangeBwBCEandCE[i].length - 2).toLowerCase() === "ce")
+                    rangeBwBCEandCE[i] = rangeBwBCEandCE[i].substring(0, rangeBwBCEandCE[i].length - 2).trim();
+            }
+            return betweenRange(rangeBwBCEandCE, ['-600', '150'], range.checked);
+        }
         var dateIsBCE = two.trim().substring(two.length - 3).toLowerCase() === "bce";
         // console.log(dateIsBCE);
         if ((one.substring(one.length - 3).toLowerCase() === "bce" || one.substring(0, 1) === "-") == (dateIsBCE)) {
-            if (two.substring(5, 8) === "BCE") {
-                var rangeBwBCEandCE = one.split("-");
-                for (let i = 0; i < rangeBwBCEandCE.length; i++) {
-                    rangeBwBCEandCE[i] = rangeBwBCEandCE[i].trim();
-                    if (rangeBwBCEandCE[i].substring(rangeBwBCEandCE[i].length - 3).toLowerCase() === "bce")
-                        rangeBwBCEandCE[i] = rangeBwBCEandCE[i].substring(0, rangeBwBCEandCE[i].length - 3).trim() * -1;
-                    if (rangeBwBCEandCE[i].substring(rangeBwBCEandCE[i].length - 2).toLowerCase() === "ce")
-                        rangeBwBCEandCE[i] = rangeBwBCEandCE[i].substring(0, rangeBwBCEandCE[i].length - 2).trim() * 1;
-                }
-                console.log(rangeBwBCEandCE);
-                betweenRange(rangeBwBCEandCE, [-600, 150], range.checked);
-            }
             if (dateIsBCE) {
                 if (one.substring(0, 1) === "-")
                     one = one.substring(1);
@@ -207,10 +216,10 @@ function equals(one, two) {
                     one = one.substring(0, one.length - 3).trim();
                 two = two.substring(0, two.length - 3).trim();
                 // console.log(one+" "+two);
-            }else{
-                two = two.trim().substring(0, two.length-2).trim();
-                if(one.trim().substring(one.length-2).toLowerCase()=="ce")
-                    one = one.trim().substring(0,one.length-2).trim();
+            } else {
+                two = two.trim().substring(0, two.length - 2).trim();
+                if (one.trim().substring(one.length - 2).toLowerCase() == "ce")
+                    one = one.trim().substring(0, one.length - 2).trim();
             }
             return betweenRange(one.split('-'), two.split('-'), range.checked);
 
@@ -302,10 +311,10 @@ function isSpecialCase() {
     if (workIndex == 21 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"))
         return 1000;
     else if (workIndex == 31 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"))
-        return 1000;    
+        return 1000;
     else if (workIndex == 35 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Name of Author"))
         return 1000;
-    else if (workIndex == 45 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"|| identifiers[0][identifier] === "Date"))
+    else if (workIndex == 45 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials" || identifiers[0][identifier] === "Date"))
         return 1000;
     if (contains(specialNameCases, workIndex))
         return 1000.1;
