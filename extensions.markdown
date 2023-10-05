@@ -16,7 +16,7 @@ A Firefox exclusive extension that tracks which sites you spend your time on and
 <a href="https://github.com/lastlegume/WebsiteTimeTracker" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
 <div style="text-align: right">  
- <a href = "https://addons.mozilla.org/en-US/firefox/addon/website-time-tracker/"><img src = "/assets/images/get-the-addon.webp" title = "Get the extension"></a>
+ <a href = "https://addons.mozilla.org/en-US/firefox/addon/website-time-tracker/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png" title = "Get the extension"></a>
 </div>
 
 ---
@@ -28,7 +28,7 @@ An extension that counts down until a certain date and time. You can add as many
 <a href="https://github.com/lastlegume/Countdown-Timer" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
 <div style="text-align: right">  
-<a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/countdown-timer/ihigneebhahgionaapclffdgiemkacib"><img src = "/assets/images/available-in-chrome.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/countdown-timer/"><img src = "/assets/images/get-the-addon.webp"></a>
+<a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/countdown-timer/ihigneebhahgionaapclffdgiemkacib"><img src = "https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/countdown-timer/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a>
 
 </div>
 
@@ -40,8 +40,8 @@ An extension that removes the citations from websites to clean up reading. Also 
 
 <a href="https://github.com/lastlegume/ExCiter" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
-<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/exciter/eajamcgdondjhilgabhnebphhlnbdhnf"><img src = "/assets/images/available-in-chrome.png"></a>
-<a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/exciter/"><img src = "/assets/images/get-the-addon.webp"></a> </div>
+<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/exciter/eajamcgdondjhilgabhnebphhlnbdhnf"><img src = "https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png"></a>
+<a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/exciter/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a> </div>
 
 ---
 
@@ -52,7 +52,7 @@ This extension isn't perfect and will need modifications such as pagebreaks to b
 
 <a href="https://github.com/lastlegume/ScilympiadToLaTeX" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
-<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/scilympiadtolatex/ompkjeefecnmejcmanlofimmclifefde"><img src = "/assets/images/available-in-chrome.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/scilympiadtolatex/"><img src = "/assets/images/get-the-addon.webp"></a> </div>
+<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/scilympiadtolatex/ompkjeefecnmejcmanlofimmclifefde"><img src = "https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/scilympiadtolatex/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a> </div>
 
 ---
 
@@ -62,6 +62,6 @@ Creates a pie chart underneath the default timer in google that updates once per
 
 <a href="https://github.com/lastlegume/TimerPieChart" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
-<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/timer-pie-chart/omipgihnnkfeijiaacgfiieacjgaepii"><img src = "/assets/images/available-in-chrome.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/timer-pie-chart/"><img src = "/assets/images/get-the-addon.webp"></a> </div>
+<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/timer-pie-chart/omipgihnnkfeijiaacgfiieacjgaepii"><img src = "https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/timer-pie-chart/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a> </div>
 
 ---
