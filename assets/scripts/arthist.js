@@ -300,7 +300,7 @@ function fuzzy(one, two) {
     return one === two;
 }
 function isSpecialCase() {
-    const specialNameCases = [21, 35, 31, 45];
+    const specialNameCases = [21, 35, 31, 45, 48, 50, 51, 55, 64, 65];
     if (workIndex == 20 && identifiers[0][identifier] === "Date")
         return 1;
     if (workIndex == 39 && identifiers[0][identifier] === "Date")
@@ -315,6 +315,8 @@ function isSpecialCase() {
     else if (workIndex == 35 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Name of Author"))
         return 1000;
     else if (workIndex == 45 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials" || identifiers[0][identifier] === "Date"))
+        return 1000;
+    else if ((contains([48, 50, 51, 55, 64, 65], workIndex)) && (identifiers[0][identifier] === "Title"))
         return 1000;
     if (contains(specialNameCases, workIndex))
         return 1000.1;
