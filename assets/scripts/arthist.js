@@ -25,6 +25,8 @@ const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
 var subtype = 0;
 var unitIdx = 0;
 
+var extraAnswers = [];
+
 answer.addEventListener("keydown", (e) => process(e));
 const request = new XMLHttpRequest();
 request.addEventListener('load', readCSV);
@@ -38,18 +40,27 @@ function check() {
     //special cases
     let specialCase = isSpecialCase();
     if (specialCase != -1) {
-        if (Math.round(specialCase) == specialCase) {
-            correctAnswer = correctAnswer.split("/")[subtype];
+        //        if (Math.round(specialCase) == specialCase) {
+        //identifiers[0][identifier] === "Title"
+        if (correctAnswer.split(":").length>1) {
+            extraAnswers.push(correctAnswer.split(":")[0]);
+            correctAnswer = correctAnswer.split(":")[1].split("/")[subtype];
         }
+        else
+            correctAnswer = correctAnswer.split("/")[subtype];
+        //  }
         if (specialCase >= 1000) {
-            nameOfWork = nameOfWork.split("/")[subtype];
+            let overall = nameOfWork.split(":");
+            nameOfWork = overall[0] + " (caption: " + overall[1].split("/")[subtype] + ")";
         }
         if (specialCase == 1) {
             nameOfWork += (subtype == 0 ? " (temple)" : " (hall)");
         } else if (specialCase == 2) {
             nameOfWork += (subtype == 0 ? " (built)" : " (rebuilt)");
         }
+
     }
+
 
     if (equals(answer.value.toLowerCase().trim(), correctAnswer.toLowerCase())) {
         reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + nameOfWork + "</span> is <span style = \"color: forestgreen;\">" + correctAnswer + "</span>.";
@@ -100,6 +111,8 @@ function makeQuestion() {
     answer.value = "";
     //make checkboxes of class period and then iterate through with for loop. for each that is true, add i+1 to the list
     var units = [];
+    extraAnswers = [];
+
     if (allWorks.checked) {
         var workDivs = document.getElementsByClassName("workDivs");
         var workboxes = document.getElementsByClassName("workboxes");
@@ -174,6 +187,9 @@ function makeQuestion() {
         } else if (specialCase == 2) {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? " (built)" : " (rebuilt)");
+        }else if (specialCase == 3) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (building)" : " (roof)");
         } else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
@@ -227,8 +243,8 @@ function equals(one, two) {
         else
             return false;
     }
-    //fuzzyEquals(one.split(","), two.split(","))
-    return one === two;
+    return fuzzyEquals(one.split(","), two.split(","))
+    //return one === two;
 }
 function betweenRange(ones, twos, inmiddle) {
 
@@ -286,9 +302,10 @@ function update() {
     }
 }
 function fuzzyEquals(ones, twos) {
+    twos.push.apply(extraAnswers);
     for (let i = 0; i < ones.length; i++) {
         for (let j = 0; j < twos.length; j++) {
-            if (fuzzy(ones[i], twos[j]))
+            if (fuzzy(ones[i], twos[j])||fuzzy(ones[i].replaceAll(/\([.]*?\)/g), twos[j].replaceAll(/\([.]*?\)/g)))
                 return true;
         }
     }
@@ -305,6 +322,8 @@ function isSpecialCase() {
         return 1;
     if (workIndex == 39 && identifiers[0][identifier] === "Date")
         return 2;
+    if (workIndex == 49 && identifiers[0][identifier] === "Materials")
+        return 3;
 
 
     //to add a new special case of this type (multiple names and multiple answers for some identifiers), add to the number to specialNameCases and create a new if in the same format as the ones below
@@ -329,7 +348,7 @@ function indexOfIdentifier(name, id) {
             idIdx = i;
     }
     for (let i = 0; i < identifiers.length; i++) {
-        if (identifiers[i][idIdx] === name)
+        if (identifiers[i][idIdx].trim() === name)
             return i;
     }
     return -1;
