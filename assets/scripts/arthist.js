@@ -59,6 +59,8 @@ function check() {
         if (specialCase >= 1000) {
             let overall = nameOfWork.split(":");
             nameOfWork = overall[0] + " (caption: " + overall[1].split("/")[subtype] + ")";
+        } else if(specialCase>0){
+            nameOfWork = nameOfWork.split(":")[0];
         }
         if (specialCase == 1) {
             nameOfWork += (subtype == 0 ? " (temple)" : " (hall)");
