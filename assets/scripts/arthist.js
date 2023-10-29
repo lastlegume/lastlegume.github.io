@@ -46,7 +46,7 @@ function check() {
         //identifiers[0][identifier] === "Title"
         if (correctAnswer.split(":").length > 1) {
             if (acceptCaption.checked) {
-                if(!onlyCaption.checked)
+                if (!onlyCaption.checked)
                     extraAnswers.push(correctAnswer.split(":")[0]);
                 correctAnswer = correctAnswer.split(":")[1].split("/")[subtype];
             } else {
@@ -66,6 +66,14 @@ function check() {
             nameOfWork += (subtype == 0 ? " (built)" : " (rebuilt)");
         } else if (specialCase == 3) {
             nameOfWork += (subtype == 0 ? " (building)" : " (roof)");
+        } else if (specialCase == 4) {
+            nameOfWork += (subtype == 0 ? " (architecture)" : (subtype == 1 ? " (tympanum)" : " (reliquary)"));
+        } else if (specialCase == 5) {
+            nameOfWork += (subtype == 0 ? " (church)" : " (reliquary)");
+        } else if (specialCase == 6) {
+            nameOfWork += (subtype == 0 ? " (original construction)" : " (reconstruction)");
+        } else if (specialCase == 7) {
+            nameOfWork += (subtype == 0 ? " (chapel)" : " (fresco)");
         }
 
     }
@@ -201,6 +209,18 @@ function makeQuestion() {
         } else if (specialCase == 3) {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? " (building)" : " (roof)");
+        } else if (specialCase == 4) {
+            subtype = Math.floor(Math.random() * 3);
+            question.textContent = question.textContent + (subtype == 0 ? " (architecture)" : (subtype == 1 ? " (tympanum)" : " (reliquary)"));
+        } else if (specialCase == 5) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (church)" : " (reliquary)");
+        } else if (specialCase == 6) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (original construction)" : " (reconstruction)");
+        } else if (specialCase == 7) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (chapel)" : " (fresco)");
         } else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
@@ -331,30 +351,30 @@ function fuzzy(guess, answer) {
     guess = guess.toLowerCase().trim();
     answer = answer.toLowerCase().trim();
     if (guess === answer)
-      return true;
+        return true;
     let score = 0;
     //number of characters back or forwards a substring is allowed to be before being counted as nonexistent.
-    var leniency = Math.ceil(answer.length**.5);
+    var leniency = Math.ceil(answer.length ** .5);
     for (let i = guess.length; i >= 2; i--) {
-      for (let s = 0; s <= (guess.length - i); s++) {
-        for (let as = Math.max(0, s - leniency); as <= Math.min(s + leniency, answer.length - i); as++) {
-          //console.log(guess.substring(s, s + i) + " vs " + answer.substring(as, as + i))
-  
-          if (guess.substring(s, s + i) === answer.substring(as, as + i)) {
-            //score += i ** 1.5;
-            score+=i;
-          }
-          //console.log(score)
-  
+        for (let s = 0; s <= (guess.length - i); s++) {
+            for (let as = Math.max(0, s - leniency); as <= Math.min(s + leniency, answer.length - i); as++) {
+                //console.log(guess.substring(s, s + i) + " vs " + answer.substring(as, as + i))
+
+                if (guess.substring(s, s + i) === answer.substring(as, as + i)) {
+                    //score += i ** 1.5;
+                    score += i;
+                }
+                //console.log(score)
+
+            }
         }
-      }
     }
-  
-    var neededFuzzyAmount = ((answer.length)*(answer.length+1)*(answer.length+2))/6;
-    var fuzziness = 1-answer.length**-.45;
-    console.log(score + " vs needed " +  neededFuzzyAmount**fuzziness)
-    return score > neededFuzzyAmount**fuzziness;
-  }
+
+    var neededFuzzyAmount = ((answer.length) * (answer.length + 1) * (answer.length + 2)) / 6;
+    var fuzziness = 1 - answer.length ** -.45;
+    console.log(score + " vs needed " + neededFuzzyAmount ** fuzziness)
+    return score > neededFuzzyAmount ** fuzziness;
+}
 function isSpecialCase() {
     // const specialNameCases = [21, 35, 31, 45, 48, 50, 51, 55, 64, 65];
     if (workIndex == 20 && identifiers[0][identifier] === "Date")
@@ -363,6 +383,14 @@ function isSpecialCase() {
         return 2;
     if (workIndex == 49 && identifiers[0][identifier] === "Materials")
         return 3;
+    if (workIndex == 58 && identifiers[0][identifier] === "Materials")
+        return 4;
+    if (workIndex == 58 && identifiers[0][identifier] === "Date")
+        return 5;
+    if (workIndex == 60 && identifiers[0][identifier] === "Date")
+        return 6;
+    if (workIndex == 63 && identifiers[0][identifier] === "Date")
+        return 7;
 
     if (identifiers[workIndex][1].split("/").length > 1) {
         if (identifiers[workIndex][identifier].split("/").length > 1)
