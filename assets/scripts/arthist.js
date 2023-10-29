@@ -46,7 +46,7 @@ function check() {
             extraAnswers.push(correctAnswer.split(":")[0]);
             correctAnswer = correctAnswer.split(":")[1].split("/")[subtype];
         }
-        else
+        else if (correctAnswer.split("/").length>1)
             correctAnswer = correctAnswer.split("/")[subtype];
         //  }
         if (specialCase >= 1000) {
@@ -57,6 +57,8 @@ function check() {
             nameOfWork += (subtype == 0 ? " (temple)" : " (hall)");
         } else if (specialCase == 2) {
             nameOfWork += (subtype == 0 ? " (built)" : " (rebuilt)");
+        } else if (specialCase == 3) {
+            nameOfWork += (subtype == 0 ? " (building)" : " (roof)");
         }
 
     }
@@ -169,7 +171,9 @@ function makeQuestion() {
     }
     if (identifiers[workIndex][identifier] === "")
         workIndex = units[0];
-    console.log("work: " + workIndex + ", identifier: " + identifier);
+    if(!contains(units, identifiers[workIndex][unitIDlistIndex] * 1)&&!allWorks.checked)
+        workIndex = 1;
+    console.log("work: " + workIndex + ", identifier: " + identifier+", subtype: "+subtype);
     // console.log(identifiers[workIndex]);
     // console.log(identifiers[workIndex][1]==="");
     //  console.log(identifiers[workIndex][unitIDlistIndex]);
@@ -287,7 +291,7 @@ function showAllWorks() {
             let tempDiv = document.createElement("div");
             tempDiv.className = "workDivs";
             let tempUnit = identifiers[i][unitIdx] - 1;
-            tempDiv.innerHTML = "<label><input type=\"checkbox\" class = \"workboxes\"" + (unitBoxes[tempUnit].checked && i <= 250 ? " checked" : "") + "> " + identifiers[i][1] + " </label>";
+            tempDiv.innerHTML = "<label><input type=\"checkbox\" class = \"workboxes\"" + (unitBoxes[tempUnit].checked && i <= 250 ? " checked" : "") + "> " + identifiers[i][1].split(":")[0] + " </label>";
             unitDivs[tempUnit].appendChild(tempDiv);
         }
 
@@ -325,20 +329,25 @@ function isSpecialCase() {
     if (workIndex == 49 && identifiers[0][identifier] === "Materials")
         return 3;
 
-
+    if (identifiers[workIndex][1].split("/").length>1){
+        if(identifiers[workIndex][identifier].split("/").length>1)
+            return 1000;
+        else
+            return 1000.1;
+    }
     //to add a new special case of this type (multiple names and multiple answers for some identifiers), add to the number to specialNameCases and create a new if in the same format as the ones below
-    if (workIndex == 21 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"))
-        return 1000;
-    else if (workIndex == 31 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"))
-        return 1000;
-    else if (workIndex == 35 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Name of Author"))
-        return 1000;
-    else if (workIndex == 45 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials" || identifiers[0][identifier] === "Date"))
-        return 1000;
-    else if ((contains([48, 50, 51, 55, 64, 65], workIndex)) && (identifiers[0][identifier] === "Title"))
-        return 1000;
-    if (contains(specialNameCases, workIndex))
-        return 1000.1;
+    // if (workIndex == 21 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"))
+    //     return 1000;
+    // else if (workIndex == 31 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials"))
+    //     return 1000;
+    // else if (workIndex == 35 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Name of Author"))
+    //     return 1000;
+    // else if (workIndex == 45 && (identifiers[0][identifier] === "Title" || identifiers[0][identifier] === "Materials" || identifiers[0][identifier] === "Date"))
+    //     return 1000;
+    // else if ((contains([48, 50, 51, 55, 64, 65], workIndex)) && (identifiers[0][identifier] === "Title"))
+    //     return 1000;
+    // if (contains(specialNameCases, workIndex))
+    //     return 1000.1;
     return -1;
 }
 function indexOfIdentifier(name, id) {
@@ -348,7 +357,7 @@ function indexOfIdentifier(name, id) {
             idIdx = i;
     }
     for (let i = 0; i < identifiers.length; i++) {
-        if (identifiers[i][idIdx].trim() === name)
+        if (identifiers[i][idIdx].trim().split(":")[0] === name)
             return i;
     }
     return -1;
