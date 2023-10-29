@@ -109,7 +109,7 @@ function readCSV() {
                 while (string.substring(j + 1, j + 2) === "\"") {
                     start = j + 2;
                     j += 2;
-                    while (string.substring(j, j + 1) !== "\"" || string.substring(j + 1, j + 2) !== ",")
+                    while (j<string.length&&(string.substring(j, j + 1) !== "\"" || string.substring(j + 1, j + 2) !== ","))
                         j++;
                     j++;
                     identifiers[i].push(string.substring(start, j - 1));
