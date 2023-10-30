@@ -59,7 +59,7 @@ function check() {
         if (specialCase >= 1000) {
             let overall = nameOfWork.split(":");
             nameOfWork = overall[0] + " (caption: " + overall[1].split("/")[subtype] + ")";
-        } else if(specialCase>0){
+        } else if (specialCase > 0) {
             nameOfWork = nameOfWork.split(":")[0];
         }
         if (specialCase == 1) {
@@ -109,7 +109,7 @@ function readCSV() {
                 while (string.substring(j + 1, j + 2) === "\"") {
                     start = j + 2;
                     j += 2;
-                    while (j<string.length&&(string.substring(j, j + 1) !== "\"" || string.substring(j + 1, j + 2) !== ","))
+                    while (j < string.length && (string.substring(j, j + 1) !== "\"" || string.substring(j + 1, j + 2) !== ","))
                         j++;
                     j++;
                     identifiers[i].push(string.substring(start, j - 1));
@@ -352,31 +352,32 @@ function fuzzyEquals(ones, twos) {
 function fuzzy(guess, answer) {
     guess = guess.toLowerCase().trim();
     answer = answer.toLowerCase().trim();
+    // checks if the strings are equals beforehand to skip the iteration if unnecessary
     if (guess === answer)
         return true;
+    // variable that holds the number of correct characters
     let score = 0;
     //number of characters back or forwards a substring is allowed to be before being counted as nonexistent.
     var leniency = Math.ceil(answer.length ** .5);
+
+    var fuzziness = 1 - answer.length ** -.45;
+    //maximum possible score
+    var neededFuzzyAmount = ((answer.length) * (answer.length + 1) * (answer.length + 2)) / 6 - answer.length;
     for (let i = guess.length; i >= 2; i--) {
         for (let s = 0; s <= (guess.length - i); s++) {
-            for (let as = Math.max(0, s - leniency); as <= Math.min(s + leniency, answer.length - i); as++) {
-                //console.log(guess.substring(s, s + i) + " vs " + answer.substring(as, as + i))
-
-                if (guess.substring(s, s + i) === answer.substring(as, as + i)) {
-                    //score += i ** 1.5;
+            for (let a = Math.max(0, s - leniency); a <= Math.min(s + leniency, answer.length - i); a++) {
+                if (guess.substring(s, s + i) === answer.substring(a, a + i)) {
                     score += i;
                 }
-                //console.log(score)
-
             }
+            if (score > neededFuzzyAmount ** fuzziness)
+                return true;
         }
     }
-
-    var neededFuzzyAmount = ((answer.length) * (answer.length + 1) * (answer.length + 2)) / 6;
-    var fuzziness = 1 - answer.length ** -.45;
     console.log(score + " vs needed " + neededFuzzyAmount ** fuzziness)
     return score > neededFuzzyAmount ** fuzziness;
 }
+
 function isSpecialCase() {
     // const specialNameCases = [21, 35, 31, 45, 48, 50, 51, 55, 64, 65];
     if (workIndex == 20 && identifiers[0][identifier] === "Date")
