@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  A Simple Algorithm for Fuzzy Text Matching
-date:   2023-08-08 17:40:30 -0500
+date:   2023-10-31 12:00:00 -0500
 category: cs
 author: lastlegume
 tags: cs javascript
