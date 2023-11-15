@@ -76,6 +76,10 @@ function check() {
             nameOfWork += (subtype == 0 ? " (original construction)" : " (reconstruction)");
         } else if (specialCase == 7) {
             nameOfWork += (subtype == 0 ? " (chapel)" : " (fresco)");
+        } else if (specialCase == 8) {
+            nameOfWork += (subtype == 0 ? " (ceiling)" : " (altar)");
+        } else if (specialCase == 9) {
+            nameOfWork += (subtype == 0 ? " (commissioned)" : (subtype == 1 ? " (group of artists)" : " (annotations)"));
         }
 
     }
@@ -223,6 +227,12 @@ function makeQuestion() {
         } else if (specialCase == 7) {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? " (chapel)" : " (fresco)");
+        } else if (specialCase == 8) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (ceiling)" : " (altar)");
+        } else if (specialCase == 9) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (commissioned)" : (subtype == 1 ? " (group of artists)" : " (annotations)"));
         } else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
@@ -394,6 +404,10 @@ function isSpecialCase() {
         return 6;
     if (workIndex == 63 && identifiers[0][identifier] === "Date")
         return 7;
+    if (workIndex == 75 && identifiers[0][identifier] === "Date")
+        return 8;
+    if (workIndex == 81 && identifiers[0][identifier] === "Name of Author")
+        return 9;
 
     if (identifiers[workIndex][1].split("/").length > 1) {
         if (identifiers[workIndex][identifier].split("/").length > 1)
