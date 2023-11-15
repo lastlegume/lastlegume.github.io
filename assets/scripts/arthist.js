@@ -180,16 +180,19 @@ function makeQuestion() {
     }
     if (allWorks.checked) {
         workIndex = units[Math.floor(Math.random() * (units.length))];
-        while ((workIndex == previousWork || identifiers[workIndex][identifier] === "") && n < 10000) {
-            workIndex = units[Math.floor(Math.random() * (units.length - 1)) + 1];
+        while (((workIndex == previousWork && n < 100) || identifiers[workIndex][identifier] === "") && n < 10000) {
+            workIndex = units[Math.floor(Math.random() * (units.length))];
+            n++;
+        }
+    } else {
+        //if the stuff in the parenthesis with OR is true, we need to continue searching
+        while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
+            workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
             n++;
         }
     }
-    //if the stuff in the parenthesis with OR is true, we need to continue searching
-    while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
-        workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
-        n++;
-    }
+    console.log(units);
+
     if (identifiers[workIndex][identifier] === "")
         workIndex = units[0];
     if (!contains(units, identifiers[workIndex][unitIDlistIndex] * 1) && !allWorks.checked)
