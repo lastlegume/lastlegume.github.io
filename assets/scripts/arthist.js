@@ -91,8 +91,9 @@ function check() {
         }
 
     }
-
-
+    let overall = nameOfWork.split(":");
+    if(overall.length>1)
+        nameOfWork = overall[0] + " (caption: " + overall[1].split("/")[subtype] + ")";
     if (equals(answer.value.toLowerCase().trim(), correctAnswer.toLowerCase())) {
         reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + nameOfWork + "</span> is <span style = \"color: forestgreen;\">" + correctAnswer + "</span>.";
         reply.style.setProperty('background-color', 'darkseagreen');
