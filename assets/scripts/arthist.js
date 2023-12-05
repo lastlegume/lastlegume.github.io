@@ -80,6 +80,14 @@ function check() {
             nameOfWork += (subtype == 0 ? " (ceiling)" : " (altar)");
         } else if (specialCase == 9) {
             nameOfWork += (subtype == 0 ? " (commissioned)" : (subtype == 1 ? " (group of artists)" : " (annotations)"));
+        } else if (specialCase == 10) {
+            nameOfWork += (subtype == 0 ? " (plan)" : (subtype == 1 ? " (facade)" : " (ceiling fresco)"));
+        } else if (specialCase == 11) {
+            nameOfWork += (subtype == 0 ? " (church)" : (subtype == 1 ? " (fresco)" : " (fresco and stucco figures)"));
+        } else if (specialCase == 12) {
+            nameOfWork += (subtype == 0 ? " (sculpture)" : " (chapel)");
+        } else if (specialCase == 13) {
+            nameOfWork += (subtype == 0 ? " (architecture)" : " (sculpture)");
         }
 
     }
@@ -234,8 +242,20 @@ function makeQuestion() {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? " (ceiling)" : " (altar)");
         } else if (specialCase == 9) {
-            subtype = Math.floor(Math.random() * 2);
+            subtype = Math.floor(Math.random() * 3);
             question.textContent = question.textContent + (subtype == 0 ? " (commissioned)" : (subtype == 1 ? " (group of artists)" : " (annotations)"));
+        } else if (specialCase == 10) {
+            subtype = Math.floor(Math.random() * 3);
+            question.textContent = question.textContent + (subtype == 0 ? " (plan)" : (subtype == 1 ? " (facade)" : " (ceiling fresco)"));
+        } else if (specialCase == 11) {
+            subtype = Math.floor(Math.random() * 3);
+            question.textContent = question.textContent + (subtype == 0 ? " (church)" : (subtype == 1 ? " (fresco)" : " (fresco and stucco figures)"));
+        } else if (specialCase == 12) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (sculpture)" : " (chapel)");
+        } else if (specialCase == 13) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (architecture)" : " (sculpture)");
         } else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
@@ -289,9 +309,14 @@ function equals(one, two) {
         else
             return false;
     }
-    var ones = one.split(",");
+    var ones = [];
+    var twos = [];
+    if (identifiers[0][identifier] === "Materials" || identifiers[0][identifier] === "Culture") {
+        ones = one.split(",");
+        twos = two.split(",");
+    }
+
     ones.push(one);
-    var twos = two.split(",");
     twos.push(two);
     return fuzzyEquals(ones, twos)
     //return one === two;
@@ -411,6 +436,14 @@ function isSpecialCase() {
         return 8;
     if (workIndex == 81 && identifiers[0][identifier] === "Name of Author")
         return 9;
+    if (workIndex == 82 && identifiers[0][identifier] === "Name of Author")
+        return 10;
+    if (workIndex == 82 && identifiers[0][identifier] === "Date")
+        return 11;
+    if (workIndex == 89 && identifiers[0][identifier] === "Materials")
+        return 12;
+    if (workIndex == 93 && identifiers[0][identifier] === "Materials")
+        return 13;
 
     if (identifiers[workIndex][1].split("/").length > 1) {
         if (identifiers[workIndex][identifier].split("/").length > 1)

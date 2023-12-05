@@ -47,7 +47,7 @@ An extension that removes the citations from websites to clean up reading. Also 
 
 ### Scilympiad To LaTeX
 
-An extension that (mostly) converts a [scilympiad](https://scilympiad.com/) test into LaTeX formatted text. Contains options to customize environments for different questions types and generate a simple preamble and gradetable.  
+An extension that (mostly) converts a [scilympiad](https://scilympiad.com/) test into LaTeX formatted text. Contains options to customize environments for different questions types and generate a simple preamble and gradetable. Also supports exporting into the [template](https://www.overleaf.com/read/sbqqkdxcgzdx#31493d) I use for tests. 
 This extension isn't perfect and will need modifications such as pagebreaks to be added to the files it generates. It also cannot convert math and will delete all math equations from the test. However, it works with most questions and should be used only as a tool to speed up conversion.
 
 <a href="https://github.com/lastlegume/ScilympiadToLaTeX" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
