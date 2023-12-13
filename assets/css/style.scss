@@ -1,23 +1,38 @@
----
----
+--- 
+--- 
 
 @import "{{ site.theme }}";
 
-.extension-link{
+.extension-link {
     color: #B5E853
 }
-body{
+
+body {
     padding-bottom: 15%;
 }
-footer{
+
+footer {
     color: #B5E853;
     text-align: center;
 }
-header h1:before{
+header h1:before {
     content: "";
 }
-header h1{
+// header{
+//     position: sticky;
+//     top: 5px;
+// }
+header h1 {
     margin: 0 0 0 0px;
 }
 
-
+.progressBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 8px;
+    background: greenyellow;
+    width: 0%;
+    z-index: 100;
+    transition: width 0.2s ease-out;
+}
