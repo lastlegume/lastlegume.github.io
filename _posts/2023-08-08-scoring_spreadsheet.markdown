@@ -30,6 +30,9 @@ Key | Meaning
 #P# | Place (1st, 2nd, 3rd, 4th, etc.)
 #TN# | Team Number 
 #NAME# | Team Name
+#SCHOOL# | Name of the school
+#SUFFIX# | The suffix of the team (A/B/C/Blue/Varsity/etc.)
+#STATE# | The state that the team is from
 
 With these keys, it's possible to easily create simple formats for the slideshow. For example, a format `#P#. #TN# - #NAME#` could be used. With the previous example, if the winning team was Random High School (Team number C5), what would the resulting phrase be?  
 
