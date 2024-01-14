@@ -1,7 +1,7 @@
 const checkButton = document.getElementById("checkIdentifier");
 checkButton.addEventListener('click', () => check());
 const allWorks = document.getElementById("allWorks");
-allWorks.addEventListener('change', () => showAllWorks())
+allWorks.addEventListener('change', () => showAllWorks());
 
 var identifiers = [];
 var previousWork = 0;
