@@ -2,6 +2,8 @@ const checkButton = document.getElementById("checkIdentifier");
 checkButton.addEventListener('click', () => check());
 const allWorks = document.getElementById("allWorks");
 allWorks.addEventListener('change', () => showAllWorks());
+const useSpecificUnits = document.getElementById("useSpecificUnits");
+useSpecificUnits.addEventListener('change', () => switchUnitsShown());
 
 var identifiers = [];
 var previousWork = 0;
@@ -17,15 +19,28 @@ var onlyCaption = document.getElementById("onlycaption");
 
 var workIndex = 0;
 var identifier = "";
+var usingSpecificUnits = false;
+//units from College Board
+const unitDivCB = document.getElementById("units");
 const unitBoxes = document.getElementsByClassName("unit-checkbox");
 const unitDivs = document.getElementsByClassName("unit-div");
+// units specific
+const unitDivSpecific = document.getElementById("specific-units");
+const sunitBoxes = document.getElementsByClassName("sunit-checkbox");
+const sunitDivs = document.getElementsByClassName("sunit-div");
+// for identifier settings
 const idBoxes = document.getElementsByClassName("identifier-checkbox");
 for (let i = 0; i < unitBoxes.length; i++) {
     unitBoxes[i].addEventListener('change', () => update());
 }
+for (let i = 0; i < sunitBoxes.length; i++) {
+    sunitBoxes[i].addEventListener('change', () => updateSpecific());
+}
+// amount of weight College Board gives each unit
 const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
 var subtype = 0;
 var unitIdx = 0;
+var sunitIdx = 0;
 
 var extraAnswers = [];
 
@@ -88,12 +103,14 @@ function check() {
             nameOfWork += (subtype == 0 ? " (sculpture)" : " (chapel)");
         } else if (specialCase == 13) {
             nameOfWork += (subtype == 0 ? " (architecture)" : " (sculpture)");
+        } else if (specialCase == 13) {
+            nameOfWork += (subtype == 0 ? " (created)" : " (published)");
         }
 
     }
-    let overall = nameOfWork.split(":");
-    if(overall.length>1)
-        nameOfWork = overall[0] + " (caption: " + overall[1].split("/")[subtype] + ")";
+ //   let overall = nameOfWork.split(":");
+   // if (overall.length > 1)
+     //   nameOfWork = overall[0] + " (caption: " + overall[1].split("/")[subtype] + ")";
     if (equals(answer.value.toLowerCase().trim(), correctAnswer.toLowerCase())) {
         reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + nameOfWork + "</span> is <span style = \"color: forestgreen;\">" + correctAnswer + "</span>.";
         reply.style.setProperty('background-color', 'darkseagreen');
@@ -132,8 +149,11 @@ function readCSV() {
         }
         identifiers[i].push(string.substring(start));
     }
-    for (let i = 0; i < identifiers[0].length; i++)
+    for (let i = 0; i < identifiers[0].length; i++) {
         unitIdx += (identifiers[0][i] === "Unit" ? 1 : 0) * i;
+        sunitIdx += (identifiers[0][i] === "Specific Unit" ? 1 : 0) * i;
+
+    }
     makeQuestion();
 
     //  console.log(identifiers);
@@ -149,7 +169,7 @@ function makeQuestion() {
         var workDivs = document.getElementsByClassName("workDivs");
         var workboxes = document.getElementsByClassName("workboxes");
         for (let i = 0; i < workboxes.length; i++) {
-            if (workboxes[i].checked) {
+            if (workboxes[i].checked&&((workDivs[i].parentElement.classList[0] === "sunit-div"&&usingSpecificUnits)||(workDivs[i].parentElement.classList[0] === "unit-div"&&!usingSpecificUnits))) {
                 let idxOf = indexOfIdentifier(workDivs[i].innerText.trim(), "Title");
                 // console.log(workDivs[i].innerText.trim());
                 // console.log(idxOf);
@@ -158,6 +178,11 @@ function makeQuestion() {
                 else
                     units.push(idxOf);
             }
+        }
+    } else if (usingSpecificUnits) {
+        for (let i = 0; i < sunitBoxes.length; i++) {
+            if (sunitBoxes[i].checked)
+                units.push(i + 1);
         }
     } else {
         for (let i = 0; i < unitBoxes.length; i++) {
@@ -181,7 +206,7 @@ function makeQuestion() {
     question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
     let n = 0;
-    let unitIDlistIndex = identifiers[0].length - 1;
+
     if (allWorks.checked && units.length == 1) {
         workIndex = units[0];
         previousWork = -1;
@@ -193,9 +218,14 @@ function makeQuestion() {
             workIndex = units[Math.floor(Math.random() * (units.length))];
             n++;
         }
+    } else if (usingSpecificUnits) {
+        while ((!(!allWorks.checked && contains(units, identifiers[workIndex][sunitIdx] * 1)) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
+            workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
+            n++;
+        }
     } else {
         //if the stuff in the parenthesis with OR is true, we need to continue searching
-        while ((!((allWorks.checked && contains(units, workIndex * 1)) || (!allWorks.checked && contains(units, identifiers[workIndex][unitIDlistIndex] * 1))) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
+        while ((!(!allWorks.checked && contains(units, identifiers[workIndex][unitIdx] * 1)) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
             workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
             n++;
         }
@@ -204,8 +234,13 @@ function makeQuestion() {
 
     if (identifiers[workIndex][identifier] === "")
         workIndex = units[0];
-    if (!contains(units, identifiers[workIndex][unitIDlistIndex] * 1) && !allWorks.checked)
-        workIndex = 1;
+    if (!allWorks.checked) {
+        if (!usingSpecificUnits&&!contains(units, identifiers[workIndex][unitIdx] * 1))
+            workIndex = 1;
+        else if (usingSpecificUnits&&!contains(units, identifiers[workIndex][sunitIdx] * 1))
+            workIndex = 1;
+    }
+
     console.log("work: " + workIndex + ", identifier: " + identifier + ", subtype: " + subtype);
     // console.log(identifiers[workIndex]);
     // console.log(identifiers[workIndex][1]==="");
@@ -257,6 +292,9 @@ function makeQuestion() {
         } else if (specialCase == 13) {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? " (architecture)" : " (sculpture)");
+        } else if (specialCase == 14) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (created)" : " (published)");
         } else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
@@ -368,13 +406,36 @@ function showAllWorks() {
         }
 
     }
+    for (let i = 1; i < identifiers.length; i++) {
+        if (identifiers[i][1] !== "" && identifiers[i][sunitIdx] > 0) {
+            let tempDiv = document.createElement("div");
+            tempDiv.className = "workDivs";
+            let tempUnit = identifiers[i][sunitIdx] - 1;
+            tempDiv.innerHTML = "<label><input type=\"checkbox\" class = \"workboxes\"" + (sunitBoxes[tempUnit].checked && i <= 250 ? " checked" : "") + "> " + identifiers[i][1].split(":")[0] + " </label>";
+            sunitDivs[tempUnit].appendChild(tempDiv);
+        }
+
+    }
 }
 function update() {
     var workDivs = document.getElementsByClassName("workDivs");
     for (let i = 0; i < workDivs.length; i++) {
-        var idxOfWorkOfDiv = indexOfIdentifier(workDivs[i].innerText.trim(), "Title");
-        if (idxOfWorkOfDiv <= 250)
-            workDivs[i].children[0].children[0].checked = unitBoxes[identifiers[idxOfWorkOfDiv][unitIdx] - 1].checked;
+        if (workDivs[i].parentElement.classList[0] === "unit-div") {
+            var idxOfWorkOfDiv = indexOfIdentifier(workDivs[i].innerText.trim(), "Title");
+            if (idxOfWorkOfDiv <= 250)
+                workDivs[i].children[0].children[0].checked = unitBoxes[identifiers[idxOfWorkOfDiv][unitIdx] - 1].checked;
+        }
+
+    }
+}
+function updateSpecific() {
+    var workDivs = document.getElementsByClassName("workDivs");
+    for (let i = 0; i < workDivs.length; i++) {
+        if (workDivs[i].parentElement.classList[0] === "sunit-div") {
+            var idxOfWorkOfDiv = indexOfIdentifier(workDivs[i].innerText.trim(), "Title");
+            if (idxOfWorkOfDiv <= 250)
+                workDivs[i].children[0].children[0].checked = sunitBoxes[identifiers[idxOfWorkOfDiv][sunitIdx] - 1].checked;
+        }
     }
 }
 function fuzzyEquals(ones, twos) {
@@ -445,7 +506,8 @@ function isSpecialCase() {
         return 12;
     if (workIndex == 93 && identifiers[0][identifier] === "Materials")
         return 13;
-
+    if (workIndex == 106 && identifiers[0][identifier] === "Date")
+        return 14;
     if (identifiers[workIndex][1].split("/").length > 1) {
         if (identifiers[workIndex][identifier].split("/").length > 1)
             return 1000;
@@ -478,4 +540,14 @@ function indexOfIdentifier(name, id) {
             return i;
     }
     return -1;
+}
+function switchUnitsShown() {
+    usingSpecificUnits = !usingSpecificUnits;
+    if (usingSpecificUnits) {
+        unitDivSpecific.classList.remove("hide");
+        unitDivCB.classList.add("hide");
+    } else {
+        unitDivSpecific.classList.add("hide");
+        unitDivCB.classList.remove("hide");
+    }
 }

@@ -74,42 +74,80 @@ title: Art History ID
 </div>
 <div class="settings">
   <h2>Settings</h2>
-  <h5>Units <label><input type="checkbox" id="allWorks"> Show individual works </label></h5>
-  <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 1: Global Prehistory,
-      30,000–500 BCE </label></div>
-  <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 2: Ancient Mediterranean, 3500
-      BCE–300 CE</label></div>
-  <div class="unit-div "><label><input type="checkbox" class="unit-checkbox" checked> Unit 3:
-      Early Europe and Colonial
-      Americas,
-      200–1750 CE </label></div>
-  <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 4:
-      Later Europe and Americas,
-      1750–1980 CE
-    </label></div>
-  <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit
-      5: Indigenous Americas, 1000
-      BCE–1980 CE
-    </label>
+  <h5>Units <label><input type="checkbox" id="allWorks"> Show individual works </label><input type="checkbox"
+      id="useSpecificUnits"> Use more specific units </label></h5>
+  </h5>
+  <div id="units" class="">
+    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 1: Global Prehistory,
+        30,000–500 BCE </label></div>
+    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 2: Ancient Mediterranean,
+        3500
+        BCE–300 CE</label></div>
+    <div class="unit-div "><label><input type="checkbox" class="unit-checkbox" checked> Unit 3:
+        Early Europe and Colonial
+        Americas,
+        200–1750 CE </label></div>
+    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 4:
+        Later Europe and Americas,
+        1750–1980 CE
+      </label></div>
+    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit
+        5: Indigenous Americas, 1000
+        BCE–1980 CE
+      </label>
+    </div>
+    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 6:
+        Africa, 1100–1980 CE
+      </label></div>
+    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 7: West
+        and Central Asia, 500
+        BCE–1980 CE
+      </label></div>
+    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 8: South,
+        East, and Southeast
+        Asia, 300
+        BCE–1980 CE </label></div>
+    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 9: The
+        Pacific, 700-1980 C.E.
+      </label></div>
+    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 10:
+        Global Contemporary, 1980 C.E.
+        to Present
+      </label></div>
   </div>
-  <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 6:
-      Africa, 1100–1980 CE
-    </label></div>
-  <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 7: West
-      and Central Asia, 500
-      BCE–1980 CE
-    </label></div>
-  <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 8: South,
-      East, and Southeast
-      Asia, 300
-      BCE–1980 CE </label></div>
-  <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 9: The
-      Pacific, 700-1980 C.E.
-    </label></div>
-  <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 10:
-      Global Contemporary, 1980 C.E.
-      to Present
-    </label></div>
+  <div id="specific-units" class="hide">
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> Global Prehistory </label>
+    </div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> Ancient Mediterranean: Ancient
+        Near East </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> Ancient Mediterranean: Ancient
+        Egypt </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> Ancient Mediterranean: Ancient
+        Greece </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> Ancient Mediterranean: Ancient
+        Etruscan and Roman </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> EEA: Early Christian </label>
+    </div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> EEA: Early Medieval and Islamic
+        Art </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> EEA: Romanesque 
+      </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> EEA: Late
+        Medieval/Pre-Renaissance & Early Renaissance </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> EEA: (High)Northern Renaissance
+        and Others </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> EEA: Renaissance </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> EEA: Part I Baroque, Dutch
+        Golden Age, Americas, English 18th Century </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> EEA: Part II Baroque, Dutch
+        Golden Age, Americas, English 18th Century </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> LEA: Later Europe/Americas:
+        Rococo, Age of Enlightenment, Neoclassicism, Romanticism, Hudson River School</label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> LEA: Developments in late 19th
+        & early 20th Century Architecture, Modernism, Photography, Realism </label></div>
+   
+
+  </div>
   <h5>Identifiers</h5>
   <label><input type="checkbox" class="identifier-checkbox" checked> Title </label><br>
   <label><input type="checkbox" class="identifier-checkbox" checked> Author </label><br>
