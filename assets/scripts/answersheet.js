@@ -20,7 +20,7 @@ function convertText() {
                     if(input[i+1].length>FIBThreshold){
                         output+="\\hspace{.1em}\n\\begin{solutionbox}{"+Math.floor((input[i+1].length)**.5)+"em}\n"+input[i+1].substring(1).trim()+"\n\\end{solutionbox}";
                     }else{
-                        output+="\\fillin["+input[i+1].substring(1).trim()+"][.9\\textwidth]";
+                        output+="\\fillin["+input[i+1].substring(1).trim()+"][.85\\textwidth]";
                     }
                     i++;
                 // MCQ
@@ -69,10 +69,10 @@ function convertText() {
         }
     }
     outputArea.value = output;
+    copyText()
 }
 
 function copyText() {
-    navigator.clipboard.writeText(copyText);
-
+    navigator.clipboard.writeText(outputArea.value);
     alert("Copied the text");
 } 

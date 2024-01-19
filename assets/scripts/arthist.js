@@ -350,6 +350,9 @@ function equals(one, two) {
     }
     var ones = [];
     var twos = [];
+    if(identifiers[0][identifier] === "Name of Author"){
+        twos = two.split(" ");
+    }
     if (identifiers[0][identifier] === "Materials" || identifiers[0][identifier] === "Culture") {
         ones = one.split(",");
         twos = two.split(",");
