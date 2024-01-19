@@ -30,7 +30,8 @@ function convertText() {
                     }else{
                         let environment = input[i+1].matchAll(/\\begin{(.*?)}/gi);
                     environment = [...environment][0][1];
-                    
+                    if(environment.includes("onepar"))
+                        output+="\\hspace{.1em}";
                     let end = i+2;
                     for(let j = i+1;j<input.length&&!input[j].includes("\\end{"+environment+"}");j++){
                         if(input[j].includes("choice")&&!input[j].includes("\\begin{")&&!input[j].includes("\\end{")&&!showAnswerChoices){
