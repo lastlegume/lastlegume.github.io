@@ -105,7 +105,7 @@ function check() {
             nameOfWork += (subtype == 0 ? " (architecture)" : " (sculpture)");
         } else if (specialCase == 14) {
             nameOfWork += (subtype == 0 ? " (created)" : " (published)");
-        }else if (specialCase == 15) {
+        } else if (specialCase == 15) {
             nameOfWork += (subtype == 0 ? "" : " (originally created)");
         }
 
