@@ -103,14 +103,16 @@ function check() {
             nameOfWork += (subtype == 0 ? " (sculpture)" : " (chapel)");
         } else if (specialCase == 13) {
             nameOfWork += (subtype == 0 ? " (architecture)" : " (sculpture)");
-        } else if (specialCase == 13) {
+        } else if (specialCase == 14) {
             nameOfWork += (subtype == 0 ? " (created)" : " (published)");
+        }else if (specialCase == 15) {
+            nameOfWork += (subtype == 0 ? "" : " (originally created)");
         }
 
     }
- //   let overall = nameOfWork.split(":");
-   // if (overall.length > 1)
-     //   nameOfWork = overall[0] + " (caption: " + overall[1].split("/")[subtype] + ")";
+    //   let overall = nameOfWork.split(":");
+    // if (overall.length > 1)
+    //   nameOfWork = overall[0] + " (caption: " + overall[1].split("/")[subtype] + ")";
     if (equals(answer.value.toLowerCase().trim(), correctAnswer.toLowerCase())) {
         reply.innerHTML = "Correct! The <span style = \"color: forestgreen;\">" + identifiers[0][identifier].toLowerCase() + "</span> of <span style = \"color: forestgreen;\">" + nameOfWork + "</span> is <span style = \"color: forestgreen;\">" + correctAnswer + "</span>.";
         reply.style.setProperty('background-color', 'darkseagreen');
@@ -169,7 +171,7 @@ function makeQuestion() {
         var workDivs = document.getElementsByClassName("workDivs");
         var workboxes = document.getElementsByClassName("workboxes");
         for (let i = 0; i < workboxes.length; i++) {
-            if (workboxes[i].checked&&((workDivs[i].parentElement.classList[0] === "sunit-div"&&usingSpecificUnits)||(workDivs[i].parentElement.classList[0] === "unit-div"&&!usingSpecificUnits))) {
+            if (workboxes[i].checked && ((workDivs[i].parentElement.classList[0] === "sunit-div" && usingSpecificUnits) || (workDivs[i].parentElement.classList[0] === "unit-div" && !usingSpecificUnits))) {
                 let idxOf = indexOfIdentifier(workDivs[i].innerText.trim(), "Title");
                 // console.log(workDivs[i].innerText.trim());
                 // console.log(idxOf);
@@ -235,9 +237,9 @@ function makeQuestion() {
     if (identifiers[workIndex][identifier] === "")
         workIndex = units[0];
     if (!allWorks.checked) {
-        if (!usingSpecificUnits&&!contains(units, identifiers[workIndex][unitIdx] * 1))
+        if (!usingSpecificUnits && !contains(units, identifiers[workIndex][unitIdx] * 1))
             workIndex = 1;
-        else if (usingSpecificUnits&&!contains(units, identifiers[workIndex][sunitIdx] * 1))
+        else if (usingSpecificUnits && !contains(units, identifiers[workIndex][sunitIdx] * 1))
             workIndex = 1;
     }
 
@@ -295,6 +297,9 @@ function makeQuestion() {
         } else if (specialCase == 14) {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? " (created)" : " (published)");
+        } else if (specialCase == 15) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? "" : " (originally created)");
         } else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
@@ -350,7 +355,7 @@ function equals(one, two) {
     }
     var ones = [];
     var twos = [];
-    if(identifiers[0][identifier] === "Name of Author"){
+    if (identifiers[0][identifier] === "Name of Author") {
         twos = two.split(" ");
     }
     if (identifiers[0][identifier] === "Materials" || identifiers[0][identifier] === "Culture") {
@@ -511,6 +516,8 @@ function isSpecialCase() {
         return 13;
     if (workIndex == 106 && identifiers[0][identifier] === "Date")
         return 14;
+    if (workIndex == 144 && identifiers[0][identifier] === "Date")
+        return 15;
     if (identifiers[workIndex][1].split("/").length > 1) {
         if (identifiers[workIndex][identifier].split("/").length > 1)
             return 1000;
