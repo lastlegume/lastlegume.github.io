@@ -5,6 +5,9 @@ allWorks.addEventListener('change', () => showAllWorks());
 const useSpecificUnits = document.getElementById("useSpecificUnits");
 useSpecificUnits.addEventListener('change', () => switchUnitsShown());
 
+const selectAll = document.getElementById("selectAll");
+selectAll.addEventListener('change', () => selectEverything());
+
 var identifiers = [];
 var previousWork = 0;
 
@@ -41,6 +44,8 @@ const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
 var subtype = 0;
 var unitIdx = 0;
 var sunitIdx = 0;
+const selectAllText = document.getElementById("selectAllText");
+
 
 var extraAnswers = [];
 
@@ -560,4 +565,25 @@ function switchUnitsShown() {
         unitDivSpecific.classList.add("hide");
         unitDivCB.classList.remove("hide");
     }
+    if(selectAll.checked){
+        selectAllText.innerHTML = "Deselect All";
+    }else
+        selectAllText.innerHTML = "Select All";
+}
+function selectEverything(){
+    if (usingSpecificUnits) {
+        for(let i = 0;i<sunitBoxes.length;i++){
+            sunitBoxes[i].checked = selectAll.checked;
+        }
+        updateSpecific();
+    } else {
+        for(let i = 0;i<unitBoxes.length;i++){
+            unitBoxes[i].checked = selectAll.checked;
+        }
+        update();
+    }
+    if(selectAll.checked){
+        selectAllText.innerHTML = "Deselect All";
+    }else
+        selectAllText.innerHTML = "Select All";
 }

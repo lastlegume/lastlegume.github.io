@@ -15,7 +15,25 @@ title: Art History ID
     overflow: hidden;
     font-size: smaller;
   }
+  .btn-submit{
+    transition: .5s;
+    border-color: springgreen;
+    
+    border-radius: 15px;
+  } 
+  
+  .btn-submit:hover{
+    transition: .5s;
+    background: rgb(50, 127, 88);
 
+  } 
+  .btn-submit:active{
+    transition: .5s;
+    background: radial-gradient(springgreen, rgb(50, 127, 88));
+    
+
+  } 
+  
   h1,
   h2 {
     margin: 30px 0;
@@ -67,15 +85,16 @@ title: Art History ID
     images selected by the College Board. </p>
 
   <img id="work"><br>
-  <div id="question"></div><input id="answer" type="text"> <button id="checkIdentifier">Check</button>
+  <div id="question"></div><input id="answer" type="text"> <button class = "btn-submit btn" id="checkIdentifier">Check</button>
   <p id="reply"></p>
 
 
 </div>
 <div class="settings">
   <h2>Settings</h2>
-  <h5>Units <label><input type="checkbox" id="allWorks"> Show individual works </label><input type="checkbox"
-      id="useSpecificUnits"> Use more specific units </label></h5>
+  <h5>Units<br> <label><input type="checkbox" id="allWorks"> Show individual works </label><label><input type="checkbox"
+      id="useSpecificUnits"> Use more specific units </label> <label><input type="checkbox"
+      id="selectAll" checked> <span id = "selectAllText">Deselect all</span> </label></h5>
   </h5>
   <div id="units" class="">
     <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 1: Global Prehistory,
@@ -149,6 +168,10 @@ title: Art History ID
         Post-Impressionism, Vienna Secession, Fauvism, Cubism </label></div>
     <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> LEA: Expressionism, Dada,
         Prairie School, De Stijl, Bauhaus, Surrealism, Russian/Soviet Avant-Garde </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> LEA: Abstract Expressionism,
+        Color Field, Pop Art, Earthwork, Post Modern Architecture </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> LEA: Latin America and African
+        American </label></div>
 
   </div>
   <h5>Identifiers</h5>
