@@ -370,6 +370,8 @@ function equals(one, two) {
 
     ones.push(one);
     twos.push(two);
+    ones.push(one.replaceAll(/\s?\(.*?\)/g, ""));
+    twos.push(two.replaceAll(/\s?\(.*?\)/g, ""));
     return fuzzyEquals(ones, twos)
     //return one === two;
 }

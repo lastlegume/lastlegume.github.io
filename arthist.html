@@ -15,25 +15,27 @@ title: Art History ID
     overflow: hidden;
     font-size: smaller;
   }
-  .btn-submit{
+
+  .btn-submit {
     transition: .5s;
     border-color: springgreen;
-    
+
     border-radius: 15px;
-  } 
-  
-  .btn-submit:hover{
+  }
+
+  .btn-submit:hover {
     transition: .5s;
     background: rgb(50, 127, 88);
 
-  } 
-  .btn-submit:active{
+  }
+
+  .btn-submit:active {
     transition: .5s;
     background: radial-gradient(springgreen, rgb(50, 127, 88));
-    
 
-  } 
-  
+
+  }
+
   h1,
   h2 {
     margin: 30px 0;
@@ -81,11 +83,12 @@ title: Art History ID
   <h1>Art History ID</h1>
 
   <p>This will quiz you on the identifiers of the 250 works needed for AP art history (currently a work in progress as
-    the creator progresses through the course). All images are from the 250
+    the creator progresses through the course [Indigenous Americas and earlier complete]). All images are from the 250
     images selected by the College Board. </p>
 
   <img id="work"><br>
-  <div id="question"></div><input id="answer" type="text"> <button class = "btn-submit btn" id="checkIdentifier">Check</button>
+  <div id="question"></div><input id="answer" type="text"> <button class="btn-submit btn"
+    id="checkIdentifier">Check</button>
   <p id="reply"></p>
 
 
@@ -93,46 +96,30 @@ title: Art History ID
 <div class="settings">
   <h2>Settings</h2>
   <h5>Units<br> <label><input type="checkbox" id="allWorks"> Show individual works </label><label><input type="checkbox"
-      id="useSpecificUnits"> Use more specific units </label> <label><input type="checkbox"
-      id="selectAll" checked> <span id = "selectAllText">Deselect all</span> </label></h5>
+        id="useSpecificUnits"> Use more specific units </label> <label><input type="checkbox" id="selectAll" checked>
+      <span id="selectAllText">Deselect all</span> </label></h5>
   </h5>
   <div id="units" class="">
     <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 1: Global Prehistory,
         30,000–500 BCE </label></div>
     <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 2: Ancient Mediterranean,
-        3500
-        BCE–300 CE</label></div>
-    <div class="unit-div "><label><input type="checkbox" class="unit-checkbox" checked> Unit 3:
-        Early Europe and Colonial
-        Americas,
-        200–1750 CE </label></div>
-    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 4:
-        Later Europe and Americas,
-        1750–1980 CE
+        3500 BCE–300 CE</label></div>
+    <div class="unit-div "><label><input type="checkbox" class="unit-checkbox" checked> Unit 3: Early Europe and
+        Colonial Americas, 200–1750 CE </label></div>
+    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 4: Later Europe and
+        Americas, 1750–1980 CE</label></div>
+    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 5: Indigenous Americas, 1000
+        BCE–1980 CE</label></div>
+    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 6: Africa, 1100–1980 CE
       </label></div>
-    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit
-        5: Indigenous Americas, 1000
-        BCE–1980 CE
-      </label>
-    </div>
-    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 6:
-        Africa, 1100–1980 CE
-      </label></div>
-    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 7: West
-        and Central Asia, 500
-        BCE–1980 CE
-      </label></div>
-    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 8: South,
-        East, and Southeast
-        Asia, 300
-        BCE–1980 CE </label></div>
-    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 9: The
-        Pacific, 700-1980 C.E.
-      </label></div>
-    <div class="unit-div hide"><label><input type="checkbox" class="unit-checkbox" checked> Unit 10:
-        Global Contemporary, 1980 C.E.
-        to Present
-      </label></div>
+    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 7: West and Central Asia,
+        500 BCE–1980 CE</label></div>
+    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 8: South, East, and
+        Southeast Asia, 300 BCE–1980 CE </label></div>
+    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 9: The Pacific, 700-1980
+        C.E.</label></div>
+    <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 10: Global Contemporary,
+        1980 C.E. to Present </label></div>
   </div>
   <div id="specific-units" class="hide">
     <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> Global Prehistory </label>
@@ -171,6 +158,10 @@ title: Art History ID
     <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> LEA: Abstract Expressionism,
         Color Field, Pop Art, Earthwork, Post Modern Architecture </label></div>
     <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> LEA: Latin America and African
+        American </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> Indigenous Americas: Ancient
+        American </label></div>
+    <div class="sunit-div"><label><input type="checkbox" class="sunit-checkbox" checked> Indigenous Americas: Native
         American </label></div>
 
   </div>
