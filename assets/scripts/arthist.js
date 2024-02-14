@@ -39,6 +39,11 @@ for (let i = 0; i < unitBoxes.length; i++) {
 for (let i = 0; i < sunitBoxes.length; i++) {
     sunitBoxes[i].addEventListener('change', () => updateSpecific());
 }
+document.getElementById("exportSettings").addEventListener('click', () => exportSettings())
+document.getElementById("importSettings").addEventListener('click', () => importSettings())
+
+document.getElementById("settingsImportToggle").addEventListener('change', () => toggleImportArea());
+
 // amount of weight College Board gives each unit
 const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
 var subtype = 0;
@@ -54,7 +59,6 @@ const request = new XMLHttpRequest();
 request.addEventListener('load', readCSV);
 request.open("GET", "/assets/arthist/arthistidentifiers.csv");
 request.send();
-//https://lastlegume.github.io
 function check() {
     previousWork = workIndex;
     var correctAnswer = identifiers[workIndex][identifier].trim();
@@ -112,6 +116,8 @@ function check() {
             nameOfWork += (subtype == 0 ? " (created)" : " (published)");
         } else if (specialCase == 15) {
             nameOfWork += (subtype == 0 ? "" : " (originally created)");
+        }else if (specialCase == 16) {
+            nameOfWork += (subtype == 0 ? "" : " (covenant added)");
         }
 
     }
@@ -305,21 +311,29 @@ function makeQuestion() {
         } else if (specialCase == 15) {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? "" : " (originally created)");
-        } else if (specialCase >= 1000) {
+        } else if (specialCase == 16) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? "" : " (covenant added)");
+        }else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
     }
     work.src = "/assets/arthist/artimages/" + path[imgIndex];
 }
 function equals(one, two) {
+    //two is the answer, one is the response
     if (strict.checked)
         return one === two;
     if (one === two)
         return true;
     if (identifiers[0][identifier] === "Date") {
         one = one.trim();
-        if (two.substring(4, 7).toUpperCase() === "BCE") {
+        if (two.includes("bce") && two.includes("ce")) {
             var stillLooking = true;
+            let twoRangeBw = two.split("-");
+
+            twoRangeBw[0] = "-" + twoRangeBw[0].substring(0, twoRangeBw[0].length - 3).trim();
+            twoRangeBw[1] = twoRangeBw[1].substring(0, twoRangeBw[1].length - 2).trim();
             for (let i = 1; i < one.length && stillLooking; i++) {
                 if (one.substring(i, i + 1) === "-") {
                     stillLooking = false;
@@ -335,7 +349,8 @@ function equals(one, two) {
                 if (rangeBwBCEandCE[i].substring(rangeBwBCEandCE[i].length - 2).toLowerCase() === "ce")
                     rangeBwBCEandCE[i] = rangeBwBCEandCE[i].substring(0, rangeBwBCEandCE[i].length - 2).trim();
             }
-            return betweenRange(rangeBwBCEandCE, ['-600', '150'], range.checked);
+
+            return betweenRange(rangeBwBCEandCE, twoRangeBw, range.checked);
         }
         var dateIsBCE = two.trim().substring(two.length - 3).toLowerCase() === "bce";
         // console.log(dateIsBCE);
@@ -525,6 +540,8 @@ function isSpecialCase() {
         return 14;
     if (workIndex == 144 && identifiers[0][identifier] === "Date")
         return 15;
+    if (workIndex == 159 && identifiers[0][identifier] === "Date")
+        return 16;
     if (identifiers[workIndex][1].split("/").length > 1) {
         if (identifiers[workIndex][identifier].split("/").length > 1)
             return 1000;
@@ -567,25 +584,73 @@ function switchUnitsShown() {
         unitDivSpecific.classList.add("hide");
         unitDivCB.classList.remove("hide");
     }
-    if(selectAll.checked){
+    if (selectAll.checked) {
         selectAllText.innerHTML = "Deselect All";
-    }else
+    } else
         selectAllText.innerHTML = "Select All";
 }
-function selectEverything(){
+function selectEverything() {
     if (usingSpecificUnits) {
-        for(let i = 0;i<sunitBoxes.length;i++){
+        for (let i = 0; i < sunitBoxes.length; i++) {
             sunitBoxes[i].checked = selectAll.checked;
         }
         updateSpecific();
     } else {
-        for(let i = 0;i<unitBoxes.length;i++){
+        for (let i = 0; i < unitBoxes.length; i++) {
             unitBoxes[i].checked = selectAll.checked;
         }
         update();
     }
-    if(selectAll.checked){
+    if (selectAll.checked) {
         selectAllText.innerHTML = "Deselect All";
-    }else
+    } else
         selectAllText.innerHTML = "Select All";
+}
+function exportSettings() {
+    showAllWorks();
+    showAllWorks();
+
+    let settings = document.getElementById("settings").querySelectorAll("input");
+    let encodedSettings = encode(settings);
+
+    navigator.clipboard.writeText(encodedSettings);
+    alert("Your code is: " + encodedSettings + "\nThis text has automatically been copied to your clipboard.");
+}
+function importSettings() {
+    showAllWorks();
+    showAllWorks();
+
+    let settings = document.getElementById("settings").querySelectorAll("input");
+    decode(settings, document.getElementById("settingsImportArea").value);
+}
+function encode(settings) {
+    let str = "";
+    for (let i = 0; i < settings.length; i++) {
+        str += settings[i].checked ? "1" : "0";
+    }
+
+    return str;
+}
+function decode(settings, str) {
+    let allWorksChanged = false;
+    for (let i = 0; i < settings.length; i++) {
+        if(settings[i].id === "allWorks"){
+            allWorksChanged = settings[i].checked!=(str.at(i) === "1");
+        }
+        settings[i].checked = (str.at(i) === "1");
+        if(settings[i].id === "useSpecificUnits"){
+            if(str.at(i) === "1"&&!usingSpecificUnits||str.at(i) === "0"&&usingSpecificUnits)
+                switchUnitsShown();
+        }
+
+    }
+    if(allWorksChanged)
+        showAllWorks();
+}
+function toggleImportArea() {
+    let importDiv = document.getElementById("settingsImport");
+    if (importDiv.classList.contains("hide"))
+        importDiv.classList.remove("hide");
+    else
+        importDiv.classList.add("hide");
 }

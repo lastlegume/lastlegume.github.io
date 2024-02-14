@@ -93,11 +93,12 @@ title: Art History ID
 
 
 </div>
-<div class="settings">
+<div id="settings">
   <h2>Settings</h2>
-  <h5>Units<br> <label><input type="checkbox" id="allWorks"> Show individual works </label><label><input type="checkbox"
-        id="useSpecificUnits"> Use more specific units </label> <label><input type="checkbox" id="selectAll" checked>
-      <span id="selectAllText">Deselect all</span> </label></h5>
+  <h5>Units<br> <label><input type="checkbox" id="allWorks"> Show individual works </label>
+    <br><label><input type="checkbox" id="useSpecificUnits"> Use more specific units </label>
+    <br><label><input type="checkbox" id="selectAll" checked> <span id="selectAllText">Deselect all</span> </label>
+  </h5>
   </h5>
   <div id="units" class="">
     <div class="unit-div"><label><input type="checkbox" class="unit-checkbox" checked> Unit 1: Global Prehistory,
@@ -177,5 +178,15 @@ title: Art History ID
   <label><input type="checkbox" id="range"> Allow any year within the range of years </label><br>
   <label><input type="checkbox" id="acceptcaption" checked> Accept caption as title </label><br>
   <label><input type="checkbox" id="onlycaption"> Only accept caption as title </label><br>
-
+</div><br>
+<div id = "settingsIO">
+  <h4>Import/Export Current Settings</h4>
+  <label><input type = "checkbox" id= "settingsImportToggle">Show Settings Input</label>
+<div id = "settingsImport" class="hide">
+  <textarea cols="100" rows="15" id= "settingsImportArea"></textarea><br>
+  <button id="importSettings">Import Settings</button>
+</div>
+<div id = "settingsExport">
+  <button id="exportSettings">Export Settings</button>
+</div>
 </div>
