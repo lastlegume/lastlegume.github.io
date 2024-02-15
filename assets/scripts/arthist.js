@@ -116,7 +116,7 @@ function check() {
             nameOfWork += (subtype == 0 ? " (created)" : " (published)");
         } else if (specialCase == 15) {
             nameOfWork += (subtype == 0 ? "" : " (originally created)");
-        }else if (specialCase == 16) {
+        } else if (specialCase == 16) {
             nameOfWork += (subtype == 0 ? "" : " (covenant added)");
         }
 
@@ -225,34 +225,56 @@ function makeQuestion() {
         previousWork = -1;
         n = 10000000000;
     }
-    if (allWorks.checked) {
-        workIndex = units[Math.floor(Math.random() * (units.length))];
-        while (((workIndex == previousWork && n < 100) || identifiers[workIndex][identifier] === "") && n < 10000) {
-            workIndex = units[Math.floor(Math.random() * (units.length))];
-            n++;
+
+    if (!allWorks.checked) {
+        var tempUnitsList = []
+        //find all in the specific units and add to list
+        if (usingSpecificUnits) {
+            for (let i = 0; i < identifiers.length; i++) {
+                if (contains(units, identifiers[i][sunitIdx].trim()))
+                    tempUnitsList.push(i);
+            }
+        } else {
+            for (let i = 0; i < identifiers.length; i++) {
+                if (contains(units, identifiers[i][unitIdx]))
+                    tempUnitsList.push(i);
+            }
         }
-    } else if (usingSpecificUnits) {
-        while ((!(!allWorks.checked && contains(units, identifiers[workIndex][sunitIdx] * 1)) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
-            workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
-            n++;
-        }
-    } else {
-        //if the stuff in the parenthesis with OR is true, we need to continue searching
-        while ((!(!allWorks.checked && contains(units, identifiers[workIndex][unitIdx] * 1)) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
-            workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
-            n++;
-        }
+        units = tempUnitsList;
     }
+    //if (allWorks.checked) {
+    workIndex = units[Math.floor(Math.random() * (units.length))];
+    while (((workIndex == previousWork && n < 100) || identifiers[workIndex][identifier].trim() === "") && n < 10000) {
+        workIndex = units[Math.floor(Math.random() * (units.length))];
+        if(n>100)
+            identifier = ids[Math.floor(Math.random() * ids.length)];
+
+        n++;
+    }
+    console.log(identifiers[workIndex][identifier]+" n: "+n);
+    //} 
+    // else if (usingSpecificUnits) {
+    //     while ((!(!allWorks.checked && contains(units, identifiers[workIndex][sunitIdx] * 1)) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
+    //         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
+    //         n++;
+    //     }
+    // } else {
+    //     //if the stuff in the parenthesis with OR is true, we need to continue searching
+    //     while ((!(!allWorks.checked && contains(units, identifiers[workIndex][unitIdx] * 1)) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
+    //         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
+    //         n++;
+    //     }
+    // }
     console.log(units);
 
-    if (identifiers[workIndex][identifier] === "")
+    if (identifiers[workIndex][identifier] === ""||!identifiers[workIndex][identifier])
         workIndex = units[0];
-    if (!allWorks.checked) {
-        if (!usingSpecificUnits && !contains(units, identifiers[workIndex][unitIdx] * 1))
-            workIndex = 1;
-        else if (usingSpecificUnits && !contains(units, identifiers[workIndex][sunitIdx] * 1))
-            workIndex = 1;
-    }
+    // if (!allWorks.checked) {
+    //     if (!usingSpecificUnits && !contains(units, identifiers[workIndex][unitIdx] * 1))
+    //         workIndex = 1;
+    //     else if (usingSpecificUnits && !contains(units, identifiers[workIndex][sunitIdx] * 1))
+    //         workIndex = 1;
+    // }
 
     console.log("work: " + workIndex + ", identifier: " + identifier + ", subtype: " + subtype);
     // console.log(identifiers[workIndex]);
@@ -314,7 +336,7 @@ function makeQuestion() {
         } else if (specialCase == 16) {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? "" : " (covenant added)");
-        }else if (specialCase >= 1000) {
+        } else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
     }
@@ -328,7 +350,7 @@ function equals(one, two) {
         return true;
     if (identifiers[0][identifier] === "Date") {
         one = one.trim();
-        if (two.includes("bce") && two.includes("ce")) {
+        if (two.includes("bce") && two.includes(" ce")) {
             var stillLooking = true;
             let twoRangeBw = two.split("-");
 
@@ -408,11 +430,12 @@ function betweenRange(ones, twos, inmiddle) {
 function contains(arr, val) {
     var bool = false;
     arr.forEach(element => {
-        if (element === val)
+        if (element === val || element == val)
             bool = true;
     });
     return bool;
 }
+
 function process(event) {
     // console.log(event.key);
     if (event.key === "Enter")
@@ -504,7 +527,7 @@ function fuzzy(guess, answer) {
                 return true;
         }
     }
-    console.log(score + " vs needed " + neededFuzzyAmount ** fuzziness)
+ //   console.log(score + " vs needed " + neededFuzzyAmount ** fuzziness)
     return score > neededFuzzyAmount ** fuzziness;
 }
 
@@ -634,17 +657,17 @@ function encode(settings) {
 function decode(settings, str) {
     let allWorksChanged = false;
     for (let i = 0; i < settings.length; i++) {
-        if(settings[i].id === "allWorks"){
-            allWorksChanged = settings[i].checked!=(str.at(i) === "1");
+        if (settings[i].id === "allWorks") {
+            allWorksChanged = settings[i].checked != (str.at(i) === "1");
         }
         settings[i].checked = (str.at(i) === "1");
-        if(settings[i].id === "useSpecificUnits"){
-            if(str.at(i) === "1"&&!usingSpecificUnits||str.at(i) === "0"&&usingSpecificUnits)
+        if (settings[i].id === "useSpecificUnits") {
+            if (str.at(i) === "1" && !usingSpecificUnits || str.at(i) === "0" && usingSpecificUnits)
                 switchUnitsShown();
         }
 
     }
-    if(allWorksChanged)
+    if (allWorksChanged)
         showAllWorks();
 }
 function toggleImportArea() {
