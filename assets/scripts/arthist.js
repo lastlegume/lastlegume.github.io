@@ -216,7 +216,7 @@ function makeQuestion() {
         ids.push(1);
     identifier = ids[Math.floor(Math.random() * ids.length)];
     //identifier = Math.floor(Math.random() * (identifiers[0].length - 2)) + 1;
-    question.textContent = identifiers[0][identifier] + "?";
+    //  question.textContent = identifiers[0][identifier] + "?";
     workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
     let n = 0;
 
@@ -246,12 +246,14 @@ function makeQuestion() {
     workIndex = units[Math.floor(Math.random() * (units.length))];
     while (((workIndex == previousWork && n < 100) || identifiers[workIndex][identifier].trim() === "") && n < 10000) {
         workIndex = units[Math.floor(Math.random() * (units.length))];
-        if(n>100)
+        if (n > 100)
             identifier = ids[Math.floor(Math.random() * ids.length)];
 
         n++;
     }
-    console.log(identifiers[workIndex][identifier]+" n: "+n);
+    question.textContent = identifiers[0][identifier] + "?";
+
+    console.log(identifiers[workIndex][identifier] + " n: " + n);
     //} 
     // else if (usingSpecificUnits) {
     //     while ((!(!allWorks.checked && contains(units, identifiers[workIndex][sunitIdx] * 1)) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
@@ -267,7 +269,7 @@ function makeQuestion() {
     // }
     console.log(units);
 
-    if (identifiers[workIndex][identifier] === ""||!identifiers[workIndex][identifier])
+    if (identifiers[workIndex][identifier] === "" || !identifiers[workIndex][identifier])
         workIndex = units[0];
     // if (!allWorks.checked) {
     //     if (!usingSpecificUnits && !contains(units, identifiers[workIndex][unitIdx] * 1))
@@ -527,7 +529,7 @@ function fuzzy(guess, answer) {
                 return true;
         }
     }
- //   console.log(score + " vs needed " + neededFuzzyAmount ** fuzziness)
+    //   console.log(score + " vs needed " + neededFuzzyAmount ** fuzziness)
     return score > neededFuzzyAmount ** fuzziness;
 }
 
