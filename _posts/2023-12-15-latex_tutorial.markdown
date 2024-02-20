@@ -15,7 +15,7 @@ This [tutorial](https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes) 
 
 # Question Writing
 
-To start writing questions, within the document, type `\begin{questions}`. Because questions is inside the brackets, this is called the questions environment. I will be using the term environment a lot going forward, so make sure to understand that environments apply formatting effects and are defined by a `\begin{environment}` and `\end{environment}` From this point on, `\question[point value]` can be used to start writing questions. Important: the first line after the questions begin must have `\question`. For some reason, if the first line is not a question, the environment doesn't really work and throws a lot of errors. After `\question`, write any text needed for the question. For example, a one point question with the text, "what is the color of the sky?", how would you write it?
+To start writing questions, within the document, type `\begin{questions}`. Because questions is inside the brackets, this is called the questions environment. I will be using the term environment a lot going forward, so make sure to understand that environments apply formatting effects and are defined by a `\begin{environment}` and `\end{environment}` From this point on, `\question[point value]` can be used to start writing questions. After `\question`, write any text needed for the question. For example, a one point question with the text, "what is the color of the sky?", how would you write it?
 
 <details style = "padding-bottom:8px">
     <summary>Code</summary>
@@ -109,7 +109,6 @@ As described earlier, this line sets the default of line of the fillin lines (fo
 ```
 
 Both of these lines do the same thing: they set the emphasis for correct answers to red bold text instead of the default bolding. This is completely subjective, but I like the red color because I feel that it stands out better than just bolding correct answers. 
-\CorrectChoiceEmphasis{\color{red}\bfseries}
 
 ```latex
 \setlength\answerclearance{2pt}
@@ -187,12 +186,11 @@ The itemize environment creates a bulleted or unordered list. I use this here to
 ```latex
 \begin{center}
 \textit{For grading use only}\\
-% A simple way to make it automatically update is to use \numpages/9 inside the braces ({}) with \usepackage[version=4]{mhchem} in the preamble. 
-% This is not very accurate because of the variance in question size, but it can serve as a starting point
-\multirowgradetable{1}[pages]    
+% The gradetable has a number of rows that automatically updates. This is not very accurate because of the variance in question size, but it can serve as a starting point. You will probably need to manually update the number of rows of the gradetable (change '\the\numexpr\numpages/13+1' to the desired number of rows).
+\multirowgradetable{\the\numexpr\numpages/13+1}[pages]    
 \end{center}
 ```
 
-The gradetable shows a list of all of the pages and number of points on each page. It leaves a space underneath the point value for you to write the score of the test taker. If you don't plan on writing on the gradetable, `\multirowpointtable` could be used instead because it lacks the space underneath the points for the score and shows only the page and number of points. Like the comments say, the way I automatically update the size of the gradetable is with `\multirowgradetable{\numpages/9}[pages]` and mhchem, but this should serve only as a rough estimate and needs to be manually verified. The need for mhchem is quite strange, but from testing I found that this was the only way to automatically update the number of rows that I could find. The ability to divide inside of the braces seems to be some addition of mhchem, but why it is in mhchem is completely unknown to me. 
+The gradetable shows a list of all of the pages and number of points on each page. It leaves a space underneath the point value for you to write the score of the test taker. If you don't plan on writing on the gradetable, `\multirowpointtable` could be used instead because it lacks the space underneath the points for the score and shows only the page and number of points. Like the comments say, it's probably better to change the formula into a number of rows manually, but the formula can serve as a starting point for the number of rows. 
 
 That's everything in the template explained, so I hope this helps make the meaning behind every line more clear. Thanks for reading to the end, and I hope this helps you write something easier.  
