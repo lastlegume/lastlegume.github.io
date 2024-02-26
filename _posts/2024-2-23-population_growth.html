@@ -1,0 +1,557 @@
+---
+layout: post
+title: "Population Growth Models: Intrinsic Rate of Increase, Finite Rate of Increase, and a Proof of the Rule of 70"
+date: 2024-2-23 08:00:00 -0500
+category: scioly
+author: lastlegume
+tags: ecology scioly
+---
+<style type="text/css" media="screen">
+    .graph {
+        text-align: center;
+    }
+
+    .panel {
+        display: inline-block;
+        padding: 5px;
+        vertical-align: top;
+    }
+
+    math {
+        padding-bottom: 15px;
+    }
+
+    input {
+        vertical-align: bottom;
+    }
+
+    h2,
+    h3 {
+        margin: 0;
+    }
+</style>
+<script defer src="/assets/scripts/graph.js"></script>
+<script defer src="/assets/scripts/growthrates.js"></script>
+There are many different ways to simulate population growth. Most of these methods have growth rates of some sort, but
+despite often having similar representations, these growth rates are often completely different. All of the models here are
+going to disregard immigration and emigration and treat births and deaths as the only forms of population changes. To
+start, let's look at the most simple form of population growth, an exponential model.
+
+
+<h2> Exponential Models of Population Growth</h2>
+<h3>Continuous</h3>
+Given a population size N, a simple exponential model for the growth in N is shown below:
+
+<math display="block" style="padding-bottom:15px;">
+    <msub>
+        <mi>N</mi>
+        <mn>t</mn>
+    </msub>
+    <mo>=</mo>
+    <msub>
+        <mi>N</mi>
+        <mn>0</mn>
+    </msub>
+    <mo>(</mo>
+    <mi>e</mi>
+    <msup>
+        <mo>)</mo>
+        <mrow>
+            <mi>r</mi>
+            <mi>t</mi>
+        </mrow>
+    </msup>
+</math>
+We could also use the differential form:
+<math display="block">
+    <mfrac>
+        <mrow>
+            <mi>d</mi>
+            <mi>N</mi>
+        </mrow>
+        <mrow>
+            <mi>d</mi>
+            <mi>t</mi>
+        </mrow>
+    </mfrac>
+    <mo>=</mo>
+    <mi>r</mi>
+    <mi>N</mi>
+</math>
+Where <math>
+    <msub>
+        <mi>N</mi>
+        <mn>0</mn>
+    </msub>
+</math> is the initial population, <math>
+    <msub>
+        <mi>N</mi>
+        <mn>t</mn>
+    </msub>
+</math> is the population at any time t, r is the instantanous rate of increase, and e is Euler's number (2.718). In
+this model, we are assuming that the population change is continous (i.e. that births and deaths happen year round) and
+that there is no immigration or emigration. Additionally, this model is density independent, meaning that growth is unaffected by population density. The
+growth rate is directly proportional to the population, resulting in a graph similar to below.
+<div class="graph panel">
+    <canvas class="graph" id="basicExponentialModel" height=400 width=610></canvas>
+</div>
+<div class="panel"><label>
+        <h3>Graph Parameters</h3>r: <input type="range" id="exponential-r" min="-1" max="1.5" step=".01" value=".3"><br>
+        <p id="exponential-r-value">r value: </p>
+    </label><br>
+    <math>
+        <msub>
+            <mi>N</mi>
+            <mn>0</mn>
+        </msub>
+    </math>: <input type="range" id="exponential-n0" min="1" max="50" step="1" value="10"><br>
+    <p id="exponential-n0-value"><math>
+            <msub>
+                <mi>N</mi>
+                <mn>0</mn>
+            </msub>
+        </math> value: </p></label>
+</div>
+<br>
+
+r is known as the instantanous rate of increase and is the per capita birth rate (<math>
+    <mi>b</mi>
+</math>) minus the per capita death rate (<math>
+    <mi>d</mi>
+</math>)
+at any instant. When at its max value, it is known as the intinsic rate of increase. This function only describes a
+population that undergoes continuous, exponential growth, such as when resources are unlimited at the start of
+colonization of a new area. When r is negative, the population decreases at an exponential rate, which follows from our
+definition of r because if r is negative, <math>
+    <mi>b</mi>
+    <mo> &lt; </mo>
+    <mi>d</mi>
+</math> and more individuals are dying than being born. Likewise, when r is positive, the population increases at an
+exponential rate because <math>
+    <mi>b</mi>
+    <mo>></mo>
+    <mi>d</mi>
+</math>.
+
+<h3>Discrete</h3>
+
+Alternatively, if organisms only reproduce in discrete intervals, we could rewrite the growth equation to <math>
+    <msub>
+        <mi>N</mi>
+        <mi>t</mi>
+    </msub>
+    <mo>=</mo>
+    <msub>
+        <mi>N</mi>
+        <mn>0</mn>
+    </msub>
+    <mo>(</mo>
+    <mn>1</mn>
+    <mo>+</mo>
+    <mi>R</mi>
+    <msup>
+        <mo>)</mo>
+        <mi>t</mi>
+    </msup>
+</math>, with R (not the same as r) being the geometric rate of increase and being the amount the population changes
+between discrete intervals. However, these birth and death rates are over some unit time, while the rates from the
+continuous model are from a single instant. We could also rewite the discrete equation to <math>
+    <msub>
+        <mi>N</mi>
+        <mi>t</mi>
+    </msub>
+    <mo>=</mo>
+    <msub>
+        <mi>N</mi>
+        <mn>0</mn>
+    </msub>
+    <msup>
+        <mi>λ</mi>
+        <mi>t</mi>
+    </msup>
+</math>, with the finite rate of increase (λ) being <math<mi>λ</mi>
+    <mo>=</mo>
+    <mo>(</mo>
+    <mn>1</mn>
+    <mo>+</mo>
+    <mi>R</mi>
+    <mo>)</mo></math>. The finite rate of increase means that the population increases by a factor of λ for each unit
+    time.
+
+    <h3>Relating λ, r, and R</h3>
+    Since both population growth equations give us the population at some time t, we can equate the equations for
+    population growth.
+    <math display="block">
+        <msub>
+            <mi>N</mi>
+            <mn>0</mn>
+        </msub>
+        <msup>
+            <mi>e</mi>
+            <mrow>
+                <mi>r</mi>
+                <mi>t</mi>
+            </mrow>
+        </msup>
+        <mo>=</mo>
+        <msub>
+            <mi>N</mi>
+            <mn>0</mn>
+        </msub>
+        <mo>(</mo>
+        <mn>1</mn>
+        <mo>+</mo>
+        <mi>R</mi>
+        <msup>
+            <mo>)</mo>
+            <mi>t</mi>
+        </msup>
+    </math>
+    From this, we can divide both sides by <math>
+        <msub>
+            <mi>N</mi>
+            <mn>0</mn>
+        </msub>
+    </math> and take the natural logarithm of both sides to give us the following relation:
+    <math display="block">
+        <mi>r</mi>
+        <mi>t</mi>
+        <mo>=</mo>
+        <mi>t</mi>
+        <mi>ln</mi>
+        <mo>(</mo>
+        <mn>1</mn>
+        <mo>+</mo>
+        <mi>R</mi>
+        <mo>)</mo>
+    </math>
+    <math display="block">
+        <mi>r</mi>
+        <mo>=</mo>
+        <mi>ln</mi>
+        <mo>(</mo>
+        <mn>1</mn>
+        <mo>+</mo>
+        <mi>R</mi>
+        <mo>)</mo>
+    </math>
+    <math display="block">
+        <mi>r</mi>
+        <mo>=</mo>
+        <mi>ln</mi>
+        <mo>(</mo>
+        <mi>λ</mi>
+        <mo>)</mo>
+    </math>
+    However, despite having a simple relationship, we don't really need to use this because populations are usually not
+    both continuous and discrete.
+
+    <h2>Proving the Rule of 70</h2>
+    For those unfamiliar, the Rule of 70 states that the doubling time of a population (or the price of an asset in
+    economics) can be estimated by <math>
+        <mi>D</mi>
+        <mo>=</mo>
+        <mfrac>
+            <mn>70</mn>
+            <mrow>
+                <mi>r</mi>
+                <mi>a</mi>
+                <mi>t</mi>
+                <mi>e</mi>
+            </mrow>
+        </mfrac>
+    </math>, with D being the doubling time and rate being the rate at which the population grows in percent (%). We can
+    prove this pretty easily with both the discrete and continuous cases as follows.
+    <h3>Continuous</h3>
+    Firstly, the doubling time is the time for the population to reach two times the original population, so we can
+    substitute <math>
+        <mn>2</mn>
+        <msub>
+            <mi>N</mi>
+            <mn>0</mn>
+        </msub>
+    </math> for the left side of the equation.
+    <math display="block">
+        <mn>2</mn>
+        <msub>
+            <mi>N</mi>
+            <mn>0</mn>
+        </msub>
+        <mo>=</mo>
+        <msub>
+            <mi>N</mi>
+            <mn>0</mn>
+        </msub>
+        <msup>
+            <mi>e</mi>
+            <mrow>
+                <mi>r</mi>
+                <mi>t</mi>
+            </mrow>
+        </msup>
+    </math>
+    Solving for t:
+    <math display="block">
+        <mn>2</mn>
+        <mo>=</mo>
+        <msup>
+            <mi>e</mi>
+            <mrow>
+                <mi>r</mi>
+                <mi>t</mi>
+            </mrow>
+        </msup>
+    </math>
+    <math display="block">
+        <mi>ln</mi>
+        <mn>2</mn>
+        <mo>=</mo>
+        <mi>r</mi>
+        <mi>t</mi>
+    </math>
+    <math display="block">
+        <mi>t</mi>
+        <mo>=</mo>
+        <mfrac>
+            <mrow>
+                <mi>ln</mi>
+                <mn>2</mn>
+            </mrow>
+            <mi>r</mi>
+        </mfrac>
+    </math>
+    <math>
+        <mi>ln</mi>
+        <mn>2</mn>
+        <mo>≈</mo>
+        <mn>0.693</mn>
+    </math>, so, when we convert r to percent by multiplying by 100, we must also multiply the numerator by 100, giving
+    us the final approximation:
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+        <mi>t</mi>
+        <mo>=</mo>
+        <mfrac>
+            <mrow>
+                <mi>ln</mi>
+                <mn>2</mn>
+            </mrow>
+            <mi>r</mi>
+        </mfrac>
+        <mo>≈</mo>
+        <mfrac>
+            <mn>69.3</mn>
+            <msub>
+                <mi>r</mi>
+                <mi mathvariant="normal">%</mi>
+            </msub>
+        </mfrac>
+        <mo>≈</mo>
+        <mfrac>
+            <mn>70</mn>
+            <msub>
+                <mi>r</mi>
+                <mi mathvariant="normal">%</mi>
+            </msub>
+        </mfrac>
+    </math>
+    with <math>
+        <msub>
+            <mi>r</mi>
+            <mi mathvariant="normal">%</mi>
+        </msub>
+    </math> being the intrinsic rate of increase in percent (%).
+
+    <h3>Discrete</h3>
+    Using the same process as before, we substitute in <math>
+        <mn>2</mn>
+        <msub>
+            <mi>N</mi>
+            <mn>0</mn>
+        </msub>
+    </math>.
+    <math display="block">
+        <mn>2</mn>
+        <msub>
+            <mi>N</mi>
+            <mn>0</mn>
+        </msub>
+        <mo>=</mo>
+        <msub>
+            <mi>N</mi>
+            <mn>0</mn>
+        </msub>
+        <mo>(</mo>
+        <mn>1</mn>
+        <mo>+</mo>
+        <mi>R</mi>
+        <msup>
+            <mo>)</mo>
+            <mi>t</mi>
+        </msup>
+    </math>
+    <math display="block">
+        <mn>2</mn>
+        <mo>=</mo>
+        <mo>(</mo>
+        <mn>1</mn>
+        <mo>+</mo>
+        <mi>R</mi>
+        <msup>
+            <mo>)</mo>
+            <mi>t</mi>
+        </msup>
+    </math>
+    Taking the natural logarithm of both sides:
+    <math display="block">
+        <mi>ln</mi>
+        <mn>2</mn>
+        <mo>=</mo>
+        <mi>t</mi>
+        <mi>ln</mi>
+        <mo>(</mo>
+        <mn>1</mn>
+        <mo>+</mo>
+        <mi>R</mi>
+        <mo>)</mo>
+    </math>
+    Using the Maclaurin series for <math>
+        <mi>ln</mi>
+        <mo>(</mo>
+        <mn>1</mn>
+        <mo>+</mo>
+        <mi>x</mi>
+        <mo>)</mo>
+    </math>, we find that <math>
+        <mi>ln</mi>
+        <mo>(</mo>
+        <mn>1</mn>
+        <mo>+</mo>
+        <mi>x</mi>
+        <mo>)</mo>
+        <mo>=</mo>
+        <mn>0</mn>
+        <mo>+</mo>
+        <mi>x</mi>
+        <mo>-</mo>
+        <mfrac>
+            <msup>
+                <mi>x</mi>
+                <mn>2</mn>
+            </msup>
+            <mn>2</mn>
+        </mfrac>
+        <mo>+</mo>
+        <mfrac>
+            <msup>
+                <mi>x</mi>
+                <mn>3</mn>
+            </msup>
+            <mn>3</mn>
+        </mfrac>
+        <mo>-</mo>
+        <mfrac>
+            <msup>
+                <mi>x</mi>
+                <mn>4</mn>
+            </msup>
+            <mn>4</mn>
+        </mfrac>
+        <mo>+</mo>
+        <mo>⋯</mo>
+        <mo>≈</mo>
+        <mi>x</mi>
+    </math> for small values of x. Therefore, 
+    <math display="block">
+        <mi>t</mi>
+        <mo>=</mo>
+        <mfrac>
+            <mrow>
+                <mi>ln</mi>
+                <mn>2</mn>
+            </mrow>
+            <mrow>
+                <mi>ln</mi>
+                <mi>λ</mi>
+            </mrow>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+            <mrow>
+                <mi>ln </mi>
+                <mn>2</mn>
+            </mrow>
+            <mrow>
+                <mi>ln</mi>
+                <mo>(</mo>
+                <mn>1</mn>
+                <mo>+</mo>
+                <mi>R</mi>
+                <mo>)</mo>
+            </mrow>
+        </mfrac>
+        <mo>≈</mo>
+        <mfrac>
+            <mrow>
+                <mi>ln</mi>
+                <mn>2</mn>
+            </mrow>
+            <mi>R</mi>
+        </mfrac>
+        <mo>≈</mo>
+        <mfrac>
+            <mn>69.3</mn>
+            <msub>
+                <mi>R</mi>
+                <mi mathvariant="normal">%</mi>
+            </msub>
+        </mfrac>
+        <mo>≈</mo>
+        <mfrac>
+            <mn>70</mn>
+            <msub>
+                <mi>R</mi>
+                <mi mathvariant="normal">%</mi>
+            </msub>
+        </mfrac>
+    </math>
+
+
+    <h2>Logistic Models</h2>
+    Logistic models take into account density dependent effects. This results in the growth rate being proportional to both the current population and the difference between the current and the max population possible, the carrying capacity (K). This gives us the following differential model
+    <math display="block"><mfrac><mrow><mi>d</mi><mi>N</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>r</mi><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mi>K</mi><mo>-</mo><mi>N</mi></mrow><mi>K</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>r</mi><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mn>1</mn><mo>-</mo><mfrac><mi>N</mi><mi>K</mi></mfrac></mrow><mo stretchy="true" form="postfix">)</mo></mrow></math>
+    where N is the population, r is the intrinsic rate of increase, and K is the carrying capacity. The integral form of this equation is
+    <math display="block"><msub><mi>N</mi><mi>t</mi></msub><mo>=</mo><msub><mi>N</mi><mn>0</mn></msub><mfrac><mi>K</mi><mrow><mo>(</mo><mi>K</mi><mo>-</mo><msub><mi>N</mi><mn>0</mn></msub><mo>)</mo><msup><mi>e</mi><mrow><mo>-</mo><mi>r</mi><mi>t</mi></mrow></msup><mo>+</mo><msub><mi>N</mi><mn>0</mn></msub></mrow></mfrac></math>
+    This model takes into account density dependent and has a clear carrying capacity. However, it is also limited through its lack of a time lag between population and population growth changes (i.e. the growth rate changes as soon as the population does), along with other limitations. <br>
+    <div class="graph panel">
+        <canvas class="graph" id="logisticModel" height=400 width=610></canvas>
+    </div>
+    <div class="panel"><label>
+            <h3>Graph Parameters</h3>r: <input type="range" id="logistic-r" min="-1" max="1.5" step=".01" value=".3"><br>
+            <p id="logistic-r-value">r value: </p>
+        </label>
+        <math>
+            <msub>
+                <mi>N</mi>
+                <mn>0</mn>
+            </msub>
+        </math>: <input type="range" id="logistic-n0" min="1" max="1500" step="1" value="10"><br>
+        <p id="logistic-n0-value"><math>
+                <msub>
+                    <mi>N</mi>
+                    <mn>0</mn>
+                </msub>
+            </math> value: </p></label>
+            K: <input type="range" id="logistic-K" min="1" max="1000" step="1" value="500"><br>
+            <p id="logistic-K-value">K value: </p>
+    </div>
+    <div class="graph panel">
+        <canvas class="graph" id="logisticModeldNdt" height=400 width=305></canvas>
+    </div>
+    <div class="graph panel">
+        <canvas class="graph" id="logisticModeldNdtN" height=400 width=305></canvas>
+    </div><br>
+    The second and third graphs show the population growth rate (<math><mfrac><mrow><mi>d</mi><mi>N</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></math>) and per capita population growth rate (<math><mfrac><mrow><mi>d</mi><mi>N</mi></mrow><mrow><mi>N</mi><mi>d</mi><mi>t</mi></mrow></mfrac></math>) respectively plotted against population size.<br>
+    As seen in the second graph, the highest growth rate is at K/2, which is an important property of logistic models. Another hallmark of the logistic model is the linear graph of per capita population growth rate against population size. Additionally, notice how when <math><msub><mi>N</mi><mn>0</mn></msub><mo>></mo><mi>K</mi></math>, the growth rate is always negative and increases as population size gets closer to the carrying capacity, illustrating the tendency of a logistic graph to tend towards the carrying capacity.   
+
+    <h2>Conclusion</h2>
+    All of these models have limitations and ultimately are only an extremely simplified model of population growth. However, we can learn a lot about population growth from even these simplified models. Thanks for reading!<br>
