@@ -118,6 +118,8 @@ function check() {
             nameOfWork += (subtype == 0 ? "" : " (originally created)");
         } else if (specialCase == 16) {
             nameOfWork += (subtype == 0 ? "" : " (covenant added)");
+        } else if (specialCase == 17) {
+            nameOfWork += (subtype == 0 ? " (founded)" : " (rebuilt)");
         }
 
     }
@@ -338,6 +340,9 @@ function makeQuestion() {
         } else if (specialCase == 16) {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? "" : " (covenant added)");
+        } else if (specialCase == 17) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (founded)" : " (rebuilt)");
         } else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
@@ -567,6 +572,8 @@ function isSpecialCase() {
         return 15;
     if (workIndex == 159 && identifiers[0][identifier] === "Date")
         return 16;
+    if (workIndex == 168 && identifiers[0][identifier] === "Date")
+        return 17;
     if (identifiers[workIndex][1].split("/").length > 1) {
         if (identifiers[workIndex][identifier].split("/").length > 1)
             return 1000;
