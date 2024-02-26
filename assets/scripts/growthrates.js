@@ -54,7 +54,8 @@ function updateLogisticGraph(){
         nVals.push(solve(func.replaceAll('x',x)));
         x+=xInc;
     }
-    let nlim = [logisticN0Slider.value*1, logisticKSlider.value*1].sort();
+    let nlim = [logisticN0Slider.value*1, logisticKSlider.value*1];
+    //.sort((a,b) => a-b)
     let nInc = (nlim[1] - nlim[0]) / (logisticGraphdNdt.width - 40);
     let n = nlim[0];
     for(let i = 0;i<logisticGraphdNdt.width - 40;i++){

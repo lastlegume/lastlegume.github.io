@@ -42,7 +42,7 @@ function graph(func, canvas, xInc, xlab, ylab, xlim, ylim, col) {
         ctx.globalAlpha = 1;
         if (i % (xGridInc * xGridSkips) == 0&&i+xGridInc+padding<=canvas.width) {
             let label = (i * xInc) + xlim[0];
-            ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 10000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding + i, (canvas.height - padding) + padding / 2, 24);
+            ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding + i, (canvas.height - padding) + padding / 2, 24);
         }
     }
     // y=a lines
@@ -56,7 +56,7 @@ function graph(func, canvas, xInc, xlab, ylab, xlim, ylim, col) {
         ctx.closePath();
         ctx.globalAlpha = 1;
         let label = (1 - (i / (canvas.height - padding))) * (ylim[1] - ylim[0]) + ylim[0];
-        ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 10000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding - 13, i, 22)
+        ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding - 13, i, 22)
     }
     //graph 
     ctx.globalAlpha = 1;
@@ -162,7 +162,7 @@ function graphList(yVals, canvas, xInc, xlab, ylab, xlim, ylim, col) {
         ctx.globalAlpha = 1;
         if (i % (xGridInc * xGridSkips) == 0&&i+xGridInc+padding<=canvas.width) {
             let label = (i * xInc) + xlim[0];
-            ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 10000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding + i, (canvas.height - padding) + padding / 2, 24);
+            ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding + i, (canvas.height - padding) + padding / 2, 24);
         }
     }
     // y=a lines
@@ -176,7 +176,7 @@ function graphList(yVals, canvas, xInc, xlab, ylab, xlim, ylim, col) {
         ctx.closePath();
         ctx.globalAlpha = 1;
         let label = (1 - (i / (canvas.height - padding))) * (ylim[1] - ylim[0]) + ylim[0];
-        ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 10000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding - 13, i, 22)
+        ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding - 13, i, 22)
     }
     //graph 
     ctx.globalAlpha = 1;
