@@ -25,8 +25,7 @@ tags: ecology scioly
         vertical-align: bottom;
     }
 
-    h2,
-    h3 {
+    .header {
         margin: 0;
     }
 </style>
@@ -38,8 +37,8 @@ going to disregard immigration and emigration and treat births and deaths as the
 start, let's look at the most simple form of population growth, an exponential model.
 
 
-<h2> Exponential Models of Population Growth</h2>
-<h3>Continuous</h3>
+<h2 class = "header"> Exponential Models of Population Growth</h2>
+<h3 class = "header">Continuous</h3>
 Given a population size N, a simple exponential model for the growth in N is shown below:
 
 <math display="block" style="padding-bottom:15px;">
@@ -96,7 +95,7 @@ growth rate is directly proportional to the population, resulting in a graph sim
     <canvas class="graph" id="basicExponentialModel" height=400 width=610></canvas>
 </div>
 <div class="panel"><label>
-        <h3>Graph Parameters</h3>r: <input type="range" id="exponential-r" min="-1" max="1.5" step=".01" value=".3"><br>
+        <h3 class = "header">Graph Parameters</h3>r: <input type="range" id="exponential-r" min="-1" max="1.5" step=".01" value=".3"><br>
         <p id="exponential-r-value">r value: </p>
     </label><br>
     <math>
@@ -133,7 +132,7 @@ exponential rate because <math>
     <mi>d</mi>
 </math>.
 
-<h3>Discrete</h3>
+<h3 class = "header">Discrete</h3>
 
 Alternatively, if organisms only reproduce in discrete intervals, we could rewrite the growth equation to <math>
     <msub>
@@ -178,7 +177,7 @@ continuous model are from a single instant. We could also rewite the discrete eq
     <mo>)</mo></math>. The finite rate of increase means that the population increases by a factor of λ for each unit
     time.
 
-    <h3>Relating λ, r, and R</h3>
+    <h3 class = "header">Relating λ, r, and R</h3>
     Since both population growth equations give us the population at some time t, we can equate the equations for
     population growth.
     <math display="block">
@@ -246,7 +245,7 @@ continuous model are from a single instant. We could also rewite the discrete eq
     However, despite having a simple relationship, we don't really need to use this because populations are usually not
     both continuous and discrete.
 
-    <h2>Proving the Rule of 70</h2>
+    <h2 class = "header">Proving the Rule of 70</h2>
     For those unfamiliar, the Rule of 70 states that the doubling time of a population (or the price of an asset in
     economics) can be estimated by <math>
         <mi>D</mi>
@@ -262,7 +261,7 @@ continuous model are from a single instant. We could also rewite the discrete eq
         </mfrac>
     </math>, with D being the doubling time and rate being the rate at which the population grows in percent (%). We can
     prove this pretty easily with both the discrete and continuous cases as follows.
-    <h3>Continuous</h3>
+    <h3 class = "header">Continuous</h3>
     Firstly, the doubling time is the time for the population to reach two times the original population, so we can
     substitute <math>
         <mn>2</mn>
@@ -361,7 +360,7 @@ continuous model are from a single instant. We could also rewite the discrete eq
         </msub>
     </math> being the intrinsic rate of increase in percent (%).
 
-    <h3>Discrete</h3>
+    <h3 class = "header">Discrete</h3>
     Using the same process as before, we substitute in <math>
         <mn>2</mn>
         <msub>
@@ -516,7 +515,7 @@ continuous model are from a single instant. We could also rewite the discrete eq
     </math>
 
 
-    <h2>Logistic Models</h2>
+    <h2 class = "header">Logistic Models</h2>
     Logistic models take into account density dependent effects. This results in the growth rate being proportional to both the current population and the difference between the current and the max population possible, the carrying capacity (K). This gives us the following differential model
     <math display="block"><mfrac><mrow><mi>d</mi><mi>N</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>r</mi><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><mrow><mi>K</mi><mo>-</mo><mi>N</mi></mrow><mi>K</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>r</mi><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mn>1</mn><mo>-</mo><mfrac><mi>N</mi><mi>K</mi></mfrac></mrow><mo stretchy="true" form="postfix">)</mo></mrow></math>
     where N is the population, r is the intrinsic rate of increase, and K is the carrying capacity. The integral form of this equation is
@@ -526,7 +525,7 @@ continuous model are from a single instant. We could also rewite the discrete eq
         <canvas class="graph" id="logisticModel" height=400 width=610></canvas>
     </div>
     <div class="panel"><label>
-            <h3>Graph Parameters</h3>r: <input type="range" id="logistic-r" min=".01" max="1.5" step=".01" value=".3"><br>
+            <h3 class = "header">Graph Parameters</h3>r: <input type="range" id="logistic-r" min=".01" max="1.5" step=".01" value=".3"><br>
             <p id="logistic-r-value">r value: </p>
         </label>
         <math>
@@ -534,14 +533,14 @@ continuous model are from a single instant. We could also rewite the discrete eq
                 <mi>N</mi>
                 <mn>0</mn>
             </msub>
-        </math>: <input type="range" id="logistic-n0" min="1" max="1500" step="1" value="10"><br>
+        </math>: <input type="range" id="logistic-n0" min="1" max="1000" step="1" value="10"><br>
         <p id="logistic-n0-value"><math>
                 <msub>
                     <mi>N</mi>
                     <mn>0</mn>
                 </msub>
             </math> value: </p></label>
-            K: <input type="range" id="logistic-K" min="1" max="1000" step="1" value="500"><br>
+            K: <input type="range" id="logistic-K" min="2" max="1000" step="1" value="500"><br>
             <p id="logistic-K-value">K value: </p>
     </div>
     <div class="graph panel">
@@ -553,5 +552,5 @@ continuous model are from a single instant. We could also rewite the discrete eq
     The second and third graphs show the population growth rate (<math><mfrac><mrow><mi>d</mi><mi>N</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac></math>) and per capita population growth rate (<math><mfrac><mrow><mi>d</mi><mi>N</mi></mrow><mrow><mi>N</mi><mi>d</mi><mi>t</mi></mrow></mfrac></math>) respectively plotted against population size.<br>
     As seen in the second graph, the highest growth rate is at K/2, which is an important property of logistic models. Another hallmark of the logistic model is the linear graph of per capita population growth rate against population size. Additionally, notice how when <math><msub><mi>N</mi><mn>0</mn></msub><mo>></mo><mi>K</mi></math>, the growth rate is always negative and increases as population size gets closer to the carrying capacity, illustrating the tendency of a logistic graph to tend towards the carrying capacity.   
 
-    <h2>Conclusion</h2>
+    <h2 class = "header">Conclusion</h2>
     All of these models have limitations and ultimately are only an extremely simplified model of population growth. However, we can learn a lot about population growth from even these simplified models. Thanks for reading!<br>

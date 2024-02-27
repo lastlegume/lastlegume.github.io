@@ -1,7 +1,6 @@
 //give the method the function and it'll graph it
 function graph(func, canvas, xInc, xlab, ylab, xlim, ylim, col) {
     let padding = 40;
-
     if (!xlim) {
         xlim = [0, 100];
     } else {
@@ -11,58 +10,12 @@ function graph(func, canvas, xInc, xlab, ylab, xlim, ylim, col) {
         ylim = [0, 100];
     }
 
-    ctx = canvas.getContext('2d');
-    ctx.clearRect(0,0,canvas.width, canvas.height);
-    ctx.lineWidth = 1;
-    ctx.textAlign = "center";
-    ctx.strokeStyle = "#FFFFFF";
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "9px";
-    //labels
-    if (xlab) {
-        ctx.fillText(xlab, canvas.width / 2 + padding / 2, canvas.height);
-    }
-    if (ylab) {
-        ctx.rotate(-Math.PI / 2);
-        ctx.fillText(ylab, (canvas.height - padding) * -.5, 9);
-        ctx.rotate(Math.PI / 2);
-    }
-    //grid
-
-    // x=a lines
-    let xGridInc = Math.round(canvas.width / 30);
-    let xGridSkips = Math.ceil(24 / xGridInc);
-    for (let i = 0; i <= canvas.width; i += xGridInc) {
-        ctx.globalAlpha = 0.1;
-        ctx.beginPath();
-        ctx.moveTo(padding + i, 0);
-        ctx.lineTo(padding + i, canvas.height - padding);
-        ctx.stroke();
-        ctx.closePath();
-        ctx.globalAlpha = 1;
-        if (i % (xGridInc * xGridSkips) == 0&&i+xGridInc+padding<=canvas.width) {
-            let label = (i * xInc) + xlim[0];
-            ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding + i, (canvas.height - padding) + padding / 2, 24);
-        }
-    }
-    // y=a lines
-    let yGridInc = Math.max(Math.round(canvas.width / 30), 15);
-    for (let i = canvas.height - padding; i >= 0; i -= yGridInc) {
-        ctx.globalAlpha = 0.1;
-        ctx.beginPath();
-        ctx.moveTo(padding, i);
-        ctx.lineTo(canvas.width, i);
-        ctx.stroke();
-        ctx.closePath();
-        ctx.globalAlpha = 1;
-        let label = (1 - (i / (canvas.height - padding))) * (ylim[1] - ylim[0]) + ylim[0];
-        ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding - 13, i, 22)
-    }
+    drawGrid(canvas, xInc, xlab, ylab, xlim, ylim, padding);
     //graph 
     ctx.globalAlpha = 1;
 
     ctx.beginPath();
-    if(col.includes("#")||col.includes("rgb"))
+    if (col.includes("#") || col.includes("rgb"))
         ctx.strokeStyle = col;
     else
         ctx.strokeStyle = "#00FFA0";
@@ -93,11 +46,12 @@ function graph(func, canvas, xInc, xlab, ylab, xlim, ylim, col) {
                 lastOvershoot = 1;
 
             }
+
         }
-        if(pctY>=0&&pctY<=1)
+        if (pctY >= 0 && pctY <= 1)
             lastOvershoot = -1;
         ctx.lineTo(padding + i, (canvas.height - padding) * (1 - Math.max(0, Math.min(1, pctY))));
-
+        //console.log(x+" "+pctY*(ylim[1] - ylim[0]));
 
         x += xInc;
 
@@ -105,23 +59,12 @@ function graph(func, canvas, xInc, xlab, ylab, xlim, ylim, col) {
     ctx.stroke();
     ctx.closePath();
     //axes
-    ctx.lineWidth = 2;
-
-    ctx.strokeStyle = "#FFFFFF";
-    ctx.beginPath();
-    ctx.moveTo(padding, canvas.height - padding);
-    ctx.lineTo(canvas.width, canvas.height - padding);
-    ctx.moveTo(padding, canvas.height - padding);
-    ctx.stroke();
-    ctx.lineTo(padding, 0);
-    ctx.stroke();
-    ctx.closePath();
-
+    drawAxes(canvas, padding);
 }
+
 //give the method a list of y coords and it'll graph it
 function graphList(yVals, canvas, xInc, xlab, ylab, xlim, ylim, col) {
     let padding = 40;
-
     if (!xlim) {
         xlim = [0, 100];
     } else {
@@ -131,58 +74,13 @@ function graphList(yVals, canvas, xInc, xlab, ylab, xlim, ylim, col) {
         ylim = [0, 100];
     }
 
-    ctx = canvas.getContext('2d');
-    ctx.clearRect(0,0,canvas.width, canvas.height);
-    ctx.lineWidth = 1;
-    ctx.textAlign = "center";
-    ctx.strokeStyle = "#FFFFFF";
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "9px";
-    //labels
-    if (xlab) {
-        ctx.fillText(xlab, canvas.width / 2 + padding / 2, canvas.height);
-    }
-    if (ylab) {
-        ctx.rotate(-Math.PI / 2);
-        ctx.fillText(ylab, (canvas.height - padding) * -.5, 9);
-        ctx.rotate(Math.PI / 2);
-    }
-    //grid
+    drawGrid(canvas, xInc, xlab, ylab, xlim, ylim, padding);
 
-    // x=a lines
-    let xGridInc = Math.round(canvas.width / 30);
-    let xGridSkips = Math.ceil(24 / xGridInc);
-    for (let i = 0; i <= canvas.width; i += xGridInc) {
-        ctx.globalAlpha = 0.1;
-        ctx.beginPath();
-        ctx.moveTo(padding + i, 0);
-        ctx.lineTo(padding + i, canvas.height - padding);
-        ctx.stroke();
-        ctx.closePath();
-        ctx.globalAlpha = 1;
-        if (i % (xGridInc * xGridSkips) == 0&&i+xGridInc+padding<=canvas.width) {
-            let label = (i * xInc) + xlim[0];
-            ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding + i, (canvas.height - padding) + padding / 2, 24);
-        }
-    }
-    // y=a lines
-    let yGridInc = Math.max(Math.round(canvas.width / 30), 15);
-    for (let i = canvas.height - padding; i >= 0; i -= yGridInc) {
-        ctx.globalAlpha = 0.1;
-        ctx.beginPath();
-        ctx.moveTo(padding, i);
-        ctx.lineTo(canvas.width, i);
-        ctx.stroke();
-        ctx.closePath();
-        ctx.globalAlpha = 1;
-        let label = (1 - (i / (canvas.height - padding))) * (ylim[1] - ylim[0]) + ylim[0];
-        ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding - 13, i, 22)
-    }
     //graph 
     ctx.globalAlpha = 1;
 
     ctx.beginPath();
-    if(col.includes("#")||col.includes("rgb"))
+    if (col.includes("#") || col.includes("rgb"))
         ctx.strokeStyle = col;
     else
         ctx.strokeStyle = "#00FFA0";
@@ -214,7 +112,7 @@ function graphList(yVals, canvas, xInc, xlab, ylab, xlim, ylim, col) {
 
             }
         }
-        if(pctY>=0&&pctY<=1)
+        if (pctY >= 0 && pctY <= 1)
             lastOvershoot = -1;
         ctx.lineTo(padding + i, (canvas.height - padding) * (1 - Math.max(0, Math.min(1, pctY))));
 
@@ -225,6 +123,61 @@ function graphList(yVals, canvas, xInc, xlab, ylab, xlim, ylim, col) {
     ctx.stroke();
     ctx.closePath();
     //axes
+    drawAxes(canvas, padding);
+
+}
+
+function drawGrid(canvas, xInc, xlab, ylab, xlim, ylim, padding) {
+
+    ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.lineWidth = 1;
+    ctx.textAlign = "center";
+    ctx.strokeStyle = "#FFFFFF";
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "9px";
+    //labels
+    if (xlab) {
+        ctx.fillText(xlab, canvas.width / 2 + padding / 2, canvas.height);
+    }
+    if (ylab) {
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillText(ylab, (canvas.height - padding) * -.5, 9);
+        ctx.rotate(Math.PI / 2);
+    }
+    //grid
+
+    // x=a lines
+    let xGridInc = Math.round(canvas.width / 30);
+    let xGridSkips = Math.ceil(24 / xGridInc);
+    for (let i = 0; i <= canvas.width; i += xGridInc) {
+        ctx.globalAlpha = 0.1;
+        ctx.beginPath();
+        ctx.moveTo(padding + i, 0);
+        ctx.lineTo(padding + i, canvas.height - padding);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.globalAlpha = 1;
+        if (i % (xGridInc * xGridSkips) == 0 && i + xGridInc + padding <= canvas.width) {
+            let label = (i * xInc) + xlim[0];
+            ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= 1000) ? Math.round(label) : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding + i, (canvas.height - padding) + padding / 2, 24);
+        }
+    }
+    // y=a lines
+    let yGridInc = Math.max(Math.round(canvas.width / 30), 15);
+    for (let i = canvas.height - padding; i >= 0; i -= yGridInc) {
+        ctx.globalAlpha = 0.1;
+        ctx.beginPath();
+        ctx.moveTo(padding, i);
+        ctx.lineTo(canvas.width, i);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.globalAlpha = 1;
+        let label = (1 - (i / (canvas.height - padding))) * (ylim[1] - ylim[0]) + ylim[0];
+        ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= 1000) ? Math.round(label) : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding - 13, i, 22)
+    }
+}
+function drawAxes(canvas, padding) {
     ctx.lineWidth = 2;
 
     ctx.strokeStyle = "#FFFFFF";
@@ -236,9 +189,7 @@ function graphList(yVals, canvas, xInc, xlab, ylab, xlim, ylim, col) {
     ctx.lineTo(padding, 0);
     ctx.stroke();
     ctx.closePath();
-
 }
-
 
 
 // test data set for the equation solver
@@ -259,7 +210,7 @@ function solve(eq) {
         if (terms[i] === "(") {
             start = i;
             let numParenthesis = 1;
-            while (numParenthesis > 0) {
+            while (numParenthesis > 0 && i < terms.length) {
                 i++;
                 if (terms[i] === "(")
                     numParenthesis++;
@@ -276,42 +227,41 @@ function solve(eq) {
         }
     }
     for (let i = 0; i < terms.length; i++) {
-        if (terms[i] === "^") {
+        if (terms[i] === "^" && i > 0 && i < terms.length - 1) {
             sol = (terms[i - 1] * 1) ** (terms[i + 1] * 1);
             terms.splice(i - 1, 3, sol);
             i--;
-        } else if (terms[i] === "!") {
+        } else if (terms[i] === "!" && i > 0) {
             sol = factorial(terms[i - 1] * 1);
             terms.splice(i - 1, 2, sol);
             i--;
-        } else if (terms[i] === "ln") {
+        } else if (terms[i] === "ln" && i < terms.length - 1) {
             sol = Math.log(terms[i + 1] * 1);
             terms.splice(i, 2, sol);
-        } else if (terms[i] === "log") {
+        } else if (terms[i] === "log" && i < terms.length - 2) {
             sol = Math.log(terms[i + 2] * 1) / Math.log(terms[i + 1] * 1);
             terms.splice(i, 3, sol);
-        } else if (terms[i] === "sin") {
+        } else if (terms[i] === "sin" && i < terms.length - 1) {
             sol = Math.sin(terms[i + 1] * 1);
             terms.splice(i, 2, sol);
-        } else if (terms[i] === "cos") {
+        } else if (terms[i] === "cos" && i < terms.length - 1) {
             sol = Math.cos(terms[i + 1] * 1);
             terms.splice(i, 2, sol);
-        } else if (terms[i] === "tan") {
+        } else if (terms[i] === "tan" && i < terms.length - 1) {
             sol = Math.tan(terms[i + 1] * 1);
             terms.splice(i, 2, sol);
-        } else if (terms[i] === "csc") {
+        } else if (terms[i] === "csc" && i < terms.length - 1) {
             sol = 1 / Math.sin(terms[i + 1] * 1);
             terms.splice(i, 2, sol);
-        } else if (terms[i] === "sec") {
+        } else if (terms[i] === "sec" && i < terms.length - 1) {
             sol = 1 / Math.cos(terms[i + 1] * 1);
             terms.splice(i, 2, sol);
-        } else if (terms[i] === "cot") {
+        } else if (terms[i] === "cot" && i < terms.length - 1) {
             sol = 1 / Math.tan(terms[i + 1] * 1);
             terms.splice(i, 2, sol);
         }
     }
-    for (let i = 0; i < terms.length; i++) {
-
+    for (let i = 1; i < terms.length - 1; i++) {
         if (terms[i] === "*") {
             sol = (terms[i - 1] * 1) * (terms[i + 1] * 1);
             terms.splice(i - 1, 3, sol);
@@ -322,7 +272,7 @@ function solve(eq) {
             i--;
         }
     }
-    for (let i = 0; i < terms.length; i++) {
+    for (let i = 1; i < terms.length - 1; i++) {
         if (terms[i] === "+") {
             sol = terms[i - 1] * 1 + terms[i + 1] * 1;
             terms.splice(i - 1, 3, sol);
@@ -345,7 +295,7 @@ function solve(eq) {
 }
 
 function factorial(n) {
-    if (n == 1)
+    if (n <= 1)
         return 1;
     return n * factorial(n - 1);
 }
