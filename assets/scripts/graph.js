@@ -160,10 +160,11 @@ function drawGrid(canvas, xInc, xlab, ylab, xlim, ylim, padding) {
         ctx.globalAlpha = 1;
         if (i % (xGridInc * xGridSkips) == 0 && i + xGridInc + padding <= canvas.width) {
             let label = (i * xInc) + xlim[0];
-            ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= 1000) ? Math.round(label) : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding + i, (canvas.height - padding) + padding / 2, 24);
+            ctx.fillText(toReadableNumber(label), padding + i, (canvas.height - padding) + padding / 2, 24);
         }
     }
     // y=a lines
+    
     let yGridInc = Math.max(Math.round(canvas.width / 30), 15);
     for (let i = canvas.height - padding; i >= 0; i -= yGridInc) {
         ctx.globalAlpha = 0.1;
@@ -174,16 +175,27 @@ function drawGrid(canvas, xInc, xlab, ylab, xlim, ylim, padding) {
         ctx.closePath();
         ctx.globalAlpha = 1;
         let label = (1 - (i / (canvas.height - padding))) * (ylim[1] - ylim[0]) + ylim[0];
-        ctx.fillText((label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= 1000) ? Math.round(label) : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2), padding - 13, i, 22)
+        ctx.fillText(toReadableNumber(label), padding - 13, i, 22)
     }
+}
+function toReadableNumber(label){
+    return (label == 0) ? "0.00" : (Math.abs(label) < 100000 && Math.abs(label) >= 1000) ? Math.round(label) : (Math.abs(label) < 100000 && Math.abs(label) >= .01) ? label.toPrecision(3) : label.toExponential(2);
 }
 function drawAxes(canvas, padding) {
     ctx.lineWidth = 2;
 
     ctx.strokeStyle = "#FFFFFF";
     ctx.beginPath();
-    ctx.moveTo(padding, canvas.height - padding);
-    ctx.lineTo(canvas.width, canvas.height - padding);
+    //horizontal axis
+    // if(ylim[0]<=0&&ylim[1]>=0){
+    //     let pctY = -1*(ylim[0]) / (ylim[1] - ylim[0]);
+    //     ctx.moveTo(padding, (canvas.height - padding) * (1 - Math.max(0, Math.min(1, pctY))));
+    //     ctx.lineTo(canvas.width, (canvas.height - padding) * (1 - Math.max(0, Math.min(1, pctY))));
+    // }else{
+        ctx.moveTo(padding, canvas.height - padding);
+        ctx.lineTo(canvas.width, canvas.height - padding);
+    // }
+    //vertical axis
     ctx.moveTo(padding, canvas.height - padding);
     ctx.stroke();
     ctx.lineTo(padding, 0);

@@ -27,8 +27,9 @@ function updateGraph() {
         ylim[1]++;
     func = func.replaceAll(/\s?\(\s?/g, " ( ");
     func = func.replaceAll(/\s?\)\s?/g, " ) ");
-    func = func.replaceAll(/\s?([\d]+?)x\s?/g, ` $1 * x `);
-    func = func.replaceAll(/\s?([\+\-\/\*\^])\s?/g, ` $1 `);
+    func = func.replaceAll(/\s?(-?[\d]+?)x\s?/g, ` $1 * x `);
+    func = func.replaceAll(/\s?([\+\/\*\^])\s?/g, ` $1 `);
+    func = func.replaceAll(/\s?([\-][^\d]+?)\s?/g, ` $1 `);
     func = func.replaceAll(/\s?log\s?/g, ` log `);
     func = func.replaceAll(/\s?ln\s?/g, ` ln `);
     func = func.replaceAll(/\s?sin\s?/g, ` sin `);
