@@ -1,0 +1,28 @@
+---
+layout: default
+title: The Difference Between R and r visualized
+permalink: /error-r-r
+---
+<style type="text/css" media="screen">
+    #graph {
+        text-align: center;
+        padding-top: 30px;
+    }
+</style>
+<script defer src="/assets/scripts/graph.js"></script>
+<script defer src="/assets/scripts/risequal.js"></script>
+
+<h1>The Difference Between R and r visualized</h1>
+See my blog post on this topic <a href="/population_growth">here</a>, specifically the <a
+    href="population_growth#footnote1">footnote</a> about r and R being approximately equal for small values. When not
+small, the error quickly balloons into large values, growing exponentially with x.
+
+<canvas id="graph" height=400 width=650></canvas>
+<br>
+<h2>Settings</h2>
+<label>Value of r/R (assuming that they are equal): <input type="number" id="r" value=".01" step=".01"
+        min="-0.99"></label><br>
+<label>x Bounds: <input type="number" id="minx" value="0"><input type="number" id="maxx" value="10"></label><br>
+<label>y Bounds: <input type="number" id="miny" value="-.1"><input type="number" id="maxy" value="10"></label><br>
+
+<label>Graph Color: <input type="color" id="color" value="#F83E39"></label>
