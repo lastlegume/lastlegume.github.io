@@ -120,6 +120,12 @@ function check() {
             nameOfWork += (subtype == 0 ? "" : " (covenant added)");
         } else if (specialCase == 17) {
             nameOfWork += (subtype == 0 ? " (founded)" : " (rebuilt)");
+        }else if (specialCase == 18) {
+            nameOfWork += (subtype == 0 ? " (built)" : " (rebuilt)");
+        }else if (specialCase == 19) {
+            nameOfWork += (subtype == 0 ? " (sculpture)" : " (architecture)");
+        }else if (specialCase == 20) {
+            nameOfWork += (subtype == 0 ? " (original)" : " (current)");
         }
 
     }
@@ -343,6 +349,15 @@ function makeQuestion() {
         } else if (specialCase == 17) {
             subtype = Math.floor(Math.random() * 2);
             question.textContent = question.textContent + (subtype == 0 ? " (founded)" : " (rebuilt)");
+        } else if (specialCase == 18) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (built)" : " (rebuilt)");
+        } else if (specialCase == 19) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (sculpture)" : " (architecture)");
+        } else if (specialCase == 20) {
+            subtype = Math.floor(Math.random() * 2);
+            question.textContent = question.textContent + (subtype == 0 ? " (original)" : " (current)");
         } else if (specialCase >= 1000) {
             subtype = imgIndex;
         }
@@ -574,6 +589,12 @@ function isSpecialCase() {
         return 16;
     if (workIndex == 168 && identifiers[0][identifier] === "Date")
         return 17;
+    if (workIndex == 197 && identifiers[0][identifier] === "Date")
+        return 18;
+    if (workIndex == 197 && identifiers[0][identifier] === "Materials")
+        return 19;
+    if (workIndex == 207 && identifiers[0][identifier] === "Date")
+        return 20;
     if (identifiers[workIndex][1].split("/").length > 1) {
         if (identifiers[workIndex][identifier].split("/").length > 1)
             return 1000;
