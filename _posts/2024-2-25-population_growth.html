@@ -101,12 +101,12 @@ growth rate is directly proportional to the population, resulting in a graph sim
             value=".3"><br>
         <p id="exponential-r-value">r value: </p>
     </label><br>
-    <math>
+    <label><math>
         <msub>
             <mi>N</mi>
             <mn>0</mn>
         </msub>
-    </math>: <input type="range" id="exponential-n0" min="1" max="50" step="1" value="10"><br>
+    </math>: <input type="range" id="exponential-n0" min="1" max="50" step="1" value="10"></label><br>
     <p id="exponential-n0-value"><math>
             <msub>
                 <mi>N</mi>
@@ -329,7 +329,7 @@ equation to <math>
         <mn>0.693</mn>
     </math>, so, when we convert r to percent by multiplying by 100, we must also multiply the numerator by 100, giving
     us the final approximation:
-    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <math display="block">
         <mi>t</mi>
         <mo>=</mo>
         <mfrac>
@@ -614,19 +614,20 @@ equation to <math>
                 step=".01" value=".3"><br>
             <p id="logistic-r-value">r value: </p>
         </label>
+    <label>
         <math>
             <msub>
                 <mi>N</mi>
                 <mn>0</mn>
             </msub>
-        </math>: <input type="range" id="logistic-n0" min="1" max="1000" step="1" value="10"><br>
+        </math>: <input type="range" id="logistic-n0" min="1" max="1000" step="1" value="10"></label><br>
         <p id="logistic-n0-value"><math>
                 <msub>
                     <mi>N</mi>
                     <mn>0</mn>
                 </msub>
             </math> value: </p></label>
-        K: <input type="range" id="logistic-K" min="2" max="1000" step="1" value="500"><br>
+        <label>K: <input type="range" id="logistic-K" min="2" max="1000" step="1" value="500"></label><br>
         <p id="logistic-K-value">K value: </p>
     </div>
     <div class="graph panel">
@@ -714,4 +715,4 @@ equation to <math>
         <mi>R</mi>
     </math> for small values of x. Therefore, at the scales of r found in nature, there isn't much of a difference
     between the different methods of population growth. Only if r is sufficiently large does the difference become
-    noticable (see <a href = "/error-r-r">here</a> for a demonstration)<br>
+    noticable (see <a href = "/error-r-r">this graph of the difference between the two values</a> for a demonstration)<br>
