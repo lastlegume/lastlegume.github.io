@@ -7,7 +7,7 @@ author: lastlegume
 tags: cs javascript
 ---
 
-<script defer src="assets/scripts/fuzzy.js"></script>
+<script defer src="/assets/scripts/fuzzy.js"></script>
 
 Exactly as the title states: a simple, javascript based code segment for matching two strings while allowing for some inaccuracy. Because of the method of matching, this segment is O(N^3), so it should not be used if time is an issue. The code is shown below and an interactive example are below:
 
