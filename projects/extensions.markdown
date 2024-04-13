@@ -34,7 +34,7 @@ An extension that counts down until a certain date and time. You can add as many
 
 ---
 
-### ExCiter
+<h3 id="exciter">ExCiter</h3>
 
 An extension that removes the citations from websites to clean up reading. Contains the option to remove citations from any site, but specifically tested and designed for both [Wikipedia](https://www.wikipedia.org/) and the [USDA FEIS database](https://www.feis-crs.org/feis/) species reviews. 
 
