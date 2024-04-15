@@ -78,6 +78,13 @@ title: Art History ID
   br.hide {
     display: none;
   }
+  .small{
+    font-size: x-small;
+    padding: 1%;  
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+  }
 </style>
 
 <div class="container">
@@ -188,11 +195,11 @@ title: Art History ID
 <div id="settingsIO">
   <h4>Import/Export Current Settings</h4>
   <label><input type="checkbox" id="settingsImportToggle">Show Settings Input</label>
-  <div id="settingsImport" class="hide btn-submit">
+  <div id="settingsImport" class="hide">
     <textarea cols="100" rows="15" id="settingsImportArea"></textarea><br>
-    <button id="importSettings">Import Settings</button>
+    <button id="importSettings" class = "btn btn-submit small">Import Settings</button>
   </div>
   <div id="settingsExport">
-    <button id="exportSettings" class="btn-submit">Export Settings</button>
+    <button id="exportSettings" class="btn btn-submit small">Export Settings</button>
   </div>
 </div>
