@@ -19,6 +19,8 @@ var strict = document.getElementById("strict");
 var range = document.getElementById("range");
 var acceptCaption = document.getElementById("acceptcaption");
 var onlyCaption = document.getElementById("onlycaption");
+var weightbyunit = document.getElementById("weightbyunit");
+
 
 var workIndex = 0;
 var identifier = "";
@@ -45,7 +47,7 @@ document.getElementById("importSettings").addEventListener('click', () => import
 document.getElementById("settingsImportToggle").addEventListener('change', () => toggleImportArea());
 
 // amount of weight College Board gives each unit
-const weights = [.04, .15, .21, .21, .06, .06, .04, .08, .04, .11];
+const weights = [4, 15, 21, 21, 6, 6, 4, 8, 4, 11];
 var subtype = 0;
 var unitIdx = 0;
 var sunitIdx = 0;
@@ -193,13 +195,13 @@ function makeQuestion() {
         var workboxes = document.getElementsByClassName("workboxes");
         for (let i = 0; i < workboxes.length; i++) {
             if (workboxes[i].checked && ((workDivs[i].parentElement.classList[0] === "sunit-div" && usingSpecificUnits) || (workDivs[i].parentElement.classList[0] === "unit-div" && !usingSpecificUnits))) {
+                //find the index of the work 
                 let idxOf = indexOfIdentifier(workDivs[i].innerText.trim(), "Title");
-                // console.log(workDivs[i].innerText.trim());
-                // console.log(idxOf);
+                // now add the found index to the units list and weight it
                 if (idxOf == -1)
                     units.push(i + 1);
                 else
-                    units.push(idxOf);
+                    units.push(...Array(weightbyunit.checked?weights[identifiers[idxOf][unitIdx]-1]:1).fill(idxOf));
             }
         }
     } else if (usingSpecificUnits) {
@@ -218,6 +220,7 @@ function makeQuestion() {
         units.push(1);
     //var unit = units[Math.floor(Math.random() * units.length)];
     var ids = [];
+    //for the identifiers
     for (let i = 0; i < idBoxes.length; i++) {
         if (idBoxes[i].checked)
             ids.push(i + 1);
@@ -240,18 +243,19 @@ function makeQuestion() {
         var tempUnitsList = []
         //find all in the specific units and add to list
         if (usingSpecificUnits) {
-            for (let i = 0; i < identifiers.length; i++) {
+            for (let i = 0; i < 252; i++) {
                 if (contains(units, identifiers[i][sunitIdx].trim()))
-                    tempUnitsList.push(i);
+                    tempUnitsList.push(...Array(weightbyunit.checked?weights[identifiers[i][unitIdx]-1]:1).fill(i));
             }
         } else {
-            for (let i = 0; i < identifiers.length; i++) {
+            for (let i = 0; i < 252; i++) {
                 if (contains(units, identifiers[i][unitIdx]))
-                    tempUnitsList.push(i);
+                    tempUnitsList.push(...Array(weightbyunit.checked?weights[identifiers[i][unitIdx]-1]:1).fill(i));
             }
         }
         units = tempUnitsList;
     }
+    console.log(units);
     //if (allWorks.checked) {
     workIndex = units[Math.floor(Math.random() * (units.length))];
     while (((workIndex == previousWork && n < 100) || identifiers[workIndex][identifier].trim() === "") && n < 10000) {
