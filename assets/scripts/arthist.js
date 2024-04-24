@@ -243,7 +243,7 @@ function makeQuestion() {
         var tempUnitsList = []
         //find all in the specific units and add to list
         if (usingSpecificUnits) {
-            for (let i = 0; i < 252; i++) {
+            for (let i = 0; i < 251; i++) {
                 if (contains(units, identifiers[i][sunitIdx].trim()))
                     tempUnitsList.push(...Array(weightbyunit.checked?weights[identifiers[i][unitIdx]-1]:1).fill(i));
             }
@@ -255,7 +255,7 @@ function makeQuestion() {
         }
         units = tempUnitsList;
     }
-    console.log(units);
+    // console.log(units);
     //if (allWorks.checked) {
     workIndex = units[Math.floor(Math.random() * (units.length))];
     while (((workIndex == previousWork && n < 100) || identifiers[workIndex][identifier].trim() === "") && n < 10000) {
