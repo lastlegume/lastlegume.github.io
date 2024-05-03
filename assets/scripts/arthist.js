@@ -248,7 +248,7 @@ function makeQuestion() {
                     tempUnitsList.push(...Array(weightbyunit.checked?weights[identifiers[i][unitIdx]-1]:1).fill(i));
             }
         } else {
-            for (let i = 0; i < 252; i++) {
+            for (let i = 0; i < 251; i++) {
                 if (contains(units, identifiers[i][unitIdx]))
                     tempUnitsList.push(...Array(weightbyunit.checked?weights[identifiers[i][unitIdx]-1]:1).fill(i));
             }
@@ -266,8 +266,9 @@ function makeQuestion() {
         n++;
     }
     question.textContent = identifiers[0][identifier] + "?";
-
-    console.log(identifiers[workIndex][identifier] + " n: " + n);
+    if(workIndex>251)
+        console.info(workIndex);
+    //console.log(identifiers[workIndex][identifier] + " n: " + n);
     //} 
     // else if (usingSpecificUnits) {
     //     while ((!(!allWorks.checked && contains(units, identifiers[workIndex][sunitIdx] * 1)) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
@@ -281,7 +282,7 @@ function makeQuestion() {
     //         n++;
     //     }
     // }
-    console.log(units);
+    //console.log(units);
 
     if (identifiers[workIndex][identifier] === "" || !identifiers[workIndex][identifier])
         workIndex = units[0];
