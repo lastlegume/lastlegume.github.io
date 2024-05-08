@@ -5,11 +5,17 @@ var panel = document.getElementById('side-panel');
 var container = document.getElementsByClassName('container')[0];
 var clock = document.getElementById('clock');
 document.onmousemove = function(e){updateMouseCoords(e);};
+var startTime = document.getElementById('startTime');
+var addTime = document.getElementById('addTime');
+
 var mousePos = [-1,-1];
+var time = 30000;
+var timers = [time, time];
+var lastDate = new Date();
 canvas.width = Math.min(Math.round((Math.min(window.innerHeight, window.innerWidth) * .75) / 9) * 9, 999);
 panel.style.maxWidth = Math.max(((canvas.width==window.innerHeight)?container.offsetWidth:200),container.offsetWidth-canvas.width-30)+"px";
 clock.width = Math.max(((canvas.width==window.innerHeight)?container.offsetWidth:200),container.offsetWidth-canvas.width-30);
-
+clock.height = clock.width/2+35;
 canvas.height = canvas.width;
 var size = canvas.width;
 var turn = -1;
@@ -51,6 +57,7 @@ function drawGrid(ctx, x, y, w, h) {
 }
 function frame(t){
     drawBoard();
+    drawTimer();
 //currentBoard = Math.floor(Math.random()*9)
     window.requestAnimationFrame(frame)
 
@@ -86,9 +93,10 @@ function drawBoard() {
             }
             if(mousePos[0]==c&&mousePos[1]==r){
                 ctx.fillStyle = "rgba(200,232,0,.5)";
-                if(turn>=0)
-                    ctx.fillRect(size / 9 * c, size / 9 * r, size / 9, size / 9);   
-                else 
+                if(turn>=0){
+                    if(overallBoard[Math.floor(r/3) * 3 + Math.floor(c/3)] == 0)
+                        ctx.fillRect(size / 9 * c, size / 9 * r, size / 9, size / 9); 
+                }else 
                     ctx.fillRect(size / 3 * Math.floor(c/3), 0, size / 3, size);   
             }
             ctx.fillStyle = "#FFFFFF";
@@ -116,6 +124,41 @@ function drawBoard() {
 
     }
 }
+function drawTimer(){
+    context = clock.getContext('2d');
+    context.fillStyle = "#000000";
+    context.fillRect(0, 0, clock.width, clock.height);
+    context.strokeStyle = "#FFFFFF";
+    context.beginPath();
+    let radius = clock.width/4-1;
+    context.arc(clock.width/4, clock.width/4, radius , 0, 2*Math.PI);
+    context.stroke();
+    context.beginPath();
+    context.arc(clock.width*3/4, clock.width/4, radius, 0, 2*Math.PI);
+    context.stroke();
+    context.font = "24px Arial";
+    context.strokeStyle = "#FF7F50";
+    context.beginPath();
+    context.moveTo(clock.width/4, clock.width/4);
+    Math.PI*timers[0]/time
+    context.lineTo(clock.width/4+Math.sin(2*Math.PI*timers[0]/time)*(radius-5), clock.width/4-Math.cos(2*Math.PI*timers[0]/time)*(radius-5));
+    context.stroke();
+    
+    context.strokeText((timers[0]/1000).toFixed(3),10,clock.height-5, clock.width/2-10)
+
+    context.strokeStyle = "#FFFF00";
+    context.beginPath();
+    context.moveTo(clock.width*3/4, clock.width/4);
+    context.lineTo(clock.width*3/4+Math.sin(2*Math.PI*timers[1]/time)*(radius-5), clock.width/4-Math.cos(2*Math.PI*timers[1]/time)*(radius-5));
+    context.stroke();
+    if(turn>=0&&turn<100)
+    timers[turn%2]-=(new Date()).getTime()-lastDate.getTime();
+    lastDate = new Date();
+    timers[turn%2] = Math.max(timers[turn%2],0)
+
+    context.strokeText((timers[1]/1000).toFixed(3),10+clock.width/2,clock.height-5, clock.width/2-10)
+
+}
 function runTurn(e) {
     if (inAction)
         return;
@@ -137,6 +180,8 @@ function runTurn(e) {
         gamemode = Math.floor(coords[0] / 3);
         currentBoard = -1;
         drawBoard();
+        timers = [startTime.value, startTime.value];
+        time = startTime.value;
         if(gamemode==2){
             computerTurn(turn%2+1);
             drawBoard();
@@ -191,6 +236,8 @@ function runTurn(e) {
 
     //console.log(overallBoard);
     drawBoard();
+    timers[turn%2]=(timers[turn%2]*1)+(addTime.value*1);
+    timers[turn%2] = Math.min(timers[turn%2], time*1);
     turn++;
     // 0 is two player, 1 is player first, and 2 is computer first
     if (turn % 2 == 2 - gamemode) {
