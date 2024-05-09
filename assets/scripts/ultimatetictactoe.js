@@ -240,7 +240,7 @@ function runTurn(e) {
     timers[turn%2] = Math.min(timers[turn%2], time*1);
     turn++;
     // 0 is two player, 1 is player first, and 2 is computer first
-    if (turn % 2 == 2 - gamemode) {
+    if (turn % 2 == 2 - gamemode&&winner==0&&spacesLeft>0) {
         computerTurn(turn%2+1);
         drawBoard();
         turn++;
