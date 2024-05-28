@@ -57,12 +57,12 @@ Another extension of the multiple choice format. You can add multiple correct an
 
 ## Fill In The Blank (FIB)
 
-To add FIB questions, use `\fillin[answer][length]` with length as a LaTeX measurement. You do not need either of the bracketed sections (brackets inddicate that a parameter is optional), but it is usually better to include them. A default length can be set in the preamble with `\setlength\fillinlinelength{length}` with length as a LaTeX measurement. I usually add a newline (`\\`) after the question and set the default length to the width of the text (`\setlength\fillinlinelength{\textwidth}`), so that there is a fillin line underneath the question spanning the full length of the page for the answer to be written on. 
+To add FIB questions, use `\fillin[answer][length]` with length as a LaTeX measurement. You do not need either of the bracketed sections (brackets indicate that a parameter is optional), but it is usually better to include them. A default length can be set in the preamble with `\setlength\fillinlinelength{length}` with length as a LaTeX measurement. I usually add a newline (`\\`) after the question and set the default length to the width of the text (`\setlength\fillinlinelength{\textwidth}`), so that there is a fillin line underneath the question spanning the full length of the page for the answer to be written on. 
 
 ## Short Answer Questions (SAQ)
 
 The best way to create SAQs is with the solutionbox environment. It places a box of a specified size that contains the answer when answers are shown. It is started with `\begin{solutionbox}{size}` with size being some LaTeX size measurement like 5cm. Because of the use of braces, the size of the box is mandatory. Inside the environment (between begin and end), write the answer, and it will appear when `\printanswers` is used. After the solution is finished, write `\end{solutionbox}`. The main advantage of solutionbox is that the size of the box is constant between when printanswers is run and not run.      
-Alternatively, the solution environment will leave a blank space of a specified size and turn into a box with the solution in it when answers are being shown. Importantly, the box with the solution does not have the same size as the white space, so formatting would have to be different between the key and the test. The solutionorbox environment is similar, producing a box of the specified size instead of a white space. Importantly, these environments differe from solutionbox in that the size parameter is optional and therefore enclosed in brackets ([]). In addition to the aforementioned environments, solutionorlines, solutionordottedlines, and solutionorgrid all work in the same way and do exactly what it sounds like they do. For examples of all of these environments, check the [template](https://www.overleaf.com/read/hxqbzhngffmg#97c754) or read the exam class documentation.
+Alternatively, the solution environment will leave a blank space of a specified size and turn into a box with the solution in it when answers are being shown. Importantly, the box with the solution does not have the same size as the white space, so formatting would have to be different between the key and the test. The solutionorbox environment is similar, producing a box of the specified size instead of a white space. Importantly, these environments differ from solutionbox in that the size parameter is optional and therefore enclosed in brackets ([]). In addition to the aforementioned environments, solutionorlines, solutionordottedlines, and solutionorgrid all work in the same way and do exactly what it sounds like they do. For examples of all of these environments, check the [template](https://www.overleaf.com/read/hxqbzhngffmg#97c754) or read the exam class documentation.
 
 # Preamble and Other Information
 
@@ -95,7 +95,7 @@ These are the only two packages that I include in the preamble. There are a lot 
 \newcommand{\tournament}{Tournament}
 ```
 
-These lines define two commands that are used later. To simply things, I use a special command that encodes the name of the tournament and the name of the event so that I can change event across the whole test with only one change.
+These lines define two commands that are used later. To simply things, I use a special command that encodes the name of the tournament and the name of the event so that I can change event across the whole test with only one modification.
 
 ```latex
 \setlength\fillinlinelength{\textwidth}
