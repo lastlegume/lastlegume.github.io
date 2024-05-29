@@ -11,7 +11,7 @@ LaTeX is amazing for writing Scioly tests: it has beautiful formatting, simple c
 
 # Basic LaTeX skills
 
-This [tutorial](https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes) from Overleaf is very detailed and should teach the basics of how to use LaTeX. In short, there is a header called a preamble that is used for configuring settings, and the rest of the document is shown in the pdf unless commented. Exactly what is written will not be shown, but this allows for a wide variety of customization and interesting formatting. From here on, I'll assume that anyone reading knows the content of the tutorial at least somewhat well so that explanations can be simplified. Keep in mind that newline is `\\` in LaTeX and not just enter.
+This [tutorial](https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes) from Overleaf is very detailed and should teach the basics of how to use LaTeX. In short, there is a header called a preamble that is used for configuring settings, and the rest of the document is shown in the pdf unless commented. Exactly what is written will not be shown (i.e. having two spaces will not appear to be double the length of one space), but this allows for a wide variety of customization and interesting formatting. From here on, I'll assume that anyone reading knows the content of the tutorial at least somewhat well so that explanations can be simplified. Keep in mind that newline is `\\` or `\newline` in LaTeX and not just enter. 
 
 # Question Writing
 
