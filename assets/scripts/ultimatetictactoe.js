@@ -9,7 +9,7 @@ var startTime = document.getElementById('startTime');
 var addTime = document.getElementById('addTime');
 
 var mousePos = [-1,-1];
-var time = 30000;
+var time = startTime.value;
 var timers = [time, time];
 var lastDate = new Date();
 canvas.width = Math.min(Math.round((Math.min(window.innerHeight, window.innerWidth) * .75) / 9) * 9, 999);

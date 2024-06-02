@@ -1,0 +1,18 @@
+---
+layout: default
+title: Maze Generator
+permalink: /maze-generator
+tools: 4
+---
+
+<title>Maze generator</title>
+<script defer src="/assets/scripts/generateMaze.js"></script>
+
+<div class="container" style="text-align: center;">
+  <h1>Maze Generator</h1>
+  Find a path from the green to the red. <br>
+  <canvas id="maze" width="150" height="150"></canvas><br>
+  Size: <input type="number" id="size" value="10" min="2"> Animation Speed: <input type="number" id="speed" value="10" min="0"><br>
+  <br> 
+  <button class="btn-submit btn" id="generate">Generate</button>
+  <button class="btn-submit btn" id="solution">Show solution</button>

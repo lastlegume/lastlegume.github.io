@@ -2,7 +2,7 @@
 layout: default
 title: Answer Sheet Generator
 permalink: /answer-sheet
-header: true
+tools: 2
 ---
 
 <script defer src = "/assets/scripts/answersheet.js"></script>
@@ -88,7 +88,7 @@ A tool to convert a (presumably class set) test or set of stations with only que
 <div style = "text-align:center;">
 <h2>Test/Stations Code</h2>
 <textarea id="input" name="input" rows="15" cols="60"></textarea><br>
-<button id = "convert">Convert</button><br><br>
+<button class = "btn" id = "convert">Convert</button><br><br>
 <h2>Answer Sheet Code</h2>
 <textarea id="output" name="output" rows="15" cols="60"></textarea>
 </div>
