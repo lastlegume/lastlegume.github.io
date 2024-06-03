@@ -38,8 +38,8 @@ function makeMaze() {
         size = sizeInput.value;
     tileSize=Math.max(35-size, 10);
     tileGap = tileSize;
-    canvas.width = size*(tileSize+tileGap)+tileGap;
-    canvas.height = size*(tileSize+tileGap)+tileGap;
+    canvas.width = size*(tileSize+tileGap)+90;
+    canvas.height = size*(tileSize+tileGap)+90;
     ctx.fillStyle  = '#000000';
     ctx.fillRect(0,0,size*(tileSize+tileGap)+tileGap, size*(tileSize+tileGap)+tileGap)
     maze = [[]];
@@ -128,9 +128,9 @@ function makeLine(){
 
     if(stack.length==0){    
         ctx.fillStyle  = '#00FF45';
-        ctx.fillRect(50-tileGap/2,50-tileGap/2,tileSize, tileSize);
+        ctx.fillRect(tileGap,tileGap,tileSize, tileSize);
         ctx.fillStyle  = '#FF2050';
-        ctx.fillRect((size-1)*(tileSize+tileGap)+50-tileGap/2,(size-1)*(tileSize+tileGap)+50-tileGap/2, tileSize, tileSize);
+        ctx.fillRect((size-1)*(tileSize+tileGap)+tileGap,(size-1)*(tileSize+tileGap)+tileGap, tileSize, tileSize);
         clearInterval(id);
         console.log(maze);
         solution.disabled = false;
@@ -157,23 +157,23 @@ function makeLine(){
 
             if(index.col==cc){
                 if(index.row>cr){
-                    ctx.fillRect(cc*(tileSize+tileGap)+50-tileGap/2,cr*(tileSize+tileGap)+50-tileGap/2,tileSize, tileSize*2+tileGap)
+                    ctx.fillRect(cc*(tileSize+tileGap)+tileGap,cr*(tileSize+tileGap)+tileGap,tileSize, tileSize*2+tileGap)
                     maze[index.row*2][cc*2+1] = 0
                 }
                 else{
-                    ctx.fillRect(cc*(tileSize+tileGap)+50-tileGap/2,index.row*(tileSize+tileGap)+50-tileGap/2,tileSize, tileSize*2+tileGap)
+                    ctx.fillRect(cc*(tileSize+tileGap)+tileGap,index.row*(tileSize+tileGap)+tileGap,tileSize, tileSize*2+tileGap)
                     maze[cr*2][cc*2+1] = 0
 
                 }
 
             }else{
                 if(index.col>cc){
-                    ctx.fillRect(cc*(tileSize+tileGap)+50-tileGap/2,cr*(tileSize+tileGap)+50-tileGap/2,tileSize*2+tileGap, tileSize)
+                    ctx.fillRect(cc*(tileSize+tileGap)+tileGap,cr*(tileSize+tileGap)+tileGap,tileSize*2+tileGap, tileSize)
                     maze[cr*2+1][index.col*2] = 0
 
                 }
             else{
-                ctx.fillRect(index.col*(tileSize+tileGap)+50-tileGap/2,index.row*(tileSize+tileGap)+50-tileGap/2,tileSize*2+tileGap, tileSize)
+                ctx.fillRect(index.col*(tileSize+tileGap)+tileGap,index.row*(tileSize+tileGap)+tileGap,tileSize*2+tileGap, tileSize)
                 maze[cr*2+1][cc*2] = 0
 
             }
@@ -392,30 +392,30 @@ function solve(r, c){
     if(r>0&&solve(r-1, c)){
         path[r][c] = 1;
         ctx.beginPath();
-        ctx.moveTo((c-1)*(tileSize)+50, (r-1)*(tileSize)+50);
-        ctx.lineTo((c-1)*(tileSize)+50, (r-2)*(tileSize)+50);
+        ctx.moveTo((c-1)*(tileSize)+tileGap*1.5, (r-1)*(tileSize)+tileGap*1.5);
+        ctx.lineTo((c-1)*(tileSize)+tileGap*1.5, (r-2)*(tileSize)+tileGap*1.5);
         ctx.stroke();
 
         return true;
     } else if(r<maze.length-1&&solve(r+1, c)){
         path[r][c] = 1;
         ctx.beginPath();
-        ctx.moveTo((c-1)*(tileSize)+50, (r-1)*(tileSize)+50);
-        ctx.lineTo((c-1)*(tileSize)+50, (r)*(tileSize)+50);
+        ctx.moveTo((c-1)*(tileSize)+tileGap*1.5, (r-1)*(tileSize)+tileGap*1.5);
+        ctx.lineTo((c-1)*(tileSize)+tileGap*1.5, (r)*(tileSize)+tileGap*1.5);
         ctx.stroke();
         return true;
     } else if(c>0&&solve(r, c-1)){
         path[r][c] = 1;
         ctx.beginPath();
-        ctx.moveTo((c-1)*(tileSize)+50, (r-1)*(tileSize)+50);
-        ctx.lineTo((c-2)*(tileSize)+50, (r-1)*(tileSize)+50);
+        ctx.moveTo((c-1)*(tileSize)+tileGap*1.5, (r-1)*(tileSize)+tileGap*1.5);
+        ctx.lineTo((c-2)*(tileSize)+tileGap*1.5, (r-1)*(tileSize)+tileGap*1.5);
         ctx.stroke();
         return true;
     } else if(c<maze[r].length-1&&solve(r, c+1)){
         path[r][c] = 1;
         ctx.beginPath();
-        ctx.moveTo((c-1)*(tileSize)+50, (r-1)*(tileSize)+50);
-        ctx.lineTo((c)*(tileSize)+50, (r-1)*(tileSize)+50);
+        ctx.moveTo((c-1)*(tileSize)+tileGap*1.5, (r-1)*(tileSize)+tileGap*1.5);
+        ctx.lineTo((c)*(tileSize)+tileGap*1.5, (r-1)*(tileSize)+tileGap*1.5);
         ctx.stroke();
         return true;
     }
