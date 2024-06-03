@@ -38,8 +38,8 @@ function makeMaze() {
         size = sizeInput.value;
     tileSize=Math.max(35-size, 10);
     tileGap = tileSize;
-    canvas.width = size*(tileSize+tileGap)+90;
-    canvas.height = size*(tileSize+tileGap)+90;
+    canvas.width = size*(tileSize+tileGap)+tileGap;
+    canvas.height = size*(tileSize+tileGap)+tileGap;
     ctx.fillStyle  = '#000000';
     ctx.fillRect(0,0,size*(tileSize+tileGap)+tileGap, size*(tileSize+tileGap)+tileGap)
     maze = [[]];
