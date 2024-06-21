@@ -68,6 +68,8 @@ async function makeQuestion() {
             await new Promise(r => setTimeout(r, timeBetweenCheckPress-(Date.now()-lastCheckPress)))
         }
         speciesIdx = nextIndex;
+        if(speciesIdx==-1)
+            speciesIdx = Math.floor(Math.random() * list.length);
         correctAnswer = list[speciesIdx];
         species = list[speciesIdx][0];
         response = JSON.parse(localStorage.getItem(species));
