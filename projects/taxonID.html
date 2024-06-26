@@ -14,7 +14,9 @@ title: Taxon ID
     overflow: hidden;
     font-size: smaller;
   }
-
+  h3{
+    margin-bottom: 3px;
+  }
   .header {
     margin: 10px 0;
     font-size: 4em;
@@ -36,7 +38,7 @@ title: Taxon ID
     outline: 1px black;
   }
 
-  .workDivs {
+  .specific {
     padding-left: 10px;
     font-size: x-small;
   }
@@ -86,6 +88,9 @@ title: Taxon ID
 </div>
 <div id="settings">
   <h2 class="header">Settings</h2>
+  <h3>Customize List</h3>
+  <label><input type="checkbox" checked id="selectAll">Deselect All</label>
+  <div id = "individualCheckboxes"></div>
   <label><input type="checkbox" id="strict"> Strict spelling </label><br>
   <label><input type="checkbox" id="allowOrders"> Accept order name for families </label><br>
   <label><input type="checkbox" id="hintSci"> Give the scientific name as the hint </label><br>

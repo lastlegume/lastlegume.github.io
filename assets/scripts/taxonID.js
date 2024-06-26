@@ -9,12 +9,16 @@ const question = document.getElementById("question");
 const answer = document.getElementById("answer");
 const hintBlank = document.getElementById("hint");
 
+var individualCheckboxes = document.getElementById("individualCheckboxes");
+
 var reply = document.getElementById("reply");
 var strict = document.getElementById("strict");
 var allowOrders = document.getElementById("allowOrders");
 var hintSci = document.getElementById("hintSci");
-
+var selectAll = document.getElementById("selectAll");
 allowOrders.addEventListener('change', () => createList(allowOrders.checked));
+selectAll.addEventListener('change', () => adjustAll());
+
 hintSci.addEventListener('change', () => hintIdx = 1);
 
 var speciesList = document.getElementById("speciesList");
@@ -28,7 +32,7 @@ let localData = "";
 let nextIndex = -1;
 let timeBetweenCalls = 1500;
 let timeBetweenCheckPress = 500;
-let lastAPICall = Date.now()+1000;
+let lastAPICall = Date.now() + 1000;
 let lastCheckPress = Date.now();
 
 let apiCall = "https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research";
@@ -37,14 +41,8 @@ var list = [];
 createList(allowOrders.checked);
 
 function check() {
-    if(Date.now()-lastAPICall<timeBetweenCalls){
-        reply.innerHTML= `Please wait ${((timeBetweenCalls-(Date.now()-lastAPICall))/1000).toPrecision(3)} seconds before checking again`;
+    if (checkTiming())
         return;
-    }
-    if(Date.now()-lastCheckPress<timeBetweenCheckPress){
-        reply.innerHTML= `Please wait ${((timeBetweenCheckPress-(Date.now()-lastCheckPress))/1000).toPrecision(3)} seconds before checking again`;
-        return;
-    }
 
     if (fuzzyEquals(answer.value.toLowerCase().trim(), [...correctAnswer])) {
         reply.innerHTML = "Correct! The specimen is <span style = \"color: forestgreen;\">" + correctAnswer.join(" or ") + "</span>.";
@@ -59,19 +57,26 @@ function check() {
     makeQuestion();
 }
 async function makeQuestion() {
-
+    let availableList = [];
+    for(let i = 0;i<list.length;i++){
+        if(document.getElementById(list[i][0]).checked)
+            availableList.push(list[i]);
+    }
+    if(availableList.length==0){
+        availableList.push(list[0]);
+    }
     if (!localData) {
-        if(Date.now()-lastAPICall<timeBetweenCalls){
-            await new Promise(r => setTimeout(r, timeBetweenCalls-(Date.now()-lastAPICall)))
+        if (Date.now() - lastAPICall < timeBetweenCalls) {
+            await new Promise(r => setTimeout(r, timeBetweenCalls - (Date.now() - lastAPICall)))
         }
-        if(Date.now()-lastCheckPress<timeBetweenCheckPress){
-            await new Promise(r => setTimeout(r, timeBetweenCheckPress-(Date.now()-lastCheckPress)))
+        if (Date.now() - lastCheckPress < timeBetweenCheckPress) {
+            await new Promise(r => setTimeout(r, timeBetweenCheckPress - (Date.now() - lastCheckPress)))
         }
         speciesIdx = nextIndex;
-        if(speciesIdx==-1)
-            speciesIdx = Math.floor(Math.random() * list.length);
-        correctAnswer = list[speciesIdx];
-        species = list[speciesIdx][0];
+        if (speciesIdx == -1)
+            speciesIdx = Math.floor(Math.random() * availableList.length);
+        correctAnswer = availableList[speciesIdx];
+        species = availableList[speciesIdx][0];
         response = JSON.parse(localStorage.getItem(species));
         if (!response || (Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.reduce((prev, cur) => prev + cur) > 50) {
             work.alt = "Choosing an image...";
@@ -105,11 +110,11 @@ async function makeQuestion() {
 
     work.src = options[random].replaceAll("square", "small");
 
-    nextIndex = Math.floor(Math.random() * list.length);
-    species = list[nextIndex][0];
+    nextIndex = Math.floor(Math.random() * availableList.length);
+    species = availableList[nextIndex][0];
     let nextResponse = JSON.parse(localStorage.getItem(species));
-    if (!nextResponse  || (Math.floor(Date.now() / 86400000) - nextResponse.date > 5) || nextResponse.usage.reduce((prev, cur) => prev + cur) > 50) {
-    //    await new Promise(r => setTimeout(r, 1000))
+    if (!nextResponse || (Math.floor(Date.now() / 86400000) - nextResponse.date > 5) || nextResponse.usage.reduce((prev, cur) => prev + cur) > 50) {
+        //    await new Promise(r => setTimeout(r, 1000))
         nextResponse = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
         nextResponse = (await nextResponse.json()).results;
         lastAPICall = Date.now();
@@ -130,18 +135,25 @@ function contains(arr, val) {
 }
 
 function process(event) {
-    if(Date.now()-lastAPICall<timeBetweenCalls){
-        reply.innerHTML= `Please wait ${((timeBetweenCalls-(Date.now()-lastAPICall))/1000).toPrecision(3)} seconds before checking again`;
+    if (checkTiming())
         return;
-    }
-    if(Date.now()-lastCheckPress<timeBetweenCheckPress){
-        reply.innerHTML= `Please wait ${((100-(Date.now()-lastCheckPress))/1000).toPrecision(3)} seconds before checking again`;
-        return;
-    }
     if (event.key === "Enter")
         check();
 }
+function checkTiming() {
+    if (Date.now() - lastAPICall < timeBetweenCalls) {
+        reply.innerHTML = `Please wait <span style="color: LemonChiffon;">${((timeBetweenCalls - (Date.now() - lastAPICall)) / 1000).toPrecision(3)}</span> seconds before checking again`;
+        reply.style.setProperty('background-color', 'burlywood');
+        return true;
+    }
+    if (Date.now() - lastCheckPress < timeBetweenCheckPress) {
+        reply.innerHTML = `Please wait <span style="color: LemonChiffon;">${((100 - (Date.now() - lastCheckPress)) / 1000).toPrecision(3)}</span> seconds before checking again`;
+        reply.style.setProperty('background-color', 'burlywood');
 
+        return true;
+    }
+    return false;
+}
 
 function fuzzyEquals(one, twos) {
     for (let i = 0; i < twos.length; i++) {
@@ -182,18 +194,51 @@ function fuzzy(guess, answer) {
 
 function createList(includeOrders) {
     let textList = speciesList.textContent.split("\n");
+    individualCheckboxes.textContent = "";
     let currentOrder = "";
+    list=[];
     for (let i = 0; i < textList.length; i++) {
         textList[i] = textList[i].trim();
-        if (/^\*?[\d]+.\s/.test(textList[i]) || (i < textList.length - 1 && !/^\*?[\d]+.\s/.test(textList[i + 1].trim()) && /^\*?[a-zA-Z]+.\s/.test(textList[i]))) {
+        if (/^\*?[\w]+.\s/.test(textList[i])) {
+            //        if (/^\*?[\d]+.\s/.test(textList[i]) || (i < textList.length - 1 && !/^\*?[\d]+.\s/.test(textList[i + 1].trim()) && /^\*?[a-zA-Z]+.\s/.test(textList[i]))) {
             let tlist = textList[i].replaceAll(/^\*?[\w]+.\s/g, "").split(":");
-            if (/^\*?[a-zA-Z]+.\s/.test(textList[i]))
+            tlist.map((e) => e.split("/"));
+            tlist = [].concat(...tlist);
+            tlist.map((e) => e.split(", "));
+            tlist = [].concat(...tlist);
+            let lab = document.createElement("label");
+            let cb = document.createElement("input")
+            cb.type = "checkbox"
+            cb.id = tlist[0];
+            cb.checked = true;
+            lab.appendChild(cb);
+            lab.appendChild(document.createTextNode(textList[i].replaceAll(/^\*?[\w]+.\s/g, "")));
+            lab.appendChild(document.createElement("br"));
+            cb.classList.add("indivCb");
+
+            if (/^\*?[a-zA-Z]+.\s/.test(textList[i])){
                 currentOrder = tlist[0];
-            else if (includeOrders)
+                if(/^\*?[\d]+.\s/.test(textList[i + 1].trim()))
+                    cb.addEventListener('change', () => updateCheckboxes())
+                else                    
+                    list.push(tlist);
+
+
+            }
+            if (includeOrders && /^\*?[\d]+.\s/.test(textList[i]))
                 tlist.push(currentOrder);
-            list.push(tlist);
+            if (/^\*?[\d]+.\s/.test(textList[i])){
+                list.push(tlist);
+                lab.classList.add("specific");
+                cb.classList.add(currentOrder);
+            }
+            individualCheckboxes.appendChild(lab);
+        } else if(textList[i].length>0){
+            list.push(textList[i]);
         }
     }
+    console.log(list);
+
     if (localStorage.length > 0) {
         random = Math.floor(Math.random() * localStorage.length);
         localData = localStorage.getItem(localStorage.key(random))
@@ -212,14 +257,30 @@ function hint() {
     hintBlank.innerText = list[speciesIdx][hintSci.checked ? 0 : 1].substring(0, hintIdx) + " _".repeat(Math.max(list[speciesIdx][hintSci.checked ? 0 : 1].length - hintIdx, 0));
     hintIdx++;
 }
-function newPicture(){
+function newPicture() {
     let options = response.response;
     let weightedOptions = [];
     for (let i = 0; i < options.length; i++) {
-        if(random!=i)
+        if (random != i)
             weightedOptions.push(...Array(Math.max(10 - Math.ceil(response.usage[i]), 1)).fill(i));
     }
     random = weightedOptions[Math.floor(Math.random() * weightedOptions.length)]
-    response.usage[random]+=.1;
+    response.usage[random] += .1;
     work.src = options[random].replaceAll("square", "small");
+}
+function updateCheckboxes() {
+    let cbs = document.getElementsByClassName('indivCb');
+    for(let i = 0;i<cbs.length;i++){
+        let specificCbs = document.getElementsByClassName(cbs[i].id);
+        for(let j = 0;j<specificCbs.length;j++){
+            specificCbs[j].checked = cbs[i].checked;
+        }
+    }
+}
+function adjustAll(){
+    selectAll.parentNode.childNodes[1].textContent = selectAll.checked?"Deselect All":"Select All"; 
+    let cbs = document.getElementsByClassName('indivCb');
+    for(let i = 0;i<cbs.length;i++){
+        cbs[i].checked = selectAll.checked;
+    }
 }
