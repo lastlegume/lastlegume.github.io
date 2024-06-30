@@ -29,7 +29,7 @@ function updateGraph() {
     func = func.replaceAll(/\s?\)\s?/g, " ) ");
     func = func.replaceAll(/\s?(-?[\d]+?)x\s?/g, ` $1 * x `);
     func = func.replaceAll(/\s?([\+\/\*\^])\s?/g, ` $1 `);
-    func = func.replaceAll(/\s?([\-][^\d]+?)\s?/g, ` $1 `);
+    func = func.replaceAll(/\s?([\-][^\d\s]+?)\s?/g, ` $1 `);
     func = func.replaceAll(/\s?log\s?/g, ` log `);
     func = func.replaceAll(/\s?ln\s?/g, ` ln `);
     func = func.replaceAll(/\s?sin\s?/g, ` sin `);
@@ -43,7 +43,10 @@ function updateGraph() {
     func = func.replaceAll(/\s?\)\s?\(\s?/g, " ) * ( ");
 
 
-    func = func.replaceAll(/\s+?/g, " ").trim();
-    console.log(func);
-    graph(func, canvas, .01, "x", "y", xlim, ylim, colorInput.value)
+    func = func.replaceAll(/\s+/g, " ").trim();
+    // console.log(func);
+    graph({"function":func}, canvas, .01, "x", "y", xlim, ylim, colorInput.value ,{ x: 0, y: 0, w: canvas.width, h: canvas.height, padding: 40 })
+    //testing graph
+    //    graph({"function":func}, canvas, .01, "x", "y", xlim, ylim, colorInput.value ,{ x: 100, y: 100, w: .5*canvas.width, h: .5*canvas.height, padding: 40 })
+
 }
