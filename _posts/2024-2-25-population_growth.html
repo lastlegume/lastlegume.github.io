@@ -22,16 +22,15 @@ toc: true
 </style>
 <script defer src="/assets/scripts/graph.js"></script>
 <script defer src="/assets/scripts/growthrates.js"></script>
-There are many different ways to simulate population growth. Most of these methods have growth rates of some sort, but
+<p>There are many different ways to simulate population growth. Most of these methods have growth rates of some sort, but
 despite often having similar representations, these growth rates are often completely different. All of the models here
-are
-going to disregard immigration and emigration and treat births and deaths as the only forms of population changes. To
-start, let's look at the most simple form of population growth, an exponential model.
+are going to disregard immigration and emigration and treat births and deaths as the only forms of population changes. To
+start, let's look at the most simple form of population growth, an exponential model.</p>
 
 
 <h2 class="header" id = "exponential"> Exponential Models of Population Growth</h2>
 <h3 class="header" id = "exponential-continuous">Continuous</h3>
-Given a population size N, a simple exponential model for the growth in N is shown below:
+<p>Given a population size N, a simple exponential model for the growth in N is shown below:</p>
 
 <math display="block" style="padding-bottom:15px;">
     <msub>
@@ -53,7 +52,7 @@ Given a population size N, a simple exponential model for the growth in N is sho
         </mrow>
     </msup>
 </math>
-We could also use the differential form:
+<p>We could also use the differential form:
 <math display="block">
     <mfrac>
         <mrow>
@@ -82,8 +81,7 @@ Where <math>
 </math> is the population at any time t, r is the instantanous rate of increase, and e is Euler's number (2.718). In
 this model, we are assuming that the population change is continous (i.e. that births and deaths happen year round) and
 that there is no immigration or emigration. Additionally, this model is density independent, meaning that growth is
-unaffected by population density. The
-growth rate is directly proportional to the population, resulting in a graph similar to below.
+unaffected by population density. The growth rate is directly proportional to the population, resulting in a graph similar to below.</p>
 <br>
 <div class="graph panel">
     <canvas class="graph" id="basicExponentialModel" height=400 width=610></canvas>
@@ -108,7 +106,7 @@ growth rate is directly proportional to the population, resulting in a graph sim
 </div>
 <br>
 
-r is known as the instantanous rate of increase and is the per capita birth rate (<math>
+<p>r is known as the instantanous rate of increase and is the per capita birth rate (<math>
     <mi>b</mi>
 </math>) minus the per capita death rate (<math>
     <mi>d</mi>
@@ -125,11 +123,11 @@ exponential rate because <math>
     <mi>b</mi>
     <mo>></mo>
     <mi>d</mi>
-</math>.
+</math>.</p>
 
 <h3 class="header" id = "exponential-discrete">Discrete</h3>
 
-Alternatively, if organisms only reproduce in discrete intervals, we could rewrite the growth equation to <math>
+<p>Alternatively, if organisms only reproduce in discrete intervals, we could rewrite the growth equation to <math>
     <msub>
         <mi>N</mi>
         <mi>t</mi>
@@ -170,11 +168,11 @@ equation to <math>
     <mo>+</mo>
     <mi>R</mi>
     <mo>)</mo></math>. The finite rate of increase means that the population increases by a factor of λ for each unit
-    time.
+    time. </p>
 
     <h3 class="header" id = "relationship">Relating λ, r, and R</h3>
-    Since both population growth equations give us the population at some time t, we can equate the equations for
-    population growth.
+    <p>Since both population growth equations give us the population at some time t, we can equate the equations for
+    population growth.</p>
     <math display="block">
         <msub>
             <mi>N</mi>
@@ -201,12 +199,12 @@ equation to <math>
             <mi>t</mi>
         </msup>
     </math>
-    From this, we can divide both sides by <math>
+    <p>From this, we can divide both sides by <math>
         <msub>
             <mi>N</mi>
             <mn>0</mn>
         </msub>
-    </math> and take the natural logarithm of both sides to give us the following relation:
+    </math> and take the natural logarithm of both sides to give us the following relation:</p>
     <math display="block">
         <mi>r</mi>
         <mi>t</mi>
@@ -237,11 +235,11 @@ equation to <math>
         <mi>λ</mi>
         <mo>)</mo>
     </math>
-    However, despite having a simple relationship, we don't really need to use this because populations are usually not
-    both continuous and discrete.
+    <p>However, despite having a simple relationship, we don't really need to use this because populations are usually not
+    both continuous and discrete.</p>
 
     <h2 class="header" id = "Ro70">Proving the Rule of 70</h2>
-    For those unfamiliar, the Rule of 70 states that the doubling time of a population (or the price of an asset in
+    <p>For those unfamiliar, the Rule of 70 states that the doubling time of a population (or the price of an asset in
     economics) can be estimated by <math>
         <mi>D</mi>
         <mo>=</mo>
@@ -255,16 +253,16 @@ equation to <math>
             </mrow>
         </mfrac>
     </math>, with D being the doubling time and rate being the rate at which the population grows in percent (%). We can
-    prove this pretty easily with both the discrete and continuous cases as follows.
+    prove this pretty easily with both the discrete and continuous cases as follows.</p>
     <h3 class="header" id = "Ro70-continuous">Continuous</h3>
-    Firstly, the doubling time is the time for the population to reach two times the original population, so we can
+    <p>Firstly, the doubling time is the time for the population to reach two times the original population, so we can
     substitute <math>
         <mn>2</mn>
         <msub>
             <mi>N</mi>
             <mn>0</mn>
         </msub>
-    </math> for the left side of the equation.
+    </math> for the left side of the equation.</p>
     <math display="block">
         <mn>2</mn>
         <msub>
@@ -284,7 +282,7 @@ equation to <math>
             </mrow>
         </msup>
     </math>
-    Solving for t:
+    <p>Solving for t:</p>
     <math display="block">
         <mn>2</mn>
         <mo>=</mo>
@@ -314,13 +312,14 @@ equation to <math>
             <mi>r</mi>
         </mfrac>
     </math>
+    <p>
     <math>
         <mi>ln</mi>
         <mn>2</mn>
         <mo>≈</mo>
         <mn>0.693</mn>
     </math>, so, when we convert r to percent by multiplying by 100, we must also multiply the numerator by 100, giving
-    us the final approximation:
+    us the final approximation:</p>
     <math display="block">
         <mi>t</mi>
         <mo>=</mo>
@@ -348,21 +347,21 @@ equation to <math>
             </msub>
         </mfrac>
     </math>
-    with <math>
+    <p>with <math>
         <msub>
             <mi>r</mi>
             <mi mathvariant="normal">%</mi>
         </msub>
-    </math> being the intrinsic rate of increase in percent (%).
+    </math> being the intrinsic rate of increase in percent (%).</p>
 
     <h3 class="header" id = "Ro70-discrete">Discrete</h3>
-    Using the same process as before, we substitute in <math>
+    <p>Using the same process as before, we substitute in <math>
         <mn>2</mn>
         <msub>
             <mi>N</mi>
             <mn>0</mn>
         </msub>
-    </math>.
+    </math>.</p>
     <math display="block">
         <mn>2</mn>
         <msub>
@@ -395,7 +394,7 @@ equation to <math>
             <mi>t</mi>
         </msup>
     </math>
-    Taking the natural logarithm of both sides:
+    <p>Taking the natural logarithm of both sides:</p>
     <math display="block">
         <mi>ln</mi>
         <mn>2</mn>
@@ -408,7 +407,7 @@ equation to <math>
         <mi>R</mi>
         <mo>)</mo>
     </math>
-    Using the Maclaurin series for <math>
+    <p>Using the Maclaurin series for <math>
         <mi>ln</mi>
         <mo>(</mo>
         <mn>1</mn>
@@ -454,7 +453,7 @@ equation to <math>
         <mo>⋯</mo>
         <mo>≈</mo>
         <mi>x</mi>
-    </math> for small values of x. Therefore,
+    </math> for small values of x. Therefore,</p>
     <math display="block">
         <mi>t</mi>
         <mo>=</mo>
@@ -511,9 +510,9 @@ equation to <math>
 
 
     <h2 class="header" id = "logistic">Logistic Models</h2>
-    Logistic models take into account density dependent effects. This results in the growth rate being proportional to
+    <p>Logistic models take into account density dependent effects. This results in the growth rate being proportional to
     both the current population and the difference between the current and the max population possible, the carrying
-    capacity (K). This gives us the following differential model
+    capacity (K). This gives us the following differential model</p>
     <math display="block">
         <mfrac>
             <mrow>
@@ -556,8 +555,8 @@ equation to <math>
             <mo stretchy="true" form="postfix">)</mo>
         </mrow>
     </math>
-    where N is the population, r is the intrinsic rate of increase, and K is the carrying capacity. The integral form of
-    this equation is
+    <p>where N is the population, r is the intrinsic rate of increase, and K is the carrying capacity. The integral form of
+    this equation is</p>
     <math display="block">
         <msub>
             <mi>N</mi>
@@ -595,9 +594,9 @@ equation to <math>
             </mrow>
         </mfrac>
     </math>
-    This model takes into account density dependent and has a clear carrying capacity. However, it is also limited
+    <p>This model takes into account density dependent and has a clear carrying capacity. However, it is also limited
     through its lack of a time lag between population and population growth changes (i.e. the growth rate changes as
-    soon as the population does), along with other limitations. <br>
+    soon as the population does), along with other limitations. </p>
     <div class="graph panel">
         <canvas class="graph" id="logisticModel" height=400 width=610></canvas>
     </div>
@@ -628,7 +627,7 @@ equation to <math>
     <div class="graph panel">
         <canvas class="graph" id="logisticModeldNdtN" height=400 width=355></canvas>
     </div><br>
-    The second and third graphs show the population growth rate <math>
+    <p>The second and third graphs show the population growth rate <math>
         <mrow>
             <mo stretchy="true" form="prefix">(</mo>
             <mfrac>
@@ -659,8 +658,8 @@ equation to <math>
             </mfrac>
             <mo stretchy="true" form="postfix">)</mo>
         </mrow>
-    </math> respectively plotted against population size.<br>
-    As seen in the second graph, the highest growth rate is at K/2, which is an important property of logistic models.
+    </math> respectively plotted against population size.</p>
+    <p>As seen in the second graph, the highest growth rate is at K/2, which is an important property of logistic models.
     Another hallmark of the logistic model is the linear graph of per capita population growth rate against population
     size. Additionally, notice how when <math>
         <msub>
@@ -670,11 +669,11 @@ equation to <math>
         <mo>></mo>
         <mi>K</mi>
     </math>, the growth rate is always negative and increases as population size gets closer to the carrying capacity,
-    illustrating the tendency of a logistic graph to tend towards the carrying capacity.
+    illustrating the tendency of a logistic graph to tend towards the carrying capacity.</p>
 
     <h2 class="header" id = "conclusion">Conclusion</h2>
-    All of these models have limitations and ultimately are only an extremely simplified model of population growth.
-    However, we can learn a lot about population growth from even these simplified models. Thanks for reading!<br>
+    <p>All of these models have limitations and ultimately are only an extremely simplified model of population growth.
+    However, we can learn a lot about population growth from even these simplified models. Thanks for reading!</p>
     <br style="padding-bottom: 50px;">
 
     <sup id="footnote1"><a href="#footnote1text">[1]</a></sup> Addendum 2/28/24: While r and R are not the same in
