@@ -29,46 +29,7 @@ tools: 2
     select{
         max-width: 80%;
     }
-    label{
-          position: relative;
-    }
-   .descriptor {
-  background-color:darkgreen;
-  border-radius: 10px;
-  padding:1px 7px;
-}
-.descriptor:before {
-    display:none;
-  content: attr(hover-text);
-  opacity: 0;
-  background-color: black;
-    width: fit-content;
-  color: white;
-  text-align: center;
-  border-radius: 5px;
-  padding: 5px;
-    transition: opacity .5s ease;
-  position: absolute;
-  z-index: 1;
-  top: 110%;
-}
-.descriptor:hover:before {
-  opacity: .9;
-  display:block;
-}
-  .btn-submit {
-    transition: .5s;
-    border-color: springgreen;
-    border-radius: 15px;
-  }
-  .btn-submit:hover {
-    transition: .5s;
-    background: rgb(50, 127, 88);
-  }
-  .btn-submit:active {
-    transition: .5s;
-    background: radial-gradient(springgreen, rgb(50, 127, 88));
-  }
+
 </style>
 <h1>LaTeX Answer Sheet Generator</h1>
 A tool to convert a (presumably class set) test or set of stations with only questions into an answer sheet to write on. The tool works by taking in the LaTeX of the test and using it to create LaTeX for an answer sheet. Any multiple choice questions are automatically recognized as such and processed into the appropriate format of your choice. For any free response question, the line after the line with ```\question``` should start with % (or your chosen character sequence) and have the answer in it. The output goes entirely within the questions environment (i.e. after ```\begin{questions}``` and before ```\end{questions}```). Any line that isn't a question or its answer (images, lists, section headers) is removed automatically to remove anything that is needed only on the test. See [the bottom of the page](#example). For a basic test writing tutorial in LaTeX, see [my tutorial](/blog/latex_tutorial), which includes a [template](/blog/tex_template) for use with this tool.

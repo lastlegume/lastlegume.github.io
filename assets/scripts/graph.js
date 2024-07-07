@@ -1,7 +1,8 @@
 //give the method the function and it'll graph it
 //give the method a list of y coords and it'll graph it
 //func is an object with either key function and function string or key list and list of y values
-function graph(func, canvas, xInc, xlab, ylab, xlim, ylim, col, coords) {
+//settings contains keys xlab, ylab, xInc, xlim, ylim, col, coords, title
+function graph(func, canvas, settings) {
     let isFunction = false;
     if (Object.keys(func).includes("function")) {
         func = func.function;
@@ -9,9 +10,20 @@ function graph(func, canvas, xInc, xlab, ylab, xlim, ylim, col, coords) {
     }
     else if (Object.keys(func).includes("list"))
         func = func.list;
-    if (!coords)
+    let coords = 0;
+    if (settings.coords)
+        coords = settings.coords;
+    else
         coords = { x: 0, y: 0, w: canvas.width, h: canvas.height, padding: 40 };
     let padding = coords.padding;
+    let xlim = settings.xlim;
+    let ylim = settings.ylim;
+    let ylab = settings.ylab;
+    let xlab = settings.xlab;
+    let title = settings.title;
+    let col = settings.col;
+    let xInc = settings.xInc;
+
     if (!xlim) {
         xlim = [0, 100];
     } else {
@@ -21,8 +33,8 @@ function graph(func, canvas, xInc, xlab, ylab, xlim, ylim, col, coords) {
         ylim = [0, 100];
     }
     let ctx = canvas.getContext('2d');
-    drawGrid(canvas, xInc, xlab, ylab, xlim, ylim, coords);
-    //graph 
+    drawGrid(canvas, xInc, xlab, ylab, title, xlim, ylim, coords);
+    //graph
     ctx.globalAlpha = 1;
 
     ctx.beginPath();
@@ -93,7 +105,7 @@ function graph(func, canvas, xInc, xlab, ylab, xlim, ylim, col, coords) {
     //axes
     drawAxes(canvas, coords);
 }
-function drawGrid(canvas, xInc, xlab, ylab, xlim, ylim, coords) {
+function drawGrid(canvas, xInc, xlab, ylab, title, xlim, ylim, coords) {
     let padding = coords.padding;
     let ctx = canvas.getContext('2d');
     ctx.clearRect(coords.x, coords.y, coords.w, coords.h);
@@ -101,10 +113,16 @@ function drawGrid(canvas, xInc, xlab, ylab, xlim, ylim, coords) {
     ctx.textAlign = "center";
     ctx.strokeStyle = "#FFFFFF";
     ctx.fillStyle = "#FFFFFF";
-    ctx.font = "9px";
+    ctx.font = "18px 'Trebuchet MS'";
+    //title
+    if (title) {
+        ctx.fillText(title, coords.x + coords.w / 2 + padding / 2, coords.y + 24);
+    }
+    ctx.font = "9px 'Trebuchet MS'";
+
     //labels
     if (xlab) {
-        ctx.fillText(xlab, coords.x + coords.w / 2 + padding / 2, coords.y + coords.h-4);
+        ctx.fillText(xlab, coords.x + coords.w / 2 + padding / 2, coords.y + coords.h - 4);
     }
     if (ylab) {
         ctx.rotate(-Math.PI / 2);
@@ -141,7 +159,7 @@ function drawGrid(canvas, xInc, xlab, ylab, xlim, ylim, coords) {
         ctx.closePath();
         ctx.globalAlpha = 1;
         let label = (1 - (i / (coords.h - padding))) * (ylim[1] - ylim[0]) + ylim[0];
-        if(i>10)
+        if (i > 10)
             ctx.fillText(toReadableNumber(label), coords.x + padding - 13, coords.y + i, 22)
     }
 }
@@ -156,7 +174,7 @@ function drawAxes(canvas, coords) {
     ctx.beginPath();
     //horizontal axis
     ctx.moveTo(coords.x + padding, coords.y + coords.h - padding);
-    ctx.lineTo(coords.x + coords.w, coords.y + coords.h - padding);
+    ctx.lineTo(coords.x + coords.w - padding, coords.y + coords.h - padding);
     //vertical axis
     ctx.moveTo(coords.x + padding, coords.y + coords.h - padding);
     ctx.stroke();
@@ -272,30 +290,104 @@ function factorial(n) {
         return 1;
     return n * factorial(n - 1);
 }
+//data is an object that either contains key data and the raw data or key binQuantities that has an a list of quantities for each bin
+//settings can have title, xRange, xlab, color, coords, highlight, highlightCol
+function hist(canvas, data, numBins, settings) {
+    let coords = 0;
+    if (settings.coords)
+        coords = settings.coords;
+    else
+        coords = { x: 0, y: 0, w: canvas.width, h: canvas.height, padding: 40 };
+    if (Object.keys(data).includes("data")) {
+        data = data.data;
+    }
 
-function hist(canvas, data, numBreaks, xRange, color, coords) {
     let min = 0;
     let max = 0;
-    if (!xRange) {
+    if (!settings.xRange) {
         min = Math.min(...data);
         max = Math.max(...data);
     } else {
-        min = xRange[0];
-        max = xRange[1];
+        min = settings.xRange[0];
+        max = settings.xRange[1];
     }
     let range = max - min;
-    let breakSize = range / numBreaks;
+    let binSize = range / numBins;
     let thresholds = [];
-    for (let i = 1; i <= numBreaks; i++) {
-        thresholds.push(min + i * breakSize);
+    for (let i = 1; i <= numBins; i++) {
+        thresholds.push(min + i * binSize);
     }
-    let numInBreaks = Array(numBreaks).fill(0);
-    for (let val of data) {
-        for (let i = 0; i < numBreaks; i++) {
-            if (val < thresholds[i])
-                numInBreaks[i]++;
+    let numInBins = Array(numBins).fill(0);
+    if (Object.keys(data).includes("binQuantities")) {
+        data = data.binQuantities;
+        for (let i = 0; i < data.length; i++)
+            numInBins[i] = data[i];
+    } else {
+        for (let val of data) {
+            for (let i = 0; i < numBins; i++) {
+                if (val < thresholds[i])
+                    numInBins[i]++;
+            }
         }
     }
-    console.log(numInBreaks);
+    let ctx = canvas.getContext('2d');
+    ctx.clearRect(coords.x, coords.y, coords.w, coords.h);
+
+    let padding = coords.padding;
+    let total = numInBins.reduce((prev, cur) => prev + cur);
+    let binWidth = Math.floor((coords.w - padding * 2) / numBins);
+    coords.w = binWidth * numBins + padding * 2;
+    ctx.font = "18px 'Trebuchet MS'";
+    ctx.fillStyle = "#FFFFFF";
+    ctx.textAlign = "center";
+    if (settings.title) {
+        ctx.fillText(settings.title, coords.x + coords.w / 2 + padding / 2, coords.y + 24);
+    }
+    ctx.font = "12px 'Trebuchet MS'";
+
+
+    ctx.lineWidth = 2;
+
+    //labels
+    if (settings.xlab) {
+        ctx.fillText(settings.xlab, coords.x + coords.w / 2 + padding / 2, coords.y + coords.h - 4);
+    }
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText("Frequency", coords.x + (coords.h - padding) * -.5, coords.y + 9);
+    ctx.rotate(Math.PI / 2);
+    ctx.fillStyle = settings.color;
+    ctx.strokeStyle = settings.color;
+    ctx.globalAlpha = 1;
+
+    for (let i = 0; i < numBins; i++) {
+        if (i == settings.highlight) {
+            ctx.fillStyle = settings.highlightCol;
+            ctx.strokeStyle = settings.highlightCol;
+        }
+        ctx.strokeRect(padding + coords.x + binWidth * i, coords.y + padding + ((coords.h - padding * 2) * (1 - numInBins[i] / total)), binWidth, (coords.h - padding * 2) * (numInBins[i] / total));
+        ctx.fillText(min+binSize*i,padding + coords.x + binWidth * i, coords.y +coords.h-padding+13, binWidth/2);
+        
+        ctx.globalAlpha = .4;
+        ctx.fillRect(padding + coords.x + binWidth * i, coords.y + padding + ((coords.h - padding * 2) * (1 - numInBins[i] / total)), binWidth, (coords.h - padding * 2) * (numInBins[i] / total));
+
+        ctx.globalAlpha = 1;
+        if ((coords.h - padding * 2) * (numInBins[i] / total) > 30)
+            ctx.fillText(numInBins[i], padding + coords.x + binWidth * (i + 0.5), coords.y + padding + ((coords.h - padding * 2) * (1 - numInBins[i] / total)) + 16, binWidth)
+        else
+            ctx.fillText(numInBins[i], padding + coords.x + binWidth * (i + 0.5), coords.y + padding + ((coords.h - padding * 2) * (1 - numInBins[i] / total)) - 7, binWidth)
+        if (i == settings.highlight) {
+            ctx.fillStyle = settings.color;
+            ctx.strokeStyle = settings.color;
+        }
+    }
+    //makes frame of highlight bin go over the other bins
+    if (settings.highlight>=0&&settings.highlight<numBins) {
+        ctx.strokeStyle = settings.highlightCol;
+        ctx.strokeRect(padding + coords.x + binWidth * settings.highlight, coords.y + padding + ((coords.h - padding * 2) * (1 - numInBins[settings.highlight] / total)), binWidth, (coords.h - padding * 2) * (numInBins[settings.highlight] / total));
+
+    }
+
+
+    drawAxes(canvas, coords);
 
 }

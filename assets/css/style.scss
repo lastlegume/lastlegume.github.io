@@ -1,5 +1,5 @@
 --- 
---- 
+---
 
 @import "{{ site.theme }}";
 
@@ -9,9 +9,10 @@
     transition-duration: 1s;
     transition-property: all;
 }
+
 .extension-link:hover {
-    text-decoration:underline;   
-    color:lightgoldenrodyellow;
+    text-decoration: underline;
+    color: lightgoldenrodyellow;
     transition-duration: 1s;
     transition-property: all;
 }
@@ -60,19 +61,20 @@ header h1 {
     transition-duration: .1s;
     transition-property: color, text-decoration;
     margin-bottom: 4px;
-    background-color:none;
+    background-color: none;
     border-radius: 80px;
     display: inline-block;
     text-decoration: none;
     padding: 5px 20px;
 }
+
 .dropdownTrigger:hover {
-    color:lightgoldenrodyellow;
-    background-color:rgb(59, 73, 34);
+    color: lightgoldenrodyellow;
+    background-color: rgb(59, 73, 34);
     transition-duration: 1s;
     transition-property: all;
     border-radius: 30px;
-    
+
 }
 
 .dropdownMenu {
@@ -95,17 +97,110 @@ header h1 {
     transition: .5s;
     border-color: springgreen;
     border-radius: 15px;
-  }
-  .btn-submit:hover {
+}
+
+.btn-submit:hover {
     transition: .5s;
     background: rgb(50, 127, 88);
-  }
-  .btn-submit:active {
+}
+
+.btn-submit:active {
     transition: .5s;
     background: radial-gradient(springgreen, rgb(50, 127, 88));
-  }
-  .dropdownLI{
-    list-style-type:circle;
-    list-style-image: none;
-  }
+}
 
+.dropdownLI {
+    list-style-type: circle;
+    list-style-image: none;
+}
+
+.descriptor {
+    background-color: darkgreen;
+    border-radius: 10px;
+    padding: 1px 7px;
+}
+
+.descriptor:before {
+    display: none;
+    content: attr(hover-text);
+    opacity: 0;
+    background-color: black;
+    width: fit-content;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    transition: opacity .5s ease;
+    position: absolute;
+    z-index: 1;
+    top: 110%;
+}
+
+.descriptor:hover:before {
+    opacity: .9;
+    display: block;
+}
+
+label {
+    position: relative;
+}
+
+.btn-submit {
+    transition: .5s;
+    border-color: springgreen;
+    border-radius: 15px;
+}
+
+.btn-submit:hover {
+    transition: .5s;
+    background: rgb(50, 127, 88);
+}
+
+.btn-submit:active {
+    transition: .5s;
+    background: radial-gradient(springgreen, rgb(50, 127, 88));
+}
+
+.panel {
+    display: inline-block;
+    padding: 5px;
+    vertical-align: top;
+}
+
+math {
+    padding-bottom: 15px;
+}
+
+h2,
+h3,
+h4 {
+    margin: 5px 0px;
+}
+
+.xx-small {
+    font-size: xx-small;
+}
+
+.x-small {
+    font-size: x-small;
+}
+
+#toc{
+    background-color: rgb(56, 56, 56);
+    overflow: hidden;
+    border: 1px goldenrod;
+    padding: 10px 45px;
+}
+.toc-entry{
+    list-style-type: upper-roman;
+    list-style-image: none;
+}
+.toc-entry a {
+    color:#B5E853;
+    text-decoration: none;
+}
+
+h5 {
+    color: goldenrod;
+    padding-top: 5px;
+  }

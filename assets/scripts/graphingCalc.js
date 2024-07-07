@@ -45,7 +45,7 @@ function updateGraph() {
 
     func = func.replaceAll(/\s+/g, " ").trim();
     // console.log(func);
-    graph({"function":func}, canvas, .01, "x", "y", xlim, ylim, colorInput.value ,{ x: 0, y: 0, w: canvas.width, h: canvas.height, padding: 40 })
+    graph({"function":func}, canvas, {"xInc":.01, "xlab":"x", "ylab":"y", "xlim":xlim, "ylim":ylim, "col":colorInput.value})
     //testing graph
     //    graph({"function":func}, canvas, .01, "x", "y", xlim, ylim, colorInput.value ,{ x: 100, y: 100, w: .5*canvas.width, h: .5*canvas.height, padding: 40 })
 

@@ -1,0 +1,524 @@
+---
+layout: post
+title: Prize Card Probability in the Pokemon TCG
+date: 2024-6-6 12:00:00 -0500
+category: pokemon
+author: lastlegume
+tags: pokemon tcg math
+toc: true
+---
+<style type="text/css" media="screen">
+    .graph {
+        text-align: center;
+    }
+
+    #csvTable {
+        table-layout: fixed;
+        border-collapse: collapse;
+        border: 1px solid white;
+    }
+
+    #csvTable thead th {
+        background-color: darkslategrey;
+        border: 1px solid white;
+
+    }
+
+    #csvTable tr td:nth-child(1) {
+        background-color: darkslategrey;
+        font-weight: bold;
+    }
+
+    #csvTable tr td {
+        padding: 2px;
+        border-collapse: collapse;
+        border: 1px solid white;
+    }
+
+    #verifyTable td {
+        padding: 2px;
+        width: 15px;
+    }
+
+    th {
+        padding: 2px;
+    }
+</style>
+<script defer src="/assets/scripts/graph.js"></script>
+
+<script defer src="/assets/scripts/prizeprobability.js"></script>
+
+<p>When I first saw <a href="https://www.youtube.com/watch?v=t5ARLXkXpQA&t=18s">John Kettler prize both of his oddish in
+        the semifinals of NAIC in 2017</a>, I remember thinking that Kettler was the most unlucky pokemon TCG player
+    alive.
+    Only a few months earlier, he had prized <a href="https://www.youtube.com/watch?v=KvRZrbEGKV4&t=1364s">three out of
+        his
+        four copies of rowlet in the finals of a regional</a>, so I thought his luck was truly terrible.</p>
+<p>But how unlucky really was he? Was this just some bad luck or was this actually somewhat likely?</p>
+<p>In this post, I'm going to explain my process to calculating these probabilities (with the R script I used to
+    calculate
+    them), describe why this problem is so complex, and provide some tools to play around with.</p>
+<h2 id="prereq">Prerequisite Knowledge</h2>
+<p>You will need to understand the basic rules of probability (multiplication rule, addition rule, conditional
+    probability, etc.) and the concept of a combination (nCk or <math>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mi>n</mi>
+                <mi>k</mi>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+    </math>). It would also help to know what a probability distribution is, but this is not required to understand the
+    article. </p>
+<h2 id="simplest-case">The Simplest Case (1 Copy of the Card)</h2>
+The simplest possible case is the case of having only one copy of a card (referred to henceforth as the "target card")
+and seeing whether it is prized. To do this we can decompose the problem into two steps: is the target card in the
+starting hand, and, if not, is the target in the prizes? <a href="#footnote1"><sup id="sup1">[1]</sup></a>. If the
+target card is in the hand, it cannot be in the prize cards, so the probability that the card is prized is therefore
+P(Not in hand) · P (In prizes). Now, having come up with this equation, we can solve for each component individually.
+<h3 id="simplest-NiH">P(Not In Hand)</h3>
+<p>The probability of not being in hand is relatively simple to calculate when there is only one copy in deck. There are
+    a
+    lot of ways to do it, but one way is to imagine drawing each of the 7 cards in hand as an independent event.
+    Therefore,
+    drawing the target card as the first card has a probability of <math display="inline">
+        <mfrac>
+            <mn>1</mn>
+            <mn>60</mn>
+        </mfrac>
+    </math>, so the probability of not drawing it as the first card is <math display="inline">
+        <mfrac>
+            <mn>59</mn>
+            <mn>60</mn>
+        </mfrac>
+    </math>. Similarly, for the next card, the probability of not drawing the target card is <math display="inline">
+        <mfrac>
+            <mn>58</mn>
+            <mn>59</mn>
+        </mfrac>
+    </math>. To not draw the target card between all 7 cards, each individual card must not be the target card, so we
+    multiply all 7 probabilities that the drawn card is not the target, giving us <math>
+        <mfrac>
+            <mn>59</mn>
+            <mn>60</mn>
+        </mfrac>
+        <mo>·</mo>
+        <mfrac>
+            <mn>58</mn>
+            <mn>59</mn>
+        </mfrac>
+        <mo>·</mo>
+        <mfrac>
+            <mn>57</mn>
+            <mn>58</mn>
+        </mfrac>
+        <mo>·</mo>
+        <mfrac>
+            <mn>56</mn>
+            <mn>57</mn>
+        </mfrac>
+        <mo>·</mo>
+        <mfrac>
+            <mn>55</mn>
+            <mn>56</mn>
+        </mfrac>
+        <mo>·</mo>
+        <mfrac>
+            <mn>54</mn>
+            <mn>55</mn>
+        </mfrac>
+        <mo>·</mo>
+        <mfrac>
+            <mn>53</mn>
+            <mn>54</mn>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+            <mn>53</mn>
+            <mn>60</mn>
+        </mfrac>
+    </math>. </p>
+<p>Alternatively, we could think about every possible hand. We can use combinations to find the total number of
+    possiblilies and the number that have the target card in them, which tells us that there are <math>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>60</mn>
+                <mn>7</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+    </math> total combinations of 7 card hands to draw, and there are <math>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>59</mn>
+                <mn>6</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+    </math> combinations of hands that have the target card in them. Therefore, the probability of having the target
+    card in
+    hand is <math>
+        <mfrac>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mn>59</mn>
+                    <mn>6</mn>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mn>60</mn>
+                    <mn>7</mn>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+        </mfrac>
+    </math>, and the probability of not having it in hand is therefore <math>
+        <mn>1</mn>
+        <mo>-</mo>
+        <mfrac>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mn>59</mn>
+                    <mn>6</mn>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mn>60</mn>
+                    <mn>7</mn>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+            <mn>53</mn>
+            <mn>60</mn>
+        </mfrac>
+    </math>. </p>
+<p>It's important to understand why this works because this idea will be used more later. Though (in my opinion) the
+    first method is more intuitive, this method of using combinations is easily scalable to different cases. The
+    denominator, <math>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>60</mn>
+                <mn>7</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+    </math>, means by definition the number of possible combinations of 7 cards you can draw from a 60 card deck, so
+    this is the total number of possibilies. Probability can also be expressed as the number of successes divided by the
+    total number, so this number (the total number of possible hands) is vital to finding the probability. The numerator
+    is slightly more complex. It is the number of hands containing the card and therefore consists of the combinations
+    of hands that contain the target card. Since order does not matter in this case, each hand with the target card is
+    composed of the target card and 6 other cards; therefore, the number of combinations with the card in hand is <math>
+        <mn>1</mn>
+        <mo>·</mo>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>59</mn>
+                <mn>6</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+    </math> because any hand of 6 cards from the remaining cards and the target card is a hand with the target card.
+    Similarly, every hand without the target card is simply <math>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>59</mn>
+                <mn>7</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+    </math>, which is the number of combinations of 7 cards possible from the remaining 59 cards. Because these are the
+    only two cases, then they should add to the total number of possible cases, and they do:
+    <math>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>59</mn>
+                <mn>7</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+        <mo>+</mo>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>59</mn>
+                <mn>6</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>60</mn>
+                <mn>7</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>386206920</mn>
+    </math>. While this might seem needlessly complex for this simple case of having only 1 copy of the card, this
+    process is scalable and can be used for more complex cases than this.
+</p>
+<h3 id="simplest-iP">P(In Prizes)</h3>
+<p>In the case that the target card is not in hand, the probability that it is in the prize cards is also something we
+    need to determine. While we could use the first method of multiplying the individual probabilities of not having the
+    card in the prizes, it's again probably easier to use combinations to find the number of cases where it is prized.
+    The total number of cases is <math>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mi>53</mi>
+                <mi>6</mi>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+    </math> because there are 53 cards in deck after drawing the starting hand and we are choosing 6 cards to be prize
+    cards <a href="#footnote2"><sup id="sup2">[2]</sup></a>. The number of combinations where the card is in the prize
+    cards is <matah>
+        <mn>1</mn>
+        <mo>·</mo>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>52</mn>
+                <mn>5</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow></math> using similar reasoning from the previous part. Therefore, the probability that a card is prized
+        when the card is not in hand is <math>
+            <mfrac>
+                <mrow>
+                    <mo stretchy="true" form="prefix">(</mo>
+                    <mfrac linethickness="0">
+                        <mn>52</mn>
+                        <mn>5</mn>
+                    </mfrac>
+                    <mo stretchy="true" form="postfix">)</mo>
+                </mrow>
+                <mrow>
+                    <mo stretchy="true" form="prefix">(</mo>
+                    <mfrac linethickness="0">
+                        <mn>53</mn>
+                        <mn>6</mn>
+                    </mfrac>
+                    <mo stretchy="true" form="postfix">)</mo>
+                </mrow>
+            </mfrac>
+            <mo>=</mo>
+            <mfrac>
+                <mn>6</mn>
+                <mn>53</mn>
+            </mfrac>
+        </math>.</p>
+<h3 id="hypergeometric">The hypergeometric distribution</h3>
+<p>The hypergeometric distribution is a probability distribution that automates this process we have been doing of
+    finding
+    the probability of drawing x target cards from a deck of size m+n with m target cards and n other cards in a hand of
+    size k <a href="#footnote3"><sup id="sup3">[3]</sup></a>. The formula of the hypergeometric distribution is as
+    follows:</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mfrac>
+        <mrow>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mi>m</mi>
+                    <mi>x</mi>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+            <mo>·</mo>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mi>n</mi>
+                    <mrow>
+                        <mi>k</mi>
+                        <mo>-</mo>
+                        <mi>x</mi>
+                    </mrow>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+        </mrow>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mrow>
+                    <mi>m</mi>
+                    <mo>+</mo>
+                    <mi>n</mi>
+                </mrow>
+                <mi>k</mi>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+    </mfrac>
+</math>
+<p>This is exactly what we have been doing with the combinations in the previous parts. To show this, let's run our
+    previous calculations through this equation.</p>
+<p>For the probability of being in hand, <math>
+        <mi>m</mi>
+        <mo>+</mo>
+        <mi>n</mi>
+        <mo>=</mo>
+        <mn>60</mn>
+    </math>, <math>
+        <mi>m</mi>
+        <mo>=</mo>
+        <mn>1</mn>
+    </math> (m is the number of target cards in deck), <math>
+        <mi>n</mi>
+        <mo>=</mo>
+        <mn>59</mn>
+    </math> (n is the number of cards in deck that are not the target card), <math>
+        <mi>k</mi>
+        <mo>=</mo>
+        <mn>7</mn>
+    </math> (k is the number of cards drawn; in this case, the hand size), and <math>
+        <mi>x</mi>
+        <mo>=</mo>
+        <mn>0</mn>
+    </math> (x is the number of the target card in hand: we want 0 in hand). Plugging these numbers in gives us:</p>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mfrac>
+        <mrow>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mn>1</mn>
+                    <mn>0</mn>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+            <mo>·</mo>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mn>59</mn>
+                    <mrow>
+                        <mn>7</mn>
+                        <mo>-</mo>
+                        <mn>0</mn>
+                    </mrow>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+        </mrow>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>60</mn>
+                <mn>7</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+    </mfrac>
+    <mo>=</mo>
+    <mfrac>
+        <mrow>
+            <mn>1</mn>
+            <mo>·</mo>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mn>59</mn>
+                    <mn>7</mn>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+        </mrow>
+        <mrow>
+            <mo stretchy="true" form="prefix">(</mo>
+            <mfrac linethickness="0">
+                <mn>60</mn>
+                <mn>7</mn>
+            </mfrac>
+            <mo stretchy="true" form="postfix">)</mo>
+        </mrow>
+    </mfrac>
+    <mo>=</mo>
+    <mfrac>
+        <mn>53</mn>
+        <mn>60</mn>
+    </mfrac>
+</math>
+<p>This is the same probability as the one we calculated previously. If you apply this same reasoning to the probability
+    of being prized, you'll find that it is also the same. From this point forward, we are going to only be using
+    hypergeometric distributions to simplify the math and increase readability, but the hypergeometric distribution is
+    simply a different name for the math that we were already doing in the previous section. Similarly, I'll use the
+    notation from R (specifically dhyper(x, m, n, k)) to write any probabilities that are found using a hypergeometric
+    distribution, so the computation from the previous paragraph would be represented as dhyper(0,1,59,7).</p>
+<h3 id="simplest-final-naive">The final probability</h3>
+
+
+<div class="graph panel">
+    <canvas class="graph" id="oneCopyHist" height=400 width=610></canvas>
+</div>
+<br>
+Please note that the number of basics does not include the target card if the target card is a basic (so if you have 12
+total basics and 4 rowlet, look at the 8 basics sheet)
+<select id="tableSelect">
+    <option value="basicsInHand.csv">Number of basics in starting hand</option>
+</select><br>
+
+<table id="csvTable"></table>
+
+<button id="verifyButton" class="btn btn-submit">Verify Sheet Data</button><label> <span class="descriptor x-small"
+        hover-text="Click this button to compare the manually calculated probabilities from my R script to the
+results of a simulation. Choose the number of trials and verify the accuracy. The number shown is the average error
+between simulation and probability, and hover over the number to see the file that was verified. Any error above .04
+appears fully red, while an error of 0 is fully green. Since these simulations are random, some results will usually 
+be somewhat red, but as the number of trials increases, the error decreases, suggesting that these probabilities are
+correct.">?</span></label><br>
+<label>Number of trials: <input id="verifyReps" type="number" value="2000"></label>
+<table id="verifyTable"></table>
+<!-- 
+P(prizing both oddish) was 0.007784993
+P(prizing 3 rowlet) was 0.001980315, 3 or more was almost exactly 1/500 -->
+
+<p><a href="#sup1"><sup id="footnote1">[1]</sup></a> If you've read <a
+        href="https://www.pojo.com/Features/X-Act/2005/Odds%20In%20Pokemon%202.htm">this article</a> or <a
+        href="https://www.pojo.com/Features/X-Act/2005/Odds%20in%20Pokemon%203.htm">its errata</a>, you'll know that
+    this
+    process is actually overly complex, but I am keeping both because it is the way I approached the problem, and
+    because
+    this process is important for the method used later in the post. Though I think these articles are amazing, I
+    believe
+    that the result in this case is slightly off as explained later in the article.</p>
+<p><a href="#sup2"><sup id="footnote2">[2]</sup></a> There is an argument to be made here about how the order of prize
+    cards matters because many players start from the bottom and work their way up. Therefore, for many players, having
+    a prize in the top 2 prize cards is significantly different than having a card in the bottom 2 because of the
+    ability to get the bottom or middle prizes back over the course of the game. In spite of this pattern, I've chosen
+    to ignore the order of prizes both because it is way too inconsistent among players (for example, do they start
+    placing cards from the top of their deck to the top of the prizes or the bottom) and it complicates this already
+    difficult problem even more. If order were to matter, we would need to be using permuations instead of combinations,
+    so this math would be quite different.
+</p>
+<p><a href="#sup3"><sup id="footnote3">[3]</sup></a> I am using the variable names in R's hypergeometric distribution
+    functions (specifically the dhyper function) in my description of the function to assist in reading the R code and
+    because I like the R variable names more than <a
+        href="https://en.wikipedia.org/wiki/Hypergeometric_distribution#Probability_mass_function">wikipedia's</a>
+    variables (N, n, K, and k). Technically, x is a vector of quantiles for the number of target cards drawn and can
+    therefore be a vector/list of numbers, but for the sake of simplicity, I'll always use only one number as x in this
+    blog post; however, in my R code, I usually ended up using a vector like 0:7 as x to get all 8 probabilities at once, so keep that in
+    mind when reading the code.
+</p>
