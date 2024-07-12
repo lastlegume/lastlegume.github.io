@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Prize Card Probability in the Pokemon TCG
-date: 2024-6-6 12:00:00 -0500
+title: Prize Card Probability in the Pokémon TCG
+date: 2024-7-11 12:00:00 -0500
 category: pokemon
 author: lastlegume
-tags: pokemon tcg math
+tags: pokémon tcg math
 toc: true
 ---
 <style type="text/css" media="screen">
@@ -57,12 +57,12 @@ toc: true
 <script defer src="/assets/scripts/prizeprobability.js"></script>
 
 <p>When I first saw <a href="https://www.youtube.com/watch?v=t5ARLXkXpQA&t=18s">John Kettler prize both of his oddish in
-        the semifinals of NAIC in 2017</a>, I remember thinking that Kettler was the most unlucky pokemon TCG player
-    alive.
-    Only a few months earlier, he had prized <a href="https://www.youtube.com/watch?v=KvRZrbEGKV4&t=1364s">three out of
-        his
-        four copies of rowlet in the finals of a regional</a>, so I thought his luck was truly terrible.</p>
+        the semifinals of NAIC in 2017</a>, I remember thinking that Kettler was the most unlucky Pokémon TCG player
+    alive. Only a few months earlier, he had prized <a href="https://www.youtube.com/watch?v=KvRZrbEGKV4&t=1364s">three
+        out of his four copies of rowlet in the finals of a regional</a>, so his luck on stream seemed really terrible.
+</p>
 <p>But how unlucky really was he? Was this just some bad luck or was this actually somewhat likely?</p>
+<p>In other words, what is the probability that a card is prized?</p>
 <p>In this post, I'm going to explain my process to calculating these probabilities (with the R script I used to
     calculate
     them), describe why this problem is so complex, and provide some tools to play around with.</p>
@@ -79,6 +79,17 @@ toc: true
         </mrow>
     </math>). It would also help to know what a probability distribution is, but this is not required to understand the
     article. </p>
+<h2 id="rules">Basic Pokémon TCG Rules</h2>
+<p>While most people reading this already know the rules of the Pokémon TCG, I'll take a moment to lay out all of the
+    necessary rules for this article. In the Pokémon TCG, you play with a 60 card deck, with up to 4 copies of each card
+    except for basic energy cards, which you can have up to 59 copies of. To start the game, you draw hands of 7 cards
+    until your hand has at least 1 basic, after which you play down as many basics from your hand as you like, with one
+    going to the active position, and the rest going onto the bench. Each time a player has a hand without a basic
+    pokémon, it is known as a mulligan. After each player has drawn their starting hand of 7 cards, they set the top 6
+    cards of their deck to the side. These are known as the prize cards, and, in this article, we are trying to find the
+    probability that some number of copies of a given card will end up in those 6 cards. For each mulligan, the opposing
+    player may draw an extra card, but this occurs after the prize cards are set out and is therefore irrelevant for
+    this problem.</p>
 <h2 id="simplest-case">The Simplest Case (1 Copy of the Card)</h2>
 The simplest possible case is the case of having only one copy of a card (referred to henceforth as the "target card")
 and seeing whether it is prized. To do this we can decompose the problem into two steps: is the target card in the
@@ -244,7 +255,7 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
             </mfrac>
             <mo stretchy="true" form="postfix">)</mo>
         </mrow>
-    </math> because any hand of 6 cards from the remaining cards and the target card is a hand with the target card.
+    </math> because any hand of the target card and 6 cards from the remaining 59 is a hand with the target card.
     Similarly, every hand without the target card is simply <math>
         <mrow>
             <mo stretchy="true" form="prefix">(</mo>
@@ -303,7 +314,7 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
         </mrow>
     </math> because there are 53 cards in deck after drawing the starting hand and we are choosing 6 cards to be prize
     cards <a href="#footnote2"><sup id="sup2">[2]</sup></a>. The number of combinations where the card is in the prize
-    cards is <matah>
+    cards is <math>
         <mn>1</mn>
         <mo>·</mo>
         <mrow>
@@ -313,38 +324,38 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
                 <mn>5</mn>
             </mfrac>
             <mo stretchy="true" form="postfix">)</mo>
-        </mrow></math> using similar reasoning from the previous part. Therefore, the probability that a card is prized
-        when the card is not in hand is <math>
-            <mfrac>
-                <mrow>
-                    <mo stretchy="true" form="prefix">(</mo>
-                    <mfrac linethickness="0">
-                        <mn>52</mn>
-                        <mn>5</mn>
-                    </mfrac>
-                    <mo stretchy="true" form="postfix">)</mo>
-                </mrow>
-                <mrow>
-                    <mo stretchy="true" form="prefix">(</mo>
-                    <mfrac linethickness="0">
-                        <mn>53</mn>
-                        <mn>6</mn>
-                    </mfrac>
-                    <mo stretchy="true" form="postfix">)</mo>
-                </mrow>
-            </mfrac>
-            <mo>=</mo>
-            <mfrac>
-                <mn>6</mn>
-                <mn>53</mn>
-            </mfrac>
-        </math>.</p>
+        </mrow>
+    </math> using similar reasoning from the previous part. Therefore, the probability that a card is prized
+    when the card is not in hand is <math>
+        <mfrac>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mn>52</mn>
+                    <mn>5</mn>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+            <mrow>
+                <mo stretchy="true" form="prefix">(</mo>
+                <mfrac linethickness="0">
+                    <mn>53</mn>
+                    <mn>6</mn>
+                </mfrac>
+                <mo stretchy="true" form="postfix">)</mo>
+            </mrow>
+        </mfrac>
+        <mo>=</mo>
+        <mfrac>
+            <mn>6</mn>
+            <mn>53</mn>
+        </mfrac>
+    </math>.</p>
 <h3 id="hypergeometric">The hypergeometric distribution</h3>
-<p>The hypergeometric distribution is a probability distribution that automates this process we have been doing of
-    finding
-    the probability of drawing x target cards from a deck of size m+n with m target cards and n other cards in a hand of
-    size k <a href="#footnote3"><sup id="sup3">[3]</sup></a>. The formula of the hypergeometric distribution is as
-    follows:</p>
+<p>The hypergeometric distribution is a probability distribution that describes this process we have been doing of
+    finding the probability of drawing x target cards from a deck of size m+n with m target cards and n other cards in a
+    hand of size k <a href="#footnote3"><sup id="sup3">[3]</sup></a>. The formula of the hypergeometric distribution is
+    as follows:</p>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
     <mfrac>
         <mrow>
@@ -500,7 +511,9 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
 <p>Therefore, the probability of having the only copy of a card prized is exactly 10%. So, for example, you can expect
     your ACE SPEC card to be prized in 10% of your games. If you want to confirm this, you can use the simulation below
     to check, which will shuffle the deck and check how many of the target card end up in the prize cards in each trial,
-    displaying its results in the histogram below.</p>
+    displaying its results in the histogram below. It does this by simply shuffling the deck and checking the number of
+    copies of the target card between indexes 7 and 13 in the deck list since it assumes we never have to redraw our
+    hand.</p>
 <div class="simulate-settings"><button id="simOneCopyButton" class="btn btn-submit">Simulate</button><label> Number of
         trials: <input id="simOneCopyReps" type="number" value="10000"></label>
 </div>
@@ -521,7 +534,8 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
     <li>0 Copies in Hand: The probability of this occuring is dhyper(0,2,58,7). If there are 0 copies in hand, then
         there are 2 copies left in deck. Therefore, P(0 prized|0 in hand) is dhyper(0,2,51,6), P(1 prized|0 in hand) is
         dhyper(1,2,51,6), and P(2 prized|0 in hand) is dhyper(2, 2,51,6). Then, we multiply all of these values by P(0
-        in hand) to get the probability of having both 0 in hand and 0/1/2 in the prizes and add these values to the
+        in hand) to get the probability of having both 0 in hand and 0, 1, or 2 in the prizes and add these values to
+        the
         probabilities of having 0, 1, or 2 copies in the prize cards.</li>
     <li>1 Copy in Hand: The probability of this occuring is dhyper(1,2,58,7). If there is 1 copy in hand, then there is
         only 1 copy left in deck, so there can only be either 0 or 1 copies in the prize cards. P(0 prized|1 in hand) is
@@ -613,25 +627,55 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
     find the probabilities of drawing copies of the target card in 7 - b cards, where b was the number of basics in
     hand. Then, using these probabilities of target cards being in hand, I did the same method as described of using
     hypergeometric distributions to find the probabilities that the remaining copies end up in the prize cards. This
-    method doesn't work though, and (somewhat embarrassingly) I'm not exactly sure what rule of probability I broke. I
-    include this failed attempt to demonstrate that often a method we think will work will fail, and it's an important
-    part of the problem solving process.</p>
+    method doesn't work though, and (somewhat embarrassingly) I'm not exactly sure what rule of probability I broke.
+    Though this didn't work, it was an important part of my process to solving this problem, and I felt that it
+    warranted inclusion for that reason. </p>
 <h2 id="correct-method">The Correct Method</h2>
 <p>Given this major flaw, we need to think about more conditional probability. What we need is the probability of having
-    some number of the target card in the starting hand given that the hand is valid. If we can find this, we can do the
-    same method of finding the probabilities of having some number of copies of the target card in the starting hand and
-    multiply them by the probability of having copies of the target card in the prizes given that number in hand. So,
-    how can we find these probabilities?</p>
-<p>If we really want to find the exact answer, it's important to think about edge cases as well. What if (this is
-    unlikely but technically possible) a deck has only one basic, and we want to know whether that card is prized? The
-    probability that it is prized is 0 because it has to be in the starting hand; for this reason, when the target card
-    is a basic, the calculations to find the probability are slightly different. Therefore, we will have to do all of
-    the math twice: once for when the target card is a basic, and once when it is not.</p>
-<p>I came up with this method myself, and I'm not very good at math, so it's possible that there is a more efficient way
-    to find these probabilities. However, I am confident that these numbers are correct, and <a href="#verify">you can
-        verify them yourself here</a>.</p>
+    some number of the target card in the starting hand given that the hand is valid. The reason we need this is that
+    hands that are not valid (like 7 energy cards) can never be the starting hand, so outcomes such as these must be
+    ignored to get the actual probabilities. The condition that the hand is valid ensures that the hand could be the
+    starting hand, which is important since prize cards are only set out after a valid starting hand is drawn. If we can
+    find these, we can do the same method of finding the probabilities of having some number of copies of the target card
+    in the starting hand and multiply them by the probability of having copies of the target card in the prizes given
+    that number in hand. So, how can we find these probabilities?</p>
+<p>The probability of getting a valid hand is the probability that there is at least 1 basic in the starting hand.
+    Therefore, we can find this probability with 1-dhyper(0,b,60-b,7), where b is the number of basics.
+    dhyper(0,b,60-b,7) is the probability that there are 0 basics in the starting hand, and subtracting it from 1 gives
+    us the probability that a hand is valid. If we think back to the formula for conditional probability (<math>
+        <mi>P</mi>
+        <mo>(</mo>
+        <mi>A</mi>
+        <mo>|</mo>
+        <mi>B</mi>
+        <mo>)</mo>
+        <mo>=</mo>
+        <mfrac>
+            <mrow>
+                <mi>P</mi>
+                <mo>(</mo>
+                <mi>A</mi>
+                <mo>∩</mo>
+                <mi>B</mi>
+                <mo>)</mo>
+            </mrow>
+            <mrow>
+                <mi>P</mi>
+                <mo>(</mo>
+                <mi>B</mi>
+                <mo>)</mo>
+            </mrow>
+        </mfrac>
+    </math>), we can see that we need the probability of getting a valid hand and a hand with some number of copies of
+    the target card. Alternatively, we could also find the probability of getting a specific valid hand arrangment (1
+    basic, 0 targets, 6 other; 1 basic, 1 target, 5 other;...; 7 basics, 0 targets, 0 others) and divide that
+    probability
+    by the probability of getting a valid hand to find the conditional probability of having that hand arrangement given
+    that the hand is valid. So, the question now is how do we find the probabilities of getting these specific hand
+    arrangements?</p>
+
 <h3 id="multivariate-hypergeometric">The Multivariate Hypergeometric Distribution</h3>
-<p>As the name suggests, this is a probability distribution that finds the probability of having some number of many
+<p>As the name suggests, this is a probability distribution for the probability of having some number of many
     different types of cards in a set of cards. The formula is as such</p>
 <math display="block">
     <mfrac>
@@ -671,20 +715,36 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
     </mfrac>
 </math>
 <p>Though it looks daunting, it is fundamentally the same as what we have been doing this whole time. The capital Pi
-    symbol simply means repeated multiplication, and if we expand it into the form for two different types, we will find
+    symbol (∏) simply means a product, and if we expand it into the form for two different types, we will find
     that it's the exact same as the hypergeometric distribution presented earlier. In this case, we can use it to find
     the probability of getting each arrangement of cards that has a basic. In our case, there are 3 different types of
     cards: basics, targets, and other cards. Therefore, we want to find the probability that the starting hand has at
-    least one basic and some number of copies of the target card. In R, we can do this with a single function (dmvhyper
-    from ExtraDist), but this is quite tedious to do by hand.</p>
-
+    least one basic and some number of copies of the target card. Then, we divide this probability by the probability of
+    drawing a valid hand to find the conditional probability of drawing that as your final starting hand. In R, we can
+    do this with a single function (dmvhyper from extraDistr).</p>
+<h3 id="edge-cases">Edge Cases</h3>
+<p>If we really want to find the exact answer, it's important to think about edge cases as well. What if (this is
+    unlikely but technically possible) a deck has only one basic, and we want to know whether that card is prized? The
+    probability that it is prized is 0 because it has to be in the starting hand; for this reason, when the target card
+    is a basic, the calculations to find the probability are slightly different. Therefore, we will have to do all of
+    the math twice: once for when the target card is a basic, and once when it is not.</p>
+<p>To change it to work when the target card is a basic, all we need to do is also find the probabilities that the
+    starting hand has 0 basics with at least 1 copy of the target card since these are also valid starting hands.
+    Additionally, the probability that a hand is valid is 1-dhyper(0,b+t,60-b-t,7), where t is the number of copies of
+    the target card in deck and b is the number of other basics in deck.</p>
+<p>I came up with this method myself, and I'm not very good at math, so it's possible that there is a more efficient way
+    to find these probabilities. However, I am confident that these numbers are correct, and <a href="#verify">you can
+        verify them yourself here</a>.</p>
 <h2 id="correct-probabilities">The Correct Probabilities</h2>
 <p>After this discussion, we finally understand how to calculate the final probabilites. So, to review, let's go over
     the steps to find the actual probabilities:</p>
 <ul>
     <li>Find the probability of each possible <span style="font-style: italic;">valid</span> hand arrangment (1 basic, 0
-        targets, 6 other; 1 basic, 1 target, 5 other;...;7 basics) using the multivariate hypergeometric distribution.
-    </li>
+        targets, 6 other; 1 basic, 1 target, 5 other;...; 7 basics, 0 targets, 0 others) using the multivariate
+        hypergeometric distribution and divide by the probability of having a valid hand to get the conditional
+        probability of getting that hand arrangement given that the hand is valid. In other words, this probability is
+        the probability of getting this combination of cards as the final hand after mulligans, which is what we
+        actually need for determining the probabilities for prize cards.</li>
     <li>Find the probability of each possible number of the target card being prized given each specific hand arrangment
         using the hypergeometric distribution.</li>
     <li>Multiply the probabilities of getting each hand and the probability of each number of target cards being prized
@@ -709,9 +769,8 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
 
 <table id="csvTable"></table>
 <p>You can also test these with my simulation, which can be configured to the number of copies of the card that you
-    have.</p>
-
-
+    have. If you set the number of basics to 0 and the target card to not a basic, then the simulation will not 
+    consider basics and mulligans like the naive method presented earlier. </p>
 <div class="graph panel">
     <canvas class="graph" id="simHist" height=400 width=610></canvas>
 </div>
@@ -729,7 +788,20 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
 
 </div>
 <h2 id="conclusion">Conclusion</h2>
-
+<p>So, how unlucky was John Kettler? The probability that he prized both oddish was 0.007784993, and the probability of
+    prizing 3 rowlet was 0.001980315 (P(prizing 3 or more) was almost exactly 1/500). Given these probabilities, he was
+    quite unlucky but not absurdly so. </p>
+<p>Nothing I've presented here is particularly revolutionary, but I hope that you at least found it interesting. Before
+    starting on this project (which spanned over a month for a variety of reasons), I didn't even think about the number
+    of basics, and even now, I still find it a bit surprising how much the number of basics affects the probability of
+    being prized. Unfortunately, this means that the probability of prizing something like an ACE SPEC is not actually
+    exactly 10%, but it's probably close enough. </p>
+<p>More than just these specific cases, I hope that this serves as a lesson of how even basic probability skills can be
+    used to solve relatively complex problems. Even though I cheated a bit using the hypergeometric distribution and R,
+    nothing in this post is especially complex; instead, just by applying the principles of probability, we've been able
+    to find some useful probabilities. I hope you enjoyed reading! An explanation of the R code will be released
+    shortly, but you can also view <a href="/assets/blog/prizeprobs/prizeProbabilitiesRelease.nb.html">the raw R
+        markdown here</a>.</p>
 <h2 id="verify">Verify</h2>
 <p>Check my math with the press of a button. Each time you press this button, the program will run a simulation for each
     row of each csv file with the same parameters as that row and find the difference between its probabilities and the
@@ -746,9 +818,7 @@ between simulation and probability, and hover over the number to see the file th
 appears fully red, while an error of 0 is fully green. ">?</span></label><br>
 <label>Number of trials: <input id="verifyReps" type="number" value="2000"></label>
 <table id="verifyTable"></table>
-<!-- 
-P(prizing both oddish) was 0.007784993
-P(prizing 3 rowlet) was 0.001980315, 3 or more was almost exactly 1/500 -->
+
 
 <p><a href="#sup1"><sup id="footnote1">[1]</sup></a> If you've read <a
         href="https://www.pojo.com/Features/X-Act/2005/Odds%20In%20Pokemon%202.htm">this article</a> or <a

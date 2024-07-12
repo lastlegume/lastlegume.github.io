@@ -2,7 +2,6 @@ const oneCopyHist = document.getElementById("oneCopyHist");
 const simHist = document.getElementById("simHist");
 
 document.onmousemove = function (e) { updateMouseCoords(e); };
-document.onmousedown = function (e) { updateHighlightedCol(); };
 const tableSelect = document.getElementById("tableSelect");
 const csvTable = document.getElementById("csvTable");
 const verifyTable = document.getElementById("verifyTable");
@@ -30,7 +29,6 @@ results[0] = simulateNSetups(1, 0, oneCopyReps.value, false);
 results[1] = simulateNSetups(prevSettings[1]*1, prevSettings[2]*1, prevSettings[0], prevSettings[4]);
 
 //results[0] = simulateNHands(4,4, 1000000,false)[1];
-//console.log(result);
 adjustWidth();
 
 let files = [];
@@ -38,14 +36,14 @@ fetch("/assets/blog/prizeprobs/names.txt").then((val) => val.text().then((txt) =
 //if basics = 0, ignore the check for if a basic is in hand
 function frame(t) {
     highlightIdx[0] = Math.floor((mousePos[0][0] - coords[0].padding) / Math.floor((coords[0].w - coords[0].padding * 2) / binNumbers[0]));
-    highlightIdx[1] = Math.floor((mousePos[1][0] - coords[1].padding) / Math.floor((coords[1].w - coords[1].padding * 2) / ((prevSettings[3])?8:7)));
+    highlightIdx[1] = Math.floor((mousePos[1][0] - coords[1].padding) / Math.floor((coords[1].w - coords[1].padding * 2) / ((prevSettings[3]!=="normal")?8:7)));
 
     if(runSummarySidebar[0]&&highlightIdx[0]>=0&&highlightIdx[0]<results[0].length)
         drawProbabilityText(oneCopyHist, results[0][highlightIdx[0]], prevReps[0], highlightIdx[0])
     if(runSummarySidebar[1]&&highlightIdx[1]>=0&&highlightIdx[1]<results[1].length)
         drawProbabilityText(simHist, results[1][highlightIdx[1]], prevReps[1], highlightIdx[1])
     hist(oneCopyHist, { "binQuantities": results[0] }, binNumbers[0], { "xRange": [0, 7], "title": "Number Prized With 1 Copy", "xlab": "Number Prized", "color": "#30A0FF", "coords": coords[0], "highlight": highlightIdx[0], "highlightCol": "#FFFF00" });
-    hist(simHist, { "binQuantities": results[1] }, ((prevSettings[3]!=="normal")?8:7), { "xRange": [0, ((prevSettings[3]!=="normal")?8:7)], "title": ((prevSettings[3]==="binhand")?"Basics ":"Number ")+((prevSettings[3]!=="normal")?"In Hand":"Prized")+` With ${prevSettings[1]} Copies and ${prevSettings[2]} Basics`, "xlab": "Number "+((prevSettings[3]!=="normal")?"In Hand":"Prized"), "color": "#30A0FF", "coords": coords[1], "highlight": highlightIdx[1], "highlightCol": "#FFFF00" });
+    hist(simHist, { "binQuantities": results[1] }, ((prevSettings[3]!=="normal")?8:7), { "xRange": [0, ((prevSettings[3]!=="normal")?8:7)], "title": ((prevSettings[3]==="binhand")?"Basics ":"Number ")+((prevSettings[3]!=="normal")?"In Hand":"Prized")+(width>450?` With ${prevSettings[1]} Copies and ${prevSettings[2]} Basics`:""), "xlab": "Number "+((prevSettings[3]!=="normal")?"In Hand":"Prized"), "color": "#30A0FF", "coords": coords[1], "highlight": highlightIdx[1], "highlightCol": "#FFFF00" });
 
     window.requestAnimationFrame(frame)
 
@@ -125,7 +123,7 @@ async function fillTable() {
         row = document.createElement("tr");
         for (let c = 0; c < csv[r].length; c++) {
             let td = document.createElement("td");
-            td.innerText = (!parseFloat(csv[r][c])) ? csv[r][c].replaceAll('"', '') : parseFloat(csv[r][c]).toPrecision(5);
+            td.innerText = (!parseFloat(csv[r][c])) ? csv[r][c].replaceAll('"', '') : (width>=800?parseFloat(csv[r][c]).toPrecision(5):(width<400?parseFloat(csv[r][c]).toFixed(3):parseFloat(csv[r][c]).toFixed(5)));
             td.classList.add("x-small");
             row.appendChild(td);
         }
@@ -220,9 +218,6 @@ function updateMouseCoords(e) {
     mousePos[1] = [e.clientX - rect.left, e.clientY - rect.top];
 }
 
-function updateHighlightedCol() {
-    console.log(highlightIdx);
-}
 
 function drawProbabilityText(canvas, trials, total, number){
     let ctx = canvas.getContext('2d');
@@ -264,7 +259,6 @@ async function verifyData() {
             let sim = [];
             let copies = csv[r][0].match(/[\d]+/g)[0] * 1;
             let basics = (path.includes("NoBasics")) ? 0 : path.match(/_([\d]+)Basics/)[1] * 1;
-            //            console.info(copies+" "+basics+" "+path)
             if (path.includes("handProb")) {
                 sim = simulateNHands(copies, basics, reps, path.includes("B_"))[1];
             } else {
@@ -288,7 +282,6 @@ async function verifyData() {
         error = Math.min(error * 25, 1);
         ctd.style.backgroundColor = `rgb(${Math.min(error, .5) * 510}, ${Math.max(0, .5 - error) * 510}, 0)`;
         ctd.classList.add("xx-small");
-        // console.log(`rgb(${Math.min(error, .5) * 510}, ${Math.max(0, .5 - error) * 510}, 0)`);
         currentTrow.appendChild(ctd);
     }
 }
