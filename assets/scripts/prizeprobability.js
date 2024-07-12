@@ -16,6 +16,7 @@ const oneCopyReps = document.getElementById("simOneCopyReps");
 const simSettings = document.getElementsByClassName("fullSim");
 let prevSettings = [simSettings[0].value*1, simSettings[1].value*1, simSettings[2].value*1, simSettings[3].value, simSettings[4].checked];
 let mousePos = [[], []];
+let means = [0,0];
 let prevReps = [oneCopyReps.value, simSettings[0].value];
 const binNumbers = [7,7]
 let coords = [{ x: 0, y: 0, w: oneCopyHist.width, h: oneCopyHist.height, padding: 40 }, { x: 0, y: 0, w: simHist.width, h: simHist.height, padding: 40 }];
@@ -27,6 +28,8 @@ reps = 1000;
 let highlightIdx = [-1, -1];
 results[0] = simulateNSetups(1, 0, oneCopyReps.value, false);
 results[1] = simulateNSetups(prevSettings[1]*1, prevSettings[2]*1, prevSettings[0], prevSettings[4]);
+means[0] = meanFromBins(results[0]);
+means[1] = meanFromBins(results[1]);
 
 //results[0] = simulateNHands(4,4, 1000000,false)[1];
 adjustWidth();
@@ -42,8 +45,8 @@ function frame(t) {
         drawProbabilityText(oneCopyHist, results[0][highlightIdx[0]], prevReps[0], highlightIdx[0])
     if(runSummarySidebar[1]&&highlightIdx[1]>=0&&highlightIdx[1]<results[1].length)
         drawProbabilityText(simHist, results[1][highlightIdx[1]], prevReps[1], highlightIdx[1])
-    hist(oneCopyHist, { "binQuantities": results[0] }, binNumbers[0], { "xRange": [0, 7], "title": "Number Prized With 1 Copy", "xlab": "Number Prized", "color": "#30A0FF", "coords": coords[0], "highlight": highlightIdx[0], "highlightCol": "#FFFF00" });
-    hist(simHist, { "binQuantities": results[1] }, ((prevSettings[3]!=="normal")?8:7), { "xRange": [0, ((prevSettings[3]!=="normal")?8:7)], "title": ((prevSettings[3]==="binhand")?"Basics ":"Number ")+((prevSettings[3]!=="normal")?"In Hand":"Prized")+(width>450?` With ${prevSettings[1]} Copies and ${prevSettings[2]} Basics`:""), "xlab": "Number "+((prevSettings[3]!=="normal")?"In Hand":"Prized"), "color": "#30A0FF", "coords": coords[1], "highlight": highlightIdx[1], "highlightCol": "#FFFF00" });
+    hist(oneCopyHist, { "binQuantities": results[0] }, binNumbers[0], { "xRange": [0, 7], "title": "Number Prized With 1 Copy", "xlab": "Number Prized", "color": "#30A0FF", "coords": coords[0], "highlight": highlightIdx[0], "highlightCol": "#FFFF00", "mean":means[0]});
+    hist(simHist, { "binQuantities": results[1] }, ((prevSettings[3]!=="normal")?8:7), { "xRange": [0, ((prevSettings[3]!=="normal")?8:7)], "title": ((prevSettings[3]==="binhand")?"Basics ":"Number ")+((prevSettings[3]!=="normal")?"In Hand":"Prized")+(width>450?` With ${prevSettings[1]} Copies and ${prevSettings[2]} Basics`:""), "xlab": "Number "+((prevSettings[3]!=="normal")?"In Hand":"Prized"), "color": "#30A0FF", "coords": coords[1], "highlight": highlightIdx[1], "highlightCol": "#FFFF00", "mean":means[1] });
 
     window.requestAnimationFrame(frame)
 
@@ -228,6 +231,8 @@ function drawProbabilityText(canvas, trials, total, number){
 
     ctx.fillText(`${(trials>1000000)?trials.toPrecision(4):trials}`, canvas.width-220, 40, 230);
     ctx.fillText(`${((trials/total)*100).toPrecision(5)}%`, canvas.width-220, 100, 230);
+
+
     ctx.font = "12px 'Trebuchet MS'";
     ctx.fillText(`or`, canvas.width-220, 60, 230);
 
@@ -236,6 +241,7 @@ function drawProbabilityText(canvas, trials, total, number){
     ctx.fillText(`had`, canvas.width-220, 160, 230);
     ctx.fillText(`${number} copies`, canvas.width-220, 180, 230);
     ctx.fillText(`prized`, canvas.width-220, 200, 230);
+
 
 }
 
@@ -289,9 +295,15 @@ async function verifyData() {
 function simOneCopy(){
     results[0] = simulateNSetups(1, 0, oneCopyReps.value, false);
     prevReps[0] = oneCopyReps.value;
+    means[0] = meanFromBins(results[0]);
+
 }
 function simulate(){
     prevSettings = [simSettings[0].value*1, simSettings[1].value*1, simSettings[2].value*1, simSettings[3].value, simSettings[4].checked];
+    if(prevSettings[1]+prevSettings[2]>60){
+        simSettings[2].value = 0;
+        prevSettings[2] = 0;
+    }
     if(prevSettings[3]==="binhand")
         results[1] = simulateNHands(prevSettings[1]*1, prevSettings[2]*1, prevSettings[0], prevSettings[4])[0];
     else if(prevSettings[3]==="tinhand")
@@ -299,7 +311,7 @@ function simulate(){
     else
         results[1] = simulateNSetups(prevSettings[1]*1, prevSettings[2]*1, prevSettings[0], prevSettings[4]);
     prevReps[1] = prevSettings[0];
-
+    means[1] = meanFromBins(results[1]);
 }
 
 function adjustWidth(){
@@ -330,4 +342,13 @@ function adjustWidth(){
 
     }
     
+}
+function meanFromBins(list){
+    let sum = 0;
+    let total = 0;
+    for(let i = 0;i<list.length;i++){
+        sum+=i*list[i];
+        total+=list[i];
+    }
+    return sum/total;
 }

@@ -291,7 +291,7 @@ function factorial(n) {
     return n * factorial(n - 1);
 }
 //data is an object that either contains key data and the raw data or key binQuantities that has an a list of quantities for each bin
-//settings can have title, xRange, xlab, color, coords, highlight, highlightCol
+//settings can have title, xRange, xlab, color, coords, highlight, highlightCol, mean
 function hist(canvas, data, numBins, settings) {
     let coords = 0;
     if (settings.coords)
@@ -343,6 +343,10 @@ function hist(canvas, data, numBins, settings) {
     if (settings.title) {
         ctx.fillText(settings.title, coords.x + coords.w / 2 + padding / 2, coords.y + 24);
     }
+    if(settings.mean){
+        ctx.fillText(`Mean: ${settings.mean}`, coords.x + coords.w / 2 + padding / 2, coords.y + 48);
+
+    }
     ctx.font = "12px 'Trebuchet MS'";
 
 
@@ -391,3 +395,5 @@ function hist(canvas, data, numBins, settings) {
     drawAxes(canvas, coords);
 
 }
+
+

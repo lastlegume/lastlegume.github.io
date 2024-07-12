@@ -515,7 +515,7 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
     copies of the target card between indexes 7 and 13 in the deck list since it assumes we never have to redraw our
     hand.</p>
 <div class="simulate-settings"><button id="simOneCopyButton" class="btn btn-submit">Simulate</button><label> Number of
-        trials: <input id="simOneCopyReps" type="number" value="10000"></label>
+        trials: <input id="simOneCopyReps" type="number" value="10000" min="1"></label>
 </div>
 <div class="graph panel">
     <canvas class="graph" id="oneCopyHist" height=400 width=610></canvas>
@@ -775,9 +775,9 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
     <canvas class="graph" id="simHist" height=400 width=610></canvas>
 </div>
 <div class="panel w300"><button id="simButton" class="btn btn-submit">Simulate</button><br>
-    <label> Number of trials: <input id="simReps" type="number" class="fullSim" value="10000"></label><br>
-    <label> Number of target card copies: <input id="simCopies" class="fullSim" type="number" value="5"></label><br>
-    <label> Number of basics: <input id="simBasics" class="fullSim" type="number" value="5"></label><br>
+    <label> Number of trials: <input id="simReps" type="number" class="fullSim" value="10000" min="1"></label><br>
+    <label> Number of target card copies: <input id="simCopies" class="fullSim" type="number" value="5" min="1" max="59"></label><br>
+    <label> Number of basics: <input id="simBasics" class="fullSim" type="number" value="5" min="0" max="59"></label><br>
     <select class="fullSim">
         <option value="normal">Check number of target in prize cards</option>
         <option value="tinhand">Check number in hand instead of number in prizes</option>
@@ -816,7 +816,7 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
 results of a simulation. Choose the number of trials and verify the accuracy. The number shown is the average error
 between simulation and probability, and hover over the number to see the file that was verified. Any error above .04
 appears fully red, while an error of 0 is fully green. ">?</span></label><br>
-<label>Number of trials: <input id="verifyReps" type="number" value="2000"></label>
+<label>Number of trials: <input id="verifyReps" type="number" value="2000" min="1"></label>
 <table id="verifyTable"></table>
 
 
