@@ -300,6 +300,10 @@ function simOneCopy(){
 }
 function simulate(){
     prevSettings = [simSettings[0].value*1, simSettings[1].value*1, simSettings[2].value*1, simSettings[3].value, simSettings[4].checked];
+    if(prevSettings[1]>60){
+        simSettings[1].value = 5;  
+        prevSettings[1] = 5;
+    }
     if(prevSettings[1]+prevSettings[2]>60){
         simSettings[2].value = 0;
         prevSettings[2] = 0;
