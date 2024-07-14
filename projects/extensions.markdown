@@ -23,7 +23,7 @@ A Firefox exclusive extension that tracks which sites you spend your time on and
 
 ### Countdown Timer
 
-An extension that counts down until a certain date and time. You can add as many timers as you want (currently Firefox exclusive), and the extension icon displays a pie chart showing the percentage of time elapsed between the start of the timer and the target time. 
+An extension that counts down until a certain date and time. You can add as many timers as you want, and the extension icon displays a pie chart showing the percentage of time elapsed between the start of the timer and the target time. 
 
 <a href="https://github.com/lastlegume/Countdown-Timer" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
