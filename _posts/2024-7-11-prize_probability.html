@@ -11,6 +11,9 @@ toc: true
     .graph {
         text-align: center;
     }
+    .btn{
+        margin: 8px 0px;
+    }
 
     .w300 {
         width: 270px;
@@ -770,13 +773,13 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
 <table id="csvTable"></table>
 <p>You can also test these with my simulation, which can be configured to the number of copies of the card that you
     have. If you set the number of basics to 0 and the target card to not a basic, then the simulation will not 
-    consider basics and mulligans like the naive method presented earlier. </p>
+    consider basics and mulligans like the naive method presented earlier. With many trials (over about 10^5), this might take several seconds and lag your browser.</p>
 <div class="graph panel">
     <canvas class="graph" id="simHist" height=400 width=610></canvas>
 </div>
 <div class="panel w300"><button id="simButton" class="btn btn-submit">Simulate</button><br>
     <label> Number of trials: <input id="simReps" type="number" class="fullSim" value="10000" min="1"></label><br>
-    <label> Number of target card copies: <input id="simCopies" class="fullSim" type="number" value="5" min="1" max="59"></label><br>
+    <label> Number of target card copies: <input id="simCopies" class="fullSim" type="number" value="4" min="1" max="59"></label><br>
     <label> Number of basics: <input id="simBasics" class="fullSim" type="number" value="5" min="0" max="59"></label><br>
     <select class="fullSim">
         <option value="normal">Check number of target in prize cards</option>
@@ -784,9 +787,10 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
         <option value="binhand">Check number of basics in hand</option>
     </select>
     <label><input id="simIsBasic" class="fullSim" type="checkbox"> Target card is a basic </label><br>
-
+    <button id="exactButton" class="btn btn-submit" style="font-size: xx-small;">Get Exact Probabilities</button>
 
 </div>
+<div id="exactOutput"></div>
 <h2 id="conclusion">Conclusion</h2>
 <p>So, how unlucky was John Kettler? The probability that he prized both oddish was 0.007784993, and the probability of
     prizing 3 rowlet was 0.001980315 (P(prizing 3 or more) was almost exactly 1/500). Given these probabilities, he was

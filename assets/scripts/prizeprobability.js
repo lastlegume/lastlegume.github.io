@@ -11,23 +11,25 @@ tableSelect.addEventListener("change", fillTable);
 document.getElementById("verifyButton").addEventListener("click", verifyData);
 document.getElementById("simOneCopyButton").addEventListener("click", simOneCopy);
 document.getElementById("simButton").addEventListener("click", simulate);
+document.getElementById("exactButton").addEventListener("click", getExactProbabilities);
 
+const exactOutput = document.getElementById("exactOutput");
 const oneCopyReps = document.getElementById("simOneCopyReps");
 const simSettings = document.getElementsByClassName("fullSim");
-let prevSettings = [simSettings[0].value*1, simSettings[1].value*1, simSettings[2].value*1, simSettings[3].value, simSettings[4].checked];
+let prevSettings = [simSettings[0].value * 1, simSettings[1].value * 1, simSettings[2].value * 1, simSettings[3].value, simSettings[4].checked];
 let mousePos = [[], []];
-let means = [0,0];
+let means = [0, 0];
 let prevReps = [oneCopyReps.value, simSettings[0].value];
-const binNumbers = [7,7]
+const binNumbers = [7, 7]
 let coords = [{ x: 0, y: 0, w: oneCopyHist.width, h: oneCopyHist.height, padding: 40 }, { x: 0, y: 0, w: simHist.width, h: simHist.height, padding: 40 }];
 let runSummarySidebar = [true, true];
-let results = [0,0];
+let results = [0, 0];
 let reps = 1000000;
 //decreases load time temporarily
 reps = 1000;
 let highlightIdx = [-1, -1];
 results[0] = simulateNSetups(1, 0, oneCopyReps.value, false);
-results[1] = simulateNSetups(prevSettings[1]*1, prevSettings[2]*1, prevSettings[0], prevSettings[4]);
+results[1] = simulateNSetups(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4]);
 means[0] = meanFromBins(results[0]);
 means[1] = meanFromBins(results[1]);
 
@@ -39,14 +41,14 @@ fetch("/assets/blog/prizeprobs/names.txt").then((val) => val.text().then((txt) =
 //if basics = 0, ignore the check for if a basic is in hand
 function frame(t) {
     highlightIdx[0] = Math.floor((mousePos[0][0] - coords[0].padding) / Math.floor((coords[0].w - coords[0].padding * 2) / binNumbers[0]));
-    highlightIdx[1] = Math.floor((mousePos[1][0] - coords[1].padding) / Math.floor((coords[1].w - coords[1].padding * 2) / ((prevSettings[3]!=="normal")?8:7)));
+    highlightIdx[1] = Math.floor((mousePos[1][0] - coords[1].padding) / Math.floor((coords[1].w - coords[1].padding * 2) / ((prevSettings[3] !== "normal") ? 8 : 7)));
 
-    if(runSummarySidebar[0]&&highlightIdx[0]>=0&&highlightIdx[0]<results[0].length)
+    if (runSummarySidebar[0] && highlightIdx[0] >= 0 && highlightIdx[0] < results[0].length)
         drawProbabilityText(oneCopyHist, results[0][highlightIdx[0]], prevReps[0], highlightIdx[0])
-    if(runSummarySidebar[1]&&highlightIdx[1]>=0&&highlightIdx[1]<results[1].length)
+    if (runSummarySidebar[1] && highlightIdx[1] >= 0 && highlightIdx[1] < results[1].length)
         drawProbabilityText(simHist, results[1][highlightIdx[1]], prevReps[1], highlightIdx[1])
-    hist(oneCopyHist, { "binQuantities": results[0] }, binNumbers[0], { "xRange": [0, 7], "title": "Number Prized With 1 Copy", "xlab": "Number Prized", "color": "#30A0FF", "coords": coords[0], "highlight": highlightIdx[0], "highlightCol": "#FFFF00", "mean":means[0]});
-    hist(simHist, { "binQuantities": results[1] }, ((prevSettings[3]!=="normal")?8:7), { "xRange": [0, ((prevSettings[3]!=="normal")?8:7)], "title": ((prevSettings[3]==="binhand")?"Basics ":"Number ")+((prevSettings[3]!=="normal")?"In Hand":"Prized")+(width>450?` With ${prevSettings[1]} Copies and ${prevSettings[2]} Basics`:""), "xlab": "Number "+((prevSettings[3]!=="normal")?"In Hand":"Prized"), "color": "#30A0FF", "coords": coords[1], "highlight": highlightIdx[1], "highlightCol": "#FFFF00", "mean":means[1] });
+    hist(oneCopyHist, { "binQuantities": results[0] }, binNumbers[0], { "xRange": [0, 7], "title": "Number Prized With 1 Copy", "xlab": "Number Prized", "color": "#30A0FF", "coords": coords[0], "highlight": highlightIdx[0], "highlightCol": "#FFFF00", "mean": means[0] });
+    hist(simHist, { "binQuantities": results[1] }, ((prevSettings[3] !== "normal") ? 8 : 7), { "xRange": [0, ((prevSettings[3] !== "normal") ? 8 : 7)], "title": ((prevSettings[3] === "binhand") ? "Basics " : "Number ") + ((prevSettings[3] !== "normal") ? "In Hand" : "Prized") + (width > 450 ? ` With ${prevSettings[1]} Copies and ${prevSettings[2]} Basics` : ""), "xlab": "Number " + ((prevSettings[3] !== "normal") ? "In Hand" : "Prized"), "color": "#30A0FF", "coords": coords[1], "highlight": highlightIdx[1], "highlightCol": "#FFFF00", "mean": means[1] });
 
     window.requestAnimationFrame(frame)
 
@@ -84,7 +86,7 @@ function simulateNHands(copies, basics, n, isCardBasic) {
             tempDeck = shuffle(deck);
             mulligans++;
         }
-        freqs[0][tempDeck.slice(0, 7).map((val) => (val === "B"||val === "C") ? 1 : 0).reduce((prev, cur) => prev + cur)]++;
+        freqs[0][tempDeck.slice(0, 7).map((val) => (val === "B" || val === "C") ? 1 : 0).reduce((prev, cur) => prev + cur)]++;
         freqs[1][tempDeck.slice(0, 7).map((val) => (val === "C") ? 1 : 0).reduce((prev, cur) => prev + cur)]++;
 
     }
@@ -114,7 +116,7 @@ async function fillTable() {
     response = await response.text();
     let csv = readCSV(response);
     let row = document.createElement("tr");
-    for (let i = 0; i < csv[0].length-1; i++) {
+    for (let i = 0; i < csv[0].length - 1; i++) {
         let td = document.createElement("th");
         td.innerText = csv[0][i].replaceAll('"', '');
         td.classList.add("x-small");
@@ -126,7 +128,7 @@ async function fillTable() {
         row = document.createElement("tr");
         for (let c = 0; c < csv[r].length; c++) {
             let td = document.createElement("td");
-            td.innerText = (!parseFloat(csv[r][c])) ? csv[r][c].replaceAll('"', '') : (width>=800?parseFloat(csv[r][c]).toPrecision(5):(width<400?parseFloat(csv[r][c]).toFixed(3):parseFloat(csv[r][c]).toFixed(5)));
+            td.innerText = (!parseFloat(csv[r][c])) ? csv[r][c].replaceAll('"', '') : (width >= 800 ? parseFloat(csv[r][c]).toPrecision(5) : (width < 400 ? parseFloat(csv[r][c]).toFixed(3) : parseFloat(csv[r][c]).toFixed(5)));
             td.classList.add("x-small");
             row.appendChild(td);
         }
@@ -156,17 +158,17 @@ function fillTableSelect() {
         let opt = document.createElement("option");
         path = files[i].split("/");
         let name = "";
-        if(files[i].includes("handProbabilities"))
-            name+="Probability of being in hand"+((files[i].includes("NoBasics"))?" (ignoring basics)":": ");
-        else if(files[i].includes("prizeProbabilities"))
-            name+="Probability of being in prizes"+((files[i].includes("NoBasics"))?" (ignoring basics)":": ");
+        if (files[i].includes("handProbabilities"))
+            name += "Probability of being in hand" + ((files[i].includes("NoBasics")) ? " (ignoring basics)" : ": ");
+        else if (files[i].includes("prizeProbabilities"))
+            name += "Probability of being in prizes" + ((files[i].includes("NoBasics")) ? " (ignoring basics)" : ": ");
         let matches = files[i].match(/(B?)_([\d]+?)Basics/);
-        if(matches){
-            if(matches[1]==="B")
-                name+=matches[2]+" other basic(s)"
+        if (matches) {
+            if (matches[1] === "B")
+                name += matches[2] + " other basic(s)"
             else
-                name+=matches[2]+" basic(s)"
-    
+                name += matches[2] + " basic(s)"
+
         }
         opt.innerText = name;
 
@@ -222,25 +224,25 @@ function updateMouseCoords(e) {
 }
 
 
-function drawProbabilityText(canvas, trials, total, number){
+function drawProbabilityText(canvas, trials, total, number) {
     let ctx = canvas.getContext('2d');
-    ctx.clearRect(canvas.width-220, 0,220,canvas.height);
+    ctx.clearRect(canvas.width - 220, 0, 220, canvas.height);
     ctx.fillStyle = "#FFFFFF";
     ctx.textAlign = "left";
     ctx.font = "28px 'Trebuchet MS'";
 
-    ctx.fillText(`${(trials>1000000)?trials.toPrecision(4):trials}`, canvas.width-220, 40, 230);
-    ctx.fillText(`${((trials/total)*100).toPrecision(5)}%`, canvas.width-220, 100, 230);
+    ctx.fillText(`${(trials > 1000000) ? trials.toPrecision(4) : trials}`, canvas.width - 220, 40, 230);
+    ctx.fillText(`${((trials / total) * 100).toPrecision(5)}%`, canvas.width - 220, 100, 230);
 
 
     ctx.font = "12px 'Trebuchet MS'";
-    ctx.fillText(`or`, canvas.width-220, 60, 230);
+    ctx.fillText(`or`, canvas.width - 220, 60, 230);
 
-    ctx.fillText(`trials out of`, canvas.width-220, 120, 230);
-    ctx.fillText(`${total}`, canvas.width-220, 140, 230);
-    ctx.fillText(`had`, canvas.width-220, 160, 230);
-    ctx.fillText(`${number} copies`, canvas.width-220, 180, 230);
-    ctx.fillText(`prized`, canvas.width-220, 200, 230);
+    ctx.fillText(`trials out of`, canvas.width - 220, 120, 230);
+    ctx.fillText(`${total}`, canvas.width - 220, 140, 230);
+    ctx.fillText(`had`, canvas.width - 220, 160, 230);
+    ctx.fillText(`${number} copies`, canvas.width - 220, 180, 230);
+    ctx.fillText(`prized`, canvas.width - 220, 200, 230);
 
 
 }
@@ -249,7 +251,7 @@ async function verifyData() {
     // we need to do reps trials ~240*60 times
     verifyTable.innerHTML = "";
     reps = document.getElementById('verifyReps').value;
-    
+
     let currentTrow = document.createElement("tr");
     let verifyIdx = 0;
     let body = document.createElement("tbody");
@@ -277,12 +279,12 @@ async function verifyData() {
             }
         }
         verifyIdx++;
-        if (verifyIdx % Math.floor(width/75) == 1) {
+        if (verifyIdx % Math.floor(width / 75) == 1) {
             currentTrow = document.createElement("tr");
             body.appendChild(currentTrow);
         }
         let ctd = document.createElement("td");
-        error/=n;
+        error /= n;
         ctd.title = path.split("/")[1];
         ctd.innerText = error.toPrecision(5);
         error = Math.min(error * 25, 1);
@@ -292,67 +294,115 @@ async function verifyData() {
     }
 }
 
-function simOneCopy(){
+function simOneCopy() {
     results[0] = simulateNSetups(1, 0, oneCopyReps.value, false);
     prevReps[0] = oneCopyReps.value;
     means[0] = meanFromBins(results[0]);
 
 }
-function simulate(){
-    prevSettings = [simSettings[0].value*1, simSettings[1].value*1, simSettings[2].value*1, simSettings[3].value, simSettings[4].checked];
-    if(prevSettings[1]>60){
-        simSettings[1].value = 5;  
-        prevSettings[1] = 5;
+function fixImpossible(){
+    if (simSettings[1].value * 1 > 60 || (simSettings[1].value > 4 && simSettings[4].checked)) {
+        simSettings[1].value = 4;
     }
-    if(prevSettings[1]+prevSettings[2]>60){
+    if (simSettings[3].value==="binhand"&&simSettings[2].value==0&&!simSettings[4].checked) {
+        simSettings[2].value = 1;
+        if(simSettings[1].value==60)
+            simSettings[1].value=59;
+    }
+    if (simSettings[1].value * 1 + simSettings[2].value * 1 > 60) {
         simSettings[2].value = 0;
-        prevSettings[2] = 0;
     }
-    if(prevSettings[3]==="binhand")
-        results[1] = simulateNHands(prevSettings[1]*1, prevSettings[2]*1, prevSettings[0], prevSettings[4])[0];
-    else if(prevSettings[3]==="tinhand")
-        results[1] = simulateNHands(prevSettings[1]*1, prevSettings[2]*1, prevSettings[0], prevSettings[4])[1];
+}
+function simulate() {
+    fixImpossible();
+    prevSettings = [simSettings[0].value * 1, simSettings[1].value * 1, simSettings[2].value * 1, simSettings[3].value, simSettings[4].checked];
+    if (prevSettings[3] === "binhand")
+        results[1] = simulateNHands(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4])[0];
+    else if (prevSettings[3] === "tinhand")
+        results[1] = simulateNHands(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4])[1];
     else
-        results[1] = simulateNSetups(prevSettings[1]*1, prevSettings[2]*1, prevSettings[0], prevSettings[4]);
+        results[1] = simulateNSetups(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4]);
     prevReps[1] = prevSettings[0];
     means[1] = meanFromBins(results[1]);
 }
+async function getExactProbabilities() {
+    fixImpossible();
+    let text = "";
+    if (simSettings[2].value == 0&&!simSettings[4].checked) {
+        if (simSettings[3].value === "tinhand") {
+            let response = await fetch("/assets/blog/prizeprobs/ignoreBasics/handProbabilitiesNoBasics.csv");
+            response = await response.text();
+            text = response.split("\n")[simSettings[1].value * 1].split(",").slice(1).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(10)}`).join("\n");
+        } else {
+            let response = await fetch("/assets/blog/prizeprobs/ignoreBasics/prizeProbabilitiesNoBasics.csv");
+            response = await response.text();
+            text = response.split("\n")[simSettings[1].value * 1].split(",").slice(1, 8).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(10)}`).join("\n");
+        }
+    } else {
+        let idx = (simSettings[4].checked) ? ((simSettings[1].value * 1) + (simSettings[2].value * 4) + 3536) : (simSettings[1].value * 1) + ((simSettings[2].value - 1) * 60);
+        if (simSettings[3].value === "binhand") {
+            let response = await fetch("/assets/blog/prizeprobs/basicsInHand.csv");
+            response = await response.text();
+            text = response.split("\n")[simSettings[2].value * 1 + ((simSettings[4].checked) ? simSettings[1].value * 1 : 0)].split(",").slice(1, 8).map((v, i) => `${i + 1} basics in hand: ${(v * 1).toFixed(10)}`).join("\n");
+            //(simSettings[1].value * 1)+((simSettings[2].value-1) * 60)
+        } else if (simSettings[3].value === "tinhand") {
+            let response = localStorage.getItem('hand');
+            if (!response) {
+                response = await fetch("/assets/blog/prizeprobs/combinedHandProbabilities.csv");
+                response = await response.text();
+                localStorage.setItem("hand", response);
+            }
+            text = response.split("\n")[idx].split(",").slice(1).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(10)}`).join("\n");
+        } else {
+            let response = localStorage.getItem('prize');
+            if (!response) {
+                response = await fetch("/assets/blog/prizeprobs/combinedPrizeProbabilities.csv");
+                response = await response.text();
+                localStorage.setItem("prize", response);
+            }
+            text = response.split("\n")[idx].split(",").slice(1).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(10)}`).join("\n");
+        }
 
-function adjustWidth(){
+    }
+
+    exactOutput.innerText = "Exact Probabilities:\n" + text;
+}
+
+function adjustWidth() {
     width = document.getElementById("main_content").getBoundingClientRect().width;
     let height = window.innerHeight;
     oneCopyHist.width = width;
-    oneCopyHist.height = height*.7;
-    simHist.height = height*.7;
+    oneCopyHist.height = height * .7;
+    simHist.height = height * .7;
 
-    if(width>900){
-        simHist.width=width-300;
-        coords[1] = { x: 0, y: 0, w: width-520, h: simHist.height, padding: 40 };
+    if (width > 900) {
+        simHist.width = width - 300;
+        coords[1] = { x: 0, y: 0, w: width - 520, h: simHist.height, padding: 40 };
     }
-    else if(width>600){
-        simHist.width=width;
-        coords[1] = { x: 0, y: 0, w: width-220, h: simHist.height, padding: 40 };
-    }else{
-        simHist.width=width;
+    else if (width > 600) {
+        simHist.width = width;
+        coords[1] = { x: 0, y: 0, w: width - 220, h: simHist.height, padding: 40 };
+    } else {
+        simHist.width = width;
         coords[1] = { x: 0, y: 0, w: width, h: simHist.height, padding: 40 };
         runSummarySidebar[1] = false;
 
     }
-    if(width>700){
-        coords[0] = { x: 0, y: 0, w: width-220, h: oneCopyHist.height, padding: 40 };
-    }else{
+    if (width > 700) {
+        coords[0] = { x: 0, y: 0, w: width - 220, h: oneCopyHist.height, padding: 40 };
+    } else {
         coords[0] = { x: 0, y: 0, w: width, h: oneCopyHist.height, padding: 40 };
         runSummarySidebar[0] = false;
 
     }
-    
+
 }
-function meanFromBins(list){
+function meanFromBins(list) {
     let sum = 0;
     let total = 0;
-    for(let i = 0;i<list.length;i++){
-        sum+=i*list[i];
-        total+=list[i];
+    for (let i = 0; i < list.length; i++) {
+        sum += i * list[i];
+        total += list[i];
     }
-    return sum/total;
+    return sum / total;
 }
