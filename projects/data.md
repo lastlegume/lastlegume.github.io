@@ -31,9 +31,11 @@ Columns:
 ### Pokémon TCG Prize/Hand Probabilities
 
 A table of the probabilities of prizing some number of a specific card given that you have b basics in deck and n copies of that card. Hand probabilities refers to the probability of having some number of copies of a specific card in your starting hand.  
-To find the probability (please note that these indices start at 1 because I used R to generate them):
+To find the probability:
  - If the card is not a basic, then row (b-1)*60+n contains the probabilities.    
  - If the card is a basic, then row 3536+4*b+n contains the probabilities.    
+
+Row 0 is the headers, so these numbers will work for any programming language that starts at index 0, but will need to be 1 higher for any languages that start at 1.   
 
 Columns are labelled with the leftmost column being 0 in prizes/hand and rightmost being 6 in prizes or 7 in hand.  
 
