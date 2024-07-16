@@ -11,7 +11,8 @@ toc: true
     .graph {
         text-align: center;
     }
-    .btn{
+
+    .btn {
         margin: 8px 0px;
     }
 
@@ -639,7 +640,8 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
     hands that are not valid (like 7 energy cards) can never be the starting hand, so outcomes such as these must be
     ignored to get the actual probabilities. The condition that the hand is valid ensures that the hand could be the
     starting hand, which is important since prize cards are only set out after a valid starting hand is drawn. If we can
-    find these, we can do the same method of finding the probabilities of having some number of copies of the target card
+    find these, we can do the same method of finding the probabilities of having some number of copies of the target
+    card
     in the starting hand and multiply them by the probability of having copies of the target card in the prizes given
     that number in hand. So, how can we find these probabilities?</p>
 <p>The probability of getting a valid hand is the probability that there is at least 1 basic in the starting hand.
@@ -772,15 +774,19 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
 
 <table id="csvTable"></table>
 <p>You can also test these with my simulation, which can be configured to the number of copies of the card that you
-    have. If you set the number of basics to 0 and the target card to not a basic, then the simulation will not 
-    consider basics and mulligans like the naive method presented earlier. With many trials (over about 10^5), this might take several seconds and lag your browser.</p>
+    have. If you set the number of basics to 0 and the target card to not a basic, then the simulation will not
+    consider basics and mulligans like the naive method presented earlier. With many trials (over about 10^5), this
+    might take several seconds and lag your browser. I have also made <a href="/deck-probs">a tool to find these
+        probabilities when given a decklist</a>.</p>
 <div class="graph panel">
     <canvas class="graph" id="simHist" height=400 width=610></canvas>
 </div>
 <div class="panel w300"><button id="simButton" class="btn btn-submit">Simulate</button><br>
     <label> Number of trials: <input id="simReps" type="number" class="fullSim" value="10000" min="1"></label><br>
-    <label> Number of target card copies: <input id="simCopies" class="fullSim" type="number" value="4" min="1" max="59"></label><br>
-    <label> Number of basics: <input id="simBasics" class="fullSim" type="number" value="5" min="0" max="59"></label><br>
+    <label> Number of target card copies: <input id="simCopies" class="fullSim" type="number" value="4" min="1"
+            max="59"></label><br>
+    <label> Number of other basics: <input id="simBasics" class="fullSim" type="number" value="5" min="0"
+            max="59"></label><br>
     <select class="fullSim">
         <option value="normal">Check number of target in prize cards</option>
         <option value="tinhand">Check number in hand instead of number in prizes</option>
