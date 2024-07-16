@@ -20,7 +20,7 @@ Contains each pokémon, what evolution stage they are, and what type of card the
 Columns:
  - **Number**: pokédex number
  - **Name**: name of the pokémon
- - **Evolution Index**: number of times the pokémon has evolved, unless they are a baby pokemon, which is -1. -1 for baby pokémon, 0 for pokémon that can evolve (like first stage starters or pokemon that evolve once), 1 for pokémon that have evolved once (like middle stage starters or fully evolved pokémon like Houndoom or Archeops), and 2 for pokémon that have evolved twice (like final stage starters or pokémon like Florges or Stoutland).
+ - **Evolution Index**: number of times the pokémon has evolved, unless they are a baby pokemon, which is -1. -1 for baby pokémon, 0 for pokémon that are the first stage after a possible baby or do not evolve (i.e. first stage starters, pokemon that evolve once like Archen, or single stage pokémon like Sawk or Walking Wake), 1 for pokémon that have evolved once (i.e. middle stage starters or fully evolved pokémon like Houndoom or Archeops), and 2 for pokémon that have evolved twice (i.e. final stage starters or pokémon like Florges or Stoutland).
  - **TCG Stage**: Which type of pokémon card the card typically is (Basic, Stage 1, Stage 2) currently (in SV block). Fossils start at stage 1 and become a stage 2 when they evolve. Could be inaccurate as it was generated completely automatically.
  - **Is Fossil**: 0 if the pokémon is not a fossil, 1 is the pokémon is a fossil.
  - **Fossil**: `<empty string>`/`""` if the pokémon is not a fossil, FOSSIL if the pokémon is a fossil.   

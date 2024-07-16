@@ -125,7 +125,7 @@ async function getStage(name) {
     let list = response.split("\n");
     for (let i = 0; i < list.length; i++) {
         row = list[i].split(",");
-        if (name.includes(row[1]))
+        if (name.toLowerCase().replaceAll(/[\s-']/g, "").includes(row[1].toLowerCase().replaceAll(/[\s-']/g, "")))
             return row[3];
     }
     return "Unknown: Assumed not to be a basic"
