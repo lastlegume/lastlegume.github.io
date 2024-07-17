@@ -2,13 +2,16 @@ let handRes = localStorage.getItem('hand');
 let prizeRes = localStorage.getItem('prize');
 
 document.getElementById("add").addEventListener('click', addDeck);
-document.getElementById("clearStorage").addEventListener('click', () => clearStorage());
+document.getElementById("clearStorage").addEventListener('click', clearStorage);
 
 const decks = document.getElementById("decks");
 const input = document.getElementById("input");
 const deckName = document.getElementById('name');
 const deckLists = document.getElementById('deckList');
 const exactOutput = document.getElementById("exactOutput");
+const toggleBasicsButton = document.getElementById("toggleBasic");
+toggleBasicsButton.addEventListener('click', toggleBasic);
+
 loadData();
 
 deckLists.addEventListener('change', function () { populate(localStorage.getItem(deckLists.value)); })
@@ -18,27 +21,27 @@ let basics = 0;
 
 
 async function addDeck() {
-    let opt = document.createElement('option');
-    let name = deckName.value;
-    let used = localStorage.getItem(name);
+    if (populate(input.value)) {
+        let opt = document.createElement('option');
+        let name = deckName.value;
+        let used = localStorage.getItem(name);
 
-    while (used || name.length == 0) {
-        name = "Deck" + nameCounter;
-        nameCounter++;
-        used = localStorage.getItem(name);
+        while (used || name.length == 0) {
+            name = "Deck" + nameCounter;
+            nameCounter++;
+            used = localStorage.getItem(name);
+        }
+        opt.value = name;
+        opt.innerText = name;
+        localStorage.setItem(name, input.value);
+        deckLists.appendChild(opt);
     }
-    opt.value = name;
-    opt.innerText = name;
-    localStorage.setItem(name, input.value);
-    deckLists.appendChild(opt);
 
-
-    populate(input.value);
 
 }
 function view(e) {
     let cards = document.getElementsByClassName("card");
-    for(let i = 0;i<cards.length;i++){
+    for (let i = 0; i < cards.length; i++) {
         cards[i].classList.remove("highlight");
     }
     let card = e.target;
@@ -46,6 +49,14 @@ function view(e) {
         card = card.parentNode;
     }
     card.classList.add("highlight")
+    if(card.children[3].innerText === "Basic"){
+        toggleBasicsButton.innerText = "This card should not be a basic";
+        toggleBasicsButton.classList.remove("hide");
+    }else if(card.children[3].innerText !== "Energy"&&card.children[3].innerText !== "Trainer"){
+        toggleBasicsButton.innerText = "This card should be a basic";
+        toggleBasicsButton.classList.remove("hide");
+    }else
+    toggleBasicsButton.classList.add("hide");
     getExactProbabilities((card.children[2].innerText) * 1, (basics - ((card.children[3].innerText === "Basic") ? ((card.children[2].innerText) * 1) : 0)), (card.children[3].innerText === "Basic"))
 }
 async function populate(str) {
@@ -74,9 +85,10 @@ async function populate(str) {
             let cardSet = document.createElement('div');
             cardSet.className = "set";
 
-            if (set) {
+            if (set) 
                 cardSet.innerText = set[1];
-            }
+            else
+                cardSet.classList.add("hide")
             card.appendChild(cardSet);
 
             let cardCopies = document.createElement('div');
@@ -102,10 +114,12 @@ async function populate(str) {
 
         }
     }
-    if (totalSize == 60)
+    if (totalSize == 60&&basics>0) {
         decks.appendChild(deck);
-    else
-        decks.innerText = "Invalid Deck";
+        return true;
+    }
+    decks.innerText = "Invalid Deck";
+    return false;
 }
 async function getStage(name) {
     //tag teams
@@ -152,12 +166,12 @@ async function getExactProbabilities(c, b, isBasic) {
 async function loadData() {
     if (!handRes) {
         handRes = await fetch("/assets/blog/prizeprobs/combinedHandProbabilities.csv");
-        handRes = await response.text();
+        handRes = await handRes.text();
         localStorage.setItem("hand", handRes);
     }
     if (!prizeRes) {
         prizeRes = await fetch("/assets/blog/prizeprobs/combinedPrizeProbabilities.csv");
-        prizeRes = await response.text();
+        prizeRes = await prizeRes.text();
         localStorage.setItem("prize", prizeRes);
     }
     for (let i = 0; i < localStorage.length; i++) {
@@ -174,5 +188,31 @@ async function loadData() {
 
 function clearStorage() {
     localStorage.clear();
+    deckLists.innerHTML = '<option selected ="true" disabled="true" hidden>Choose A Deck</option>';
 }
+function toggleBasic(){
+    let cards = document.getElementsByClassName("card");
+    for (let i = 0; i < cards.length; i++) {
+        if(cards[i].classList.contains("highlight")){
+            if(cards[i].children[3].innerText === "Basic"){
+                if(basics-cards[i].children[2].innerText*1>0){
+                    cards[i].children[3].innerText = "Not a basic";
+                    toggleBasicsButton.innerText = "This card should be a basic";
+                    basics-=cards[i].children[2].innerText*1;
+                    getExactProbabilities((cards[i].children[2].innerText) * 1, (basics - ((cards[i].children[3].innerText === "Basic") ? ((cards[i].children[2].innerText) * 1) : 0)), (cards[i].children[3].innerText === "Basic"))
+                }else{
+                    exactOutput.innerText = "You cannot remove the last basic from the deck";
+                }
 
+                return;
+            }else if(cards[i].children[3].innerText.includes("Stage ")||cards[i].children[3].innerText === "Not a basic"){
+                cards[i].children[3].innerText = "Basic";
+                toggleBasicsButton.innerText = "This card should not be a basic";
+                basics+=cards[i].children[2].innerText*1;
+                getExactProbabilities((cards[i].children[2].innerText) * 1, (basics - ((cards[i].children[3].innerText === "Basic") ? ((cards[i].children[2].innerText) * 1) : 0)), (cards[i].children[3].innerText === "Basic"))
+                return;
+
+            }
+        }
+    }
+}

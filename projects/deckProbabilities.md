@@ -37,7 +37,7 @@ tools: 6
 
 ### Enter in the decklist
 
-Accepts the PTCGL and Limitless export format. Once you have inputted the deck, click on a card to see probabilities for it.    
+Accepts the PTCGL and Limitless export format. Once you have inputted the deck, click on a card to see probabilities for it. Because of certain limitations, some cards may rarely be incorrectly matched as a Stage 1, Stage 2, or Basic. If a card is marked as a basic and is not (or vice versa), select the card and press the button below the probabilities to correct it as the number of basics in deck is important to finding the correct probability.   
 
 <label>Deck Name: <input type="text" value="" id="name"></label>
 <textarea id="input" name="input" rows="15" cols="120"></textarea><br>
@@ -51,4 +51,5 @@ Accepts the PTCGL and Limitless export format. Once you have inputted the deck, 
 <div id="exactOutput">
 
 </div>
+<button class = "btn btn-submit hide" id="toggleBasic">This should be a basic</button><br>
 <button style="margin-top: 60px;" class="btn small" id="clearStorage">Clear local decks</button><br>
