@@ -1,7 +1,7 @@
 ---
 layout: post
 title: An Explanation of the R code from Prize Card Probability 
-date:   2024-7-19 12:00:00 -0500
+date:   2024-7-19 1:00:00 -0500
 category: pokémon
 author: lastlegume
 tags: pokémon tcg math
