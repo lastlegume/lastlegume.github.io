@@ -2,7 +2,7 @@
 layout: post
 title: Prize Card Probability in the Pokémon TCG
 date: 2024-7-11 12:00:00 -0500
-category: pokemon
+category: pokémon
 author: lastlegume
 tags: pokémon tcg math
 toc: true
@@ -641,8 +641,8 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
     ignored to get the actual probabilities. The condition that the hand is valid ensures that the hand could be the
     starting hand, which is important since prize cards are only set out after a valid starting hand is drawn. If we can
     find these, we can do the same method of finding the probabilities of having some number of copies of the target
-    card
-    in the starting hand and multiply them by the probability of having copies of the target card in the prizes given
+    card in the starting hand and multiply them by the probability of having copies of the target card in the prizes
+    given
     that number in hand. So, how can we find these probabilities?</p>
 <p>The probability of getting a valid hand is the probability that there is at least 1 basic in the starting hand.
     Therefore, we can find this probability with 1-dhyper(0,b,60-b,7), where b is the number of basics.
@@ -674,10 +674,9 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
     </math>), we can see that we need the probability of getting a valid hand and a hand with some number of copies of
     the target card. Alternatively, we could also find the probability of getting a specific valid hand arrangment (1
     basic, 0 targets, 6 other; 1 basic, 1 target, 5 other;...; 7 basics, 0 targets, 0 others) and divide that
-    probability
-    by the probability of getting a valid hand to find the conditional probability of having that hand arrangement given
-    that the hand is valid. So, the question now is how do we find the probabilities of getting these specific hand
-    arrangements?</p>
+    probability by the probability of getting a valid hand to find the conditional probability of having that hand
+    arrangement given that the hand is valid. So, the question now is how do we find the probabilities of getting these
+    specific hand arrangements?</p>
 
 <h3 id="multivariate-hypergeometric">The Multivariate Hypergeometric Distribution</h3>
 <p>As the name suggests, this is a probability distribution for the probability of having some number of many
