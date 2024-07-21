@@ -77,7 +77,7 @@ async function makeQuestion() {
             speciesIdx = Math.floor(Math.random() * availableList.length);
         correctAnswer = availableList[speciesIdx];
         species = availableList[speciesIdx][0];
-        response = JSON.parse(localStorage.getItem(species));
+        response = JSON.parse(localStorage.getItem("t+++"+species));
         if (!response || (Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.reduce((prev, cur) => prev + cur) > 50) {
             work.alt = "Choosing an image...";
             await new Promise(r => setTimeout(r, 1500))
@@ -101,7 +101,7 @@ async function makeQuestion() {
     }
     random = weightedOptions[Math.floor(Math.random() * weightedOptions.length)]
     response.usage[random]++;
-    localStorage.setItem(species, JSON.stringify(response));
+    localStorage.setItem("t+++"+species, JSON.stringify(response));
     work.alt = "identify this";
 
     answer.value = "";
@@ -112,7 +112,7 @@ async function makeQuestion() {
 
     nextIndex = Math.floor(Math.random() * availableList.length);
     species = availableList[nextIndex][0];
-    let nextResponse = JSON.parse(localStorage.getItem(species));
+    let nextResponse = JSON.parse(localStorage.getItem("t+++"+species));
     if (!nextResponse || (Math.floor(Date.now() / 86400000) - nextResponse.date > 5) || nextResponse.usage.reduce((prev, cur) => prev + cur) > 50) {
         //    await new Promise(r => setTimeout(r, 1000))
         nextResponse = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
@@ -121,7 +121,7 @@ async function makeQuestion() {
         let nextPhotos = [];
         nextResponse.forEach((val) => nextPhotos.push(...val.photos.map((p) => p.url)))
         nextResponse = { "date": Math.floor(Date.now() / 86400000), "usage": new Array(nextPhotos.length).fill(0), "response": nextPhotos };
-        localStorage.setItem(species, JSON.stringify(nextResponse));
+        localStorage.setItem("t+++"+species, JSON.stringify(nextResponse));
     }
 }
 
@@ -238,13 +238,13 @@ function createList(includeOrders) {
         }
     }
     console.log(list);
-
-    if (localStorage.length > 0) {
-        random = Math.floor(Math.random() * localStorage.length);
+    let validKeys = getValidKeys("t+++");
+    if (validKeys.length > 0) {//needs to be rewritten
+        random = Math.floor(Math.random() * validKeys.length);
         localData = localStorage.getItem(localStorage.key(random))
-        speciesIdx = list.map((arr) => arr[0]).indexOf(localStorage.key(random));
+        species = localStorage.key(random).substring(4);
+        speciesIdx = list.map((arr) => arr[0]).indexOf(species);
         correctAnswer = list[speciesIdx];
-        species = localStorage.key(random);
     }
 
     makeQuestion();
@@ -283,4 +283,13 @@ function adjustAll(){
     for(let i = 0;i<cbs.length;i++){
         cbs[i].checked = selectAll.checked;
     }
+}
+function getValidKeys(str){
+    let list = [];
+    for(let i = 0;i<localStorage.length;i++){
+        if(localStorage.key(i).substring(0,str.length)===str){
+            list.push(i);
+        }
+    }
+    return list;
 }
