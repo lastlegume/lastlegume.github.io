@@ -764,9 +764,9 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
     in hand based on the number of basics, the expected number of copies prized, and the probabilities of having copies
     of the target card in hand.</p>
 <p>Please note that the number of basics does not include the target card if the target card is a basic (so if you have
-    12
-    total basics and 4 rowlet (like John Kettler did), look at the 8 other basics sheet to find the probability that the
-    rowlets are prized).</p>
+    12 total basics and 4 rowlet (like John Kettler did), look at the 8 other basics sheet to find the probability that
+    the rowlets are prized).</p>
+<label for="tableSelect">File: </label>
 <select id="tableSelect">
     <option value="basicsInHand.csv">Number of basics in starting hand</option>
 </select>
@@ -786,11 +786,13 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
             max="59"></label><br>
     <label> Number of other basics: <input id="simBasics" class="fullSim" type="number" value="5" min="0"
             max="59"></label><br>
-    <select class="fullSim">
-        <option value="normal">Check number of target in prize cards</option>
-        <option value="tinhand">Check number in hand instead of number in prizes</option>
-        <option value="binhand">Check number of basics in hand</option>
-    </select>
+    <label>Type:
+        <select class="fullSim">
+            <option value="normal">Check number of target in prize cards</option>
+            <option value="tinhand">Check number in hand instead of number in prizes</option>
+            <option value="binhand">Check number of basics in hand</option>
+        </select>
+    </label>
     <label><input id="simIsBasic" class="fullSim" type="checkbox"> Target card is a basic </label><br>
     <button id="exactButton" class="btn btn-submit" style="font-size: xx-small;">Get Exact Probabilities</button>
 
