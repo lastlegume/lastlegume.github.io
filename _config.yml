@@ -33,6 +33,7 @@ theme: jekyll-theme-hacker
 plugins:
   - jekyll-feed
   - jekyll-toc
+  - jekyll-sitemap
 #  - jekyll-remote-theme
 
 # Exclude from processing.
