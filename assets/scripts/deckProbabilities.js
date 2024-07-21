@@ -70,13 +70,13 @@ async function populate(str) {
     console.log(deckList);
     let currentType = "p";
     for (let i = 0; i < deckList.length; i++) {
-        if (deckList[i].length > 0 && deckList[i].split(":").length == 1) {
+        if (deckList[i].length > 0 && !isHeader(deckList[i])) {
             let copies = deckList[i].match(/^(\d+)\s/)[1];
-            let set = deckList[i].match(/\s([A-Z]{3}\s\d+)\s?$/);
+            let set = deckList[i].match(/\s([A-Z\-]{3,}\s[RC\d]+)\s?$/);
             totalSize += copies.trim() * 1;
             let name = deckList[i].replaceAll(/^[\d]+\s/g, "");
-            name = name.replaceAll(/\s[A-Z]{3}\s\d+\s?$/g, "");
-
+            name = name.replaceAll(/\s([A-Z\-]{3,}\s[RC\d]+)\s?$/g, "");
+            //console.log(`${name}  ${copies} ${totalSize}`)
             let card = document.createElement("div");
             card.className = "card";
             let cardTitle = document.createElement('h5');
@@ -215,4 +215,7 @@ function toggleBasic(){
             }
         }
     }
+}
+function isHeader(str){
+    return /Pok[ée]mon:\s\d+/.test(str)||/Trainer:\s\d+/.test(str)||/Energy:\s\d+/.test(str);
 }
