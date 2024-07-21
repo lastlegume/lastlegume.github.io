@@ -1,0 +1,20 @@
+---
+layout: default
+title: Pattern Generator
+permalink: /pattern-generator
+---
+
+<title>Pattern generator</title>
+<script defer src="/assets/scripts/generatePattern.js"></script>
+
+<h1>Pattern Generator</h1>
+<p>A simple tool I wrote to make an overlapping circle pattern. To download the image, right click the pattern, click open image in new tab, and download the image from there.</p>
+<canvas id="pattern" width="1024" height="768"></canvas><br>
+<p>
+<label>Width: <input type="number" id="width" value="1024" min="100"> </label>
+<label>Height: <input type="number" id="height" value="768" min="100"> </label><br>
+<label>Circle Color: <input type="color" id="color" value = "#757575"> </label> 
+<label>Background Color: <input type="color" id="bgcolor" value = "#333333"> </label> 
+</p>
+
+<button class="btn-submit btn" id="generate">Generate</button>
