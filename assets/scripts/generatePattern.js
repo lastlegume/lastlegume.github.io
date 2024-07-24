@@ -3,7 +3,7 @@ const colorInput = document.getElementById("color");
 const bgInput = document.getElementById("bgcolor");
 
 document.getElementById("generate").addEventListener('click', generate)
-
+generate();
 function generate() {
     let ctx = pattern.getContext('2d');
     pattern.width = document.getElementById("width").value * 1;
