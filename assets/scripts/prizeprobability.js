@@ -34,10 +34,10 @@ document.getElementById("exactButton").addEventListener("click", getExactProbabi
 const exactOutput = document.getElementById("exactOutput");
 const oneCopyReps = document.getElementById("simOneCopyReps");
 const simSettings = document.getElementsByClassName("fullSim");
-let prevSettings = [simSettings[0].value * 1, simSettings[1].value * 1, simSettings[2].value * 1, simSettings[3].value, simSettings[4].checked];
+let prevSettings = [Math.min(simSettings[0].value * 1, 10000), simSettings[1].value * 1, simSettings[2].value * 1, simSettings[3].value, simSettings[4].checked];
 let mousePos = [[], []];
 let means = [0, 0];
-let prevReps = [oneCopyReps.value, simSettings[0].value];
+let prevReps = [Math.min(oneCopyReps.value, 10000), simSettings[0].value];
 const binNumbers = [7, 7]
 let coords = [{ x: 0, y: 0, w: oneCopyHist.width, h: oneCopyHist.height, padding: 40 }, { x: 0, y: 0, w: simHist.width, h: simHist.height, padding: 40 }];
 let runSummarySidebar = [true, true];
@@ -46,7 +46,7 @@ let reps = 1000000;
 //decreases load time temporarily
 reps = 1000;
 let highlightIdx = [-1, -1];
-results[0] = simulateNSetups(1, 0, oneCopyReps.value, false);
+results[0] = simulateNSetups(1, 0, prevReps[0], false);
 results[1] = simulateNSetups(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4]);
 means[0] = meanFromBins(results[0]);
 means[1] = meanFromBins(results[1]);
