@@ -9,22 +9,7 @@ let width = document.getElementById("main_content").getBoundingClientRect().widt
 let worker = window.Worker;
 let simOneWorker = null;
 let simWorker = null;
-// if (worker) {
-//     simOneWorker = new Worker("/assets/scripts/prizeWorker.js");
 
-//     simOneWorker.onmessage = function (e) {
-//         results[0] = e.data.slice(1);
-//         prevReps[0] = e.data[0];
-//         means[0] = meanFromBins(results[0]);
-//     }
-//     simWorker = new Worker("/assets/scripts/prizeWorker.js");
-
-//     simWorker.onmessage = function (e) {
-//         results[1] = e.data.slice(1);
-//         prevReps[1] = e.data[0];
-//         means[1] = meanFromBins(results[1]);
-//     }
-// }
 tableSelect.addEventListener("change", fillTable);
 document.getElementById("verifyButton").addEventListener("click", verifyData);
 document.getElementById("simOneCopyButton").addEventListener("click", simOneCopy);
@@ -34,10 +19,12 @@ document.getElementById("exactButton").addEventListener("click", getExactProbabi
 const exactOutput = document.getElementById("exactOutput");
 const oneCopyReps = document.getElementById("simOneCopyReps");
 const simSettings = document.getElementsByClassName("fullSim");
-let prevSettings = [Math.min(simSettings[0].value * 1, 10000), simSettings[1].value * 1, simSettings[2].value * 1, simSettings[3].value, simSettings[4].checked];
+simSettings[0].value = Math.min(simSettings[0].value * 1, 10000);
+oneCopyReps.value = Math.min(oneCopyReps.value, 10000);
+let prevSettings = [simSettings[0].value * 1, simSettings[1].value * 1, simSettings[2].value * 1, simSettings[3].value, simSettings[4].checked];
 let mousePos = [[], []];
 let means = [0, 0];
-let prevReps = [Math.min(oneCopyReps.value, 10000), simSettings[0].value];
+let prevReps = [oneCopyReps.value, simSettings[0].value];
 const binNumbers = [7, 7]
 let coords = [{ x: 0, y: 0, w: oneCopyHist.width, h: oneCopyHist.height, padding: 40 }, { x: 0, y: 0, w: simHist.width, h: simHist.height, padding: 40 }];
 let runSummarySidebar = [true, true];
