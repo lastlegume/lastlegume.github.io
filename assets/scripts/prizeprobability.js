@@ -6,7 +6,25 @@ const tableSelect = document.getElementById("tableSelect");
 const csvTable = document.getElementById("csvTable");
 const verifyTable = document.getElementById("verifyTable");
 let width = document.getElementById("main_content").getBoundingClientRect().width;
+let worker = window.Worker;
+let simOneWorker = null;
+let simWorker = null;
+// if (worker) {
+//     simOneWorker = new Worker("/assets/scripts/prizeWorker.js");
 
+//     simOneWorker.onmessage = function (e) {
+//         results[0] = e.data.slice(1);
+//         prevReps[0] = e.data[0];
+//         means[0] = meanFromBins(results[0]);
+//     }
+//     simWorker = new Worker("/assets/scripts/prizeWorker.js");
+
+//     simWorker.onmessage = function (e) {
+//         results[1] = e.data.slice(1);
+//         prevReps[1] = e.data[0];
+//         means[1] = meanFromBins(results[1]);
+//     }
+// }
 tableSelect.addEventListener("change", fillTable);
 document.getElementById("verifyButton").addEventListener("click", verifyData);
 document.getElementById("simOneCopyButton").addEventListener("click", simOneCopy);
@@ -295,19 +313,34 @@ async function verifyData() {
 }
 
 function simOneCopy() {
-    results[0] = simulateNSetups(1, 0, oneCopyReps.value, false);
-    prevReps[0] = oneCopyReps.value;
-    means[0] = meanFromBins(results[0]);
+    if (!worker || oneCopyReps.value <= 1000) {
+        results[0] = simulateNSetups(1, 0, oneCopyReps.value, false);
+        prevReps[0] = oneCopyReps.value;
+        means[0] = meanFromBins(results[0]);
+    } else {
+        if (simOneWorker)
+            simOneWorker.terminate();
+        simOneWorker = new Worker("/assets/scripts/prizeWorker.js");
 
+        simOneWorker.onmessage = function (e) {
+            results[0] = e.data.slice(1);
+            prevReps[0] = e.data[0];
+            means[0] = meanFromBins(results[0]).toFixed(5);
+            if(e.data[0]==oneCopyReps.value)
+                simOneWorker.terminate();
+
+        }
+        simOneWorker.postMessage(["one", oneCopyReps.value]);
+    }
 }
-function fixImpossible(){
+function fixImpossible() {
     if (simSettings[1].value * 1 > 60 || (simSettings[1].value > 4 && simSettings[4].checked)) {
         simSettings[1].value = 4;
     }
-    if (simSettings[3].value==="binhand"&&simSettings[2].value==0&&!simSettings[4].checked) {
+    if (simSettings[3].value === "binhand" && simSettings[2].value == 0 && !simSettings[4].checked) {
         simSettings[2].value = 1;
-        if(simSettings[1].value==60)
-            simSettings[1].value=59;
+        if (simSettings[1].value == 60)
+            simSettings[1].value = 59;
     }
     if (simSettings[1].value * 1 + simSettings[2].value * 1 > 60) {
         simSettings[2].value = 0;
@@ -316,34 +349,51 @@ function fixImpossible(){
 function simulate() {
     fixImpossible();
     prevSettings = [simSettings[0].value * 1, simSettings[1].value * 1, simSettings[2].value * 1, simSettings[3].value, simSettings[4].checked];
-    if (prevSettings[3] === "binhand")
-        results[1] = simulateNHands(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4])[0];
-    else if (prevSettings[3] === "tinhand")
-        results[1] = simulateNHands(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4])[1];
-    else
-        results[1] = simulateNSetups(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4]);
-    prevReps[1] = prevSettings[0];
-    means[1] = meanFromBins(results[1]);
+    if (!worker || prevSettings[0] <= 1000) {
+        if (prevSettings[3] === "binhand")
+            results[1] = simulateNHands(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4])[0];
+        else if (prevSettings[3] === "tinhand")
+            results[1] = simulateNHands(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4])[1];
+        else
+            results[1] = simulateNSetups(prevSettings[1] * 1, prevSettings[2] * 1, prevSettings[0], prevSettings[4]);
+        prevReps[1] = prevSettings[0];
+        means[1] = meanFromBins(results[1]);
+    } else {
+        if (simWorker)
+            simWorker.terminate();
+        simWorker = new Worker("/assets/scripts/prizeWorker.js");
+
+        simWorker.onmessage = function (e) {
+            results[1] = e.data.slice(1);
+            prevReps[1] = e.data[0];
+            means[1] = meanFromBins(results[1]).toFixed(5);
+            if(e.data[0]==prevSettings[0])
+                simWorker.terminate();
+
+        }
+        simWorker.postMessage(["any", ...prevSettings]);
+    }
+
 }
 async function getExactProbabilities() {
     fixImpossible();
     let text = "";
-    if (simSettings[2].value == 0&&!simSettings[4].checked) {
+    if (simSettings[2].value == 0 && !simSettings[4].checked) {
         if (simSettings[3].value === "tinhand") {
             let response = await fetch("/assets/blog/prizeprobs/ignoreBasics/handProbabilitiesNoBasics.csv");
             response = await response.text();
-            text = response.split("\n")[simSettings[1].value * 1].split(",").slice(1).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(10)}`).join("\n");
+            text = response.split("\n")[simSettings[1].value * 1].split(",").slice(1).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(10)} or ${(v * 100).toFixed(5)}%`).join("\n");
         } else {
             let response = await fetch("/assets/blog/prizeprobs/ignoreBasics/prizeProbabilitiesNoBasics.csv");
             response = await response.text();
-            text = response.split("\n")[simSettings[1].value * 1].split(",").slice(1, 8).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(10)}`).join("\n");
+            text = response.split("\n")[simSettings[1].value * 1].split(",").slice(1, 8).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(10)} or ${(v * 100).toFixed(5)}%`).join("\n");
         }
     } else {
         let idx = (simSettings[4].checked) ? ((simSettings[1].value * 1) + (simSettings[2].value * 4) + 3536) : (simSettings[1].value * 1) + ((simSettings[2].value - 1) * 60);
         if (simSettings[3].value === "binhand") {
             let response = await fetch("/assets/blog/prizeprobs/basicsInHand.csv");
             response = await response.text();
-            text = response.split("\n")[simSettings[2].value * 1 + ((simSettings[4].checked) ? simSettings[1].value * 1 : 0)].split(",").slice(1, 8).map((v, i) => `${i + 1} basics in hand: ${(v * 1).toFixed(10)}`).join("\n");
+            text = response.split("\n")[simSettings[2].value * 1 + ((simSettings[4].checked) ? simSettings[1].value * 1 : 0)].split(",").slice(1, 8).map((v, i) => `${i + 1} basics in hand: ${(v * 1).toFixed(10)} or ${(v * 100).toFixed(5)}%`).join("\n");
             //(simSettings[1].value * 1)+((simSettings[2].value-1) * 60)
         } else if (simSettings[3].value === "tinhand") {
             let response = localStorage.getItem('hand');
@@ -352,7 +402,7 @@ async function getExactProbabilities() {
                 response = await response.text();
                 localStorage.setItem("hand", response);
             }
-            text = response.split("\n")[idx].split(",").slice(1).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(10)}`).join("\n");
+            text = response.split("\n")[idx].split(",").slice(1).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(10)} or ${(v * 100).toFixed(5)}%`).join("\n");
         } else {
             let response = localStorage.getItem('prize');
             if (!response) {
@@ -360,7 +410,7 @@ async function getExactProbabilities() {
                 response = await response.text();
                 localStorage.setItem("prize", response);
             }
-            text = response.split("\n")[idx].split(",").slice(1).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(10)}`).join("\n");
+            text = response.split("\n")[idx].split(",").slice(1).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(10)} or ${(v * 100).toFixed(5)}%`).join("\n");
         }
 
     }
