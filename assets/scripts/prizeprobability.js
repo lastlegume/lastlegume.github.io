@@ -9,6 +9,7 @@ let width = document.getElementById("main_content").getBoundingClientRect().widt
 let worker = window.Worker;
 let simOneWorker = null;
 let simWorker = null;
+let verifyWorker = null;
 
 tableSelect.addEventListener("change", fillTable);
 document.getElementById("verifyButton").addEventListener("click", verifyData);
@@ -261,41 +262,74 @@ async function verifyData() {
     let verifyIdx = 0;
     let body = document.createElement("tbody");
     verifyTable.appendChild(body);
-    for (let i = 1; i < files.length; i++) {
-        let path = files[i];
-        let response = await fetch("/assets/blog/prizeprobs/" + path);
-        response = await response.text();
-        let csv = readCSV(response);
-        let error = 0;
-        let n = 0;
-        for (let r = 1; r < csv.length; r++) {
-            let sim = [];
-            let copies = csv[r][0].match(/[\d]+/g)[0] * 1;
-            let basics = (path.includes("NoBasics")) ? 0 : path.match(/_([\d]+)Basics/)[1] * 1;
-            if (path.includes("handProb")) {
-                sim = simulateNHands(copies, basics, reps, path.includes("B_"))[1];
-            } else {
-                sim = simulateNSetups(copies, basics, reps, path.includes("B_"));
+    if (!worker || reps <= 1000) {
+
+        for (let i = 1; i < files.length; i++) {
+            let path = files[i];
+            let response = await fetch("/assets/blog/prizeprobs/" + path);
+            response = await response.text();
+            let csv = readCSV(response);
+            let error = 0;
+            let n = 0;
+            for (let r = 1; r < csv.length; r++) {
+                let sim = [];
+                let copies = csv[r][0].match(/[\d]+/g)[0] * 1;
+                let basics = (path.includes("NoBasics")) ? 0 : path.match(/_([\d]+)Basics/)[1] * 1;
+                if (path.includes("handProb")) {
+                    sim = simulateNHands(copies, basics, reps, path.includes("B_"))[1];
+                } else {
+                    sim = simulateNSetups(copies, basics, reps, path.includes("B_"));
+                }
+                sim = sim.map((e) => e / reps);
+                for (let c = 0; c < sim.length; c++) {
+                    error += Math.abs(sim[c] - csv[r][c + 1]);
+                    n++;
+                }
             }
-            sim = sim.map((e) => e / reps);
-            for (let c = 0; c < sim.length; c++) {
-                error += Math.abs(sim[c] - csv[r][c + 1]);
-                n++;
+
+            verifyIdx++;
+            if (verifyIdx % Math.floor(width / 75) == 1) {
+                currentTrow = document.createElement("tr");
+                body.appendChild(currentTrow);
             }
+            let ctd = document.createElement("td");
+            error /= n;
+            ctd.title = path.split("/")[1];
+            ctd.innerText = error.toPrecision(5);
+            error = Math.min(error * 25, 1);
+            ctd.style.backgroundColor = `rgb(${Math.min(error, .5) * 510}, ${Math.max(0, .5 - error) * 510}, 0)`;
+            ctd.classList.add("xx-small");
+            currentTrow.appendChild(ctd);
         }
-        verifyIdx++;
-        if (verifyIdx % Math.floor(width / 75) == 1) {
-            currentTrow = document.createElement("tr");
-            body.appendChild(currentTrow);
-        }
-        let ctd = document.createElement("td");
-        error /= n;
-        ctd.title = path.split("/")[1];
-        ctd.innerText = error.toPrecision(5);
-        error = Math.min(error * 25, 1);
-        ctd.style.backgroundColor = `rgb(${Math.min(error, .5) * 510}, ${Math.max(0, .5 - error) * 510}, 0)`;
-        ctd.classList.add("xx-small");
-        currentTrow.appendChild(ctd);
+    }else{
+        if(verifyWorker)
+            verifyWorker.terminate();
+        verifyWorker = new Worker("/assets/blog/prizeprobs/workers/prizeWorker.js");
+        console.log("start");
+        verifyWorker.onmessage = function (e) {
+            if (e.data[0] === "done"){
+                verifyWorker.terminate();
+                return;
+            }
+            console.log(e.data);
+            if (e.data[0] % Math.floor(width / 75) == 1) {
+                currentTrow = document.createElement("tr");
+                body.appendChild(currentTrow);
+            }
+            let ctd = document.createElement("td");
+            let error = e.data[1];
+            ctd.title = e.data[2];
+            ctd.innerText = error.toPrecision(5);
+            error = Math.min(error * 25, 1);
+            ctd.style.backgroundColor = `rgb(${Math.min(error, .5) * 510}, ${Math.max(0, .5 - error) * 510}, 0)`;
+            ctd.classList.add("xx-small");
+            currentTrow.appendChild(ctd);
+
+    }
+    console.log(["start", reps, files])
+    verifyWorker.postMessage(["verify", reps, files]);
+
+    
     }
 }
 
@@ -307,13 +341,13 @@ function simOneCopy() {
     } else {
         if (simOneWorker)
             simOneWorker.terminate();
-        simOneWorker = new Worker("/assets/scripts/prizeWorker.js");
+        simOneWorker = new Worker("/assets/blog/prizeprobs/workers/prizeWorker.js");
 
         simOneWorker.onmessage = function (e) {
             results[0] = e.data.slice(1);
             prevReps[0] = e.data[0];
             means[0] = meanFromBins(results[0]).toFixed(5);
-            if(e.data[0]==oneCopyReps.value)
+            if (e.data[0] == oneCopyReps.value)
                 simOneWorker.terminate();
 
         }
@@ -348,13 +382,13 @@ function simulate() {
     } else {
         if (simWorker)
             simWorker.terminate();
-        simWorker = new Worker("/assets/scripts/prizeWorker.js");
+        simWorker = new Worker("/assets/blog/prizeprobs/workers/prizeWorker.js");
 
         simWorker.onmessage = function (e) {
             results[1] = e.data.slice(1);
             prevReps[1] = e.data[0];
             means[1] = meanFromBins(results[1]).toFixed(5);
-            if(e.data[0]==prevSettings[0])
+            if (e.data[0] == prevSettings[0])
                 simWorker.terminate();
 
         }

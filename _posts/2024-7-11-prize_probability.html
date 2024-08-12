@@ -610,7 +610,8 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
 
 <p>So, if you are comfortable with probability or just <a href="#footnote1">read the first footnote</a>, you will have
     already realized that the method presented above has some flaws. Firstly, most of the math is unnecessary because we
-    don't actually need to know what is in the hand. If we never have to redraw the hand (i.e. every possible starting hand is a valid starting hand) and our deck is perfectly
+    don't actually need to know what is in the hand. If we never have to redraw the hand (i.e. every possible starting
+    hand is a valid starting hand) and our deck is perfectly
     shuffled and completely random, then the order of drawing the hand and prize cards doesn't matter. For a better
     explanation of why this is true, read <a
         href="https://www.pojo.com/Features/X-Act/2005/Odds%20In%20Pokemon%202.htm">this article on the topic</a>, which
@@ -741,7 +742,7 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
         verify them yourself here</a>.</p>
 <h2 id="correct-probabilities">The Correct Probabilities</h2>
 <p>After this discussion, we finally understand how to calculate the final probabilites. So, to review, let's go over
-    the steps to find the actual probabilities:</p>
+    the steps to find the actual probabilities<a href="#footnote4"><sup id="sup4">[4]</sup></a>:</p>
 <ul>
     <li>Find the probability of each possible <span style="font-style: italic;">valid</span> hand arrangment (1 basic, 0
         targets, 6 other; 1 basic, 1 target, 5 other;...; 7 basics, 0 targets, 0 others) using the multivariate
@@ -768,7 +769,8 @@ this becomes relevant. Now, having come up with this equation, we can solve for 
     the rowlets are prized).</p>
 <label for="tableSelect">File: </label>
 <select id="tableSelect">
-    <option value="basicsInHand.csv">Number of basics in starting hand</option>
+    <option value="" disabled selected hidden>Choose a data set to display</option>
+    <option class="xx-small" value="basicsInHand.csv">Number of basics in starting hand</option>
 </select>
 
 <table id="csvTable"></table>
@@ -856,4 +858,12 @@ appears fully red, while an error of 0 is fully green. ">?</span></label><br>
     blog post; however, in my R code, I usually ended up using a vector like 0:7 as x to get all 8 probabilities at
     once, so keep that in mind when reading the code. Additionally, when I write equations using dhyper, you can plug in
     those equations into R to solve them if you wish.
+</p>
+<p><a href="#sup4"><sup id="footnote4">[4]</sup></a> Addendum 8/12/24: I didn't notice at the time, but there is
+    actually a simpler method when there is only one basic in the deck. Since every valid hand has this card in the top
+    6 cards, we can just treat the other 59 cards as being truly randomized and use dhyper(0:1, m, 59-m, 6) to find the
+    probabilities that they are prized (m is the total number of copies of the target card). However, this doesn't work
+    for higher values of m because the number of basics in the starting hand is not constant and cannot be assumed to be
+    any value like this without further calculations. I include this just as another reminder that the method here might
+    not be the most efficient method, but I do believe that it is completely accurate.
 </p>
