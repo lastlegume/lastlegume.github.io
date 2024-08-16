@@ -73,6 +73,8 @@ A tool to convert a (presumably class set) test or set of stations with only que
     <label id="showAnswerChoicesLabel"><input type="checkbox" id="showAnswerChoices" > Display answer choices <span class = "descriptor" hover-text = "The text of answer choices will be copied over in addition to the letters corresponding to each answer choice."> ? </span><br></label>
     <label><input type="checkbox" id="includeAll"> Include all non-question lines <span class = "descriptor" hover-text = "All non-question lines (i.e. lists, figures, etc.) will be retained in the answer sheet."> ? </span><br> </label>
     <label><input type="checkbox" id="includeSection" checked> Include section headers <span class = "descriptor" hover-text = "Any section headers (\section, \subsection, \section*, etc.) will be added to the answer sheet.">?</span><br></label>
+    <label><input type="checkbox" id="includeParts" checked> Include part environments <span class = "descriptor" hover-text = "Needed if the test uses any of the parts environments. Includes the begin and end parts lines in the answer sheet.">?</span><br></label>
+    <label><input type="checkbox" id="includeFullwidth" > Include full width/bold/noindent text <span class = "descriptor" hover-text = "Any bold or fullwidth text (\textbf, \fullwidth, \noindent) will be added to the answer sheet.">?</span><br></label>
     <label><input type="checkbox" id="linegoal" > Use linegoal for fillin line lengths <span class = "descriptor" hover-text = "Uses the linegoal package to make the fillin line fill the rest of the line. Very buggy and will introduce errors, but appears to work. Requires the linegoal package."> ? </span><br></label>
     <p style = "padding-bottom:100px"></p>
 

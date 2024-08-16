@@ -29,13 +29,16 @@ function convertText() {
     marker = markerInput.value;
     includeAll = document.getElementById("includeAll").checked;
     includeSection = document.getElementById("includeSection").checked;
+    includeParts = document.getElementById("includeParts").checked;
+    includeFullwidth = document.getElementById("includeFullwidth").checked;
+
     showAnswerChoices = document.getElementById("showAnswerChoices").checked;
     FIBThreshold = document.getElementById("FIBThreshold").value;
 
     for (let i = 0; i < input.length; i++) {
-        if (input[i].includes("\\question") && input[i].trim().substring(0, 9) === "\\question") {
+        if (/\\(sub)*?(part|question)\[(\d*?)(\\half)\]/g.test(input[i])) {
             let question = "";
-            question += input[i].match(/\\question(\[[\d]*\])?/g) + " ";
+            question += input[i].match(/\\(sub)*?(part|question)\[(\d*?)(\\half)*?\]/g) + " ";
             if (i < input.length - 1) {
                 // short answer/fib
                 input[i + 1] = input[i + 1].trim();
@@ -134,13 +137,25 @@ function convertText() {
             //lines that are not questions
         } else {
             
-            if (includeAll) {
+            if (includeAll || input[i].toLowerCase().includes("\\addtocounter")) {
                 if(consecutiveMCQ>0){
                     output+="\\end{multicols}\n";
                 }
                 consecutiveMCQ = 0;
                 output += input[i] + "\n";
-            }   else if ((/\\(sub)*?section/g.test(input[i].toLowerCase()) || input[i].toLowerCase().includes("\\addtocounter")) && !includeAll && includeSection) {
+            }   else if ((/\\(sub)*?section/g.test(input[i].toLowerCase())) && includeSection) {
+                if(consecutiveMCQ>0){
+                    output+="\\end{multicols}\n";
+                }
+                consecutiveMCQ = 0;
+                output += input[i] + "\n";
+            }   else if ((/\\(begin|end){(sub)*?parts}/g.test(input[i].toLowerCase())) && includeParts) {
+                if(consecutiveMCQ>0){
+                    output+="\\end{multicols}\n";
+                }
+                consecutiveMCQ = 0;
+                output += input[i] + "\n";
+            }   else if ((/^\\(fullwidth{|textbf{|noindent )/g.test(input[i].toLowerCase().trim())) && includeFullwidth) {
                 if(consecutiveMCQ>0){
                     output+="\\end{multicols}\n";
                 }
