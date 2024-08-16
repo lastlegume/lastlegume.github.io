@@ -35,10 +35,11 @@ function convertText() {
     showAnswerChoices = document.getElementById("showAnswerChoices").checked;
     FIBThreshold = document.getElementById("FIBThreshold").value;
 
+    const qregex = /\\(sub)*?(part|question)\[(\d*?)(\\half)*?\]/g;
     for (let i = 0; i < input.length; i++) {
-        if (/\\(sub)*?(part|question)\[(\d*?)(\\half)\]/g.test(input[i])) {
+        if (qregex.test(input[i])) {
             let question = "";
-            question += input[i].match(/\\(sub)*?(part|question)\[(\d*?)(\\half)*?\]/g) + " ";
+            question += input[i].match(qregex) + " ";
             if (i < input.length - 1) {
                 // short answer/fib
                 input[i + 1] = input[i + 1].trim();
