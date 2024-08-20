@@ -19,6 +19,9 @@ const markerInput = document.getElementById("marker");
 let marker = "%";
 let includeAll = false;
 let includeSection = true;
+let includeParts = false;
+let includeFullwidth = false;
+let includeEmptyQuestions = false;
 let showAnswerChoices = false;
 function convertText() {
     let input = inputArea.value.split("\n");
@@ -31,11 +34,11 @@ function convertText() {
     includeSection = document.getElementById("includeSection").checked;
     includeParts = document.getElementById("includeParts").checked;
     includeFullwidth = document.getElementById("includeFullwidth").checked;
-
+    includeEmptyQuestions = document.getElementById("includeEmptyQuestions").checked;
     showAnswerChoices = document.getElementById("showAnswerChoices").checked;
     FIBThreshold = document.getElementById("FIBThreshold").value;
 
-    const qregex = /\\(sub)*?(part|question)\[(\d*?)(\\half)*?\]/g;
+    const qregex = /\\(sub)*?(part|question)\[(\d*?)\s*?(\\half)*?\]/g;
     for (let i = 0; i < input.length; i++) {
         if (qregex.test(input[i])) {
             let question = "";
@@ -162,7 +165,14 @@ function convertText() {
                 }
                 consecutiveMCQ = 0;
                 output += input[i] + "\n";
+            }else if((/^\\question[^[]/g.test(input[i].toLowerCase().trim())) && includeEmptyQuestions)  {
+                if(consecutiveMCQ>0){
+                    output+="\\end{multicols}\n";
+                }
+                consecutiveMCQ = 0;
+                output += input[i] + "\n";
             }
+            
         }
         
     }

@@ -217,5 +217,5 @@ function toggleBasic(){
     }
 }
 function isHeader(str){
-    return /Pok[ée]mon:\s\d+/.test(str)||/Trainer:\s\d+/.test(str)||/Energy:\s\d+/.test(str)||str.includes("Total Cards:");
+    return /Pok[ée]mon:\s\d+/.test(str)||/Trainer:\s\d+/.test(str)||/Energy:\s\d+/.test(str)||str.toLowerCase().includes("total cards:");
 }
