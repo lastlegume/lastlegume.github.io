@@ -4,12 +4,13 @@
 //settings contains keys xlab, ylab, xInc, xlim, ylim, col, coords, title
 function graph(func, canvas, settings) {
     let isFunction = false;
+    let funcs = [];
     if (Object.keys(func).includes("function")) {
-        func = func.function;
+        funcs = func.function;
         isFunction = true;
     }
     else if (Object.keys(func).includes("list"))
-        func = func.list;
+        funcs = func.list;
     let coords = 0;
     if (settings.coords)
         coords = settings.coords;
@@ -21,7 +22,7 @@ function graph(func, canvas, settings) {
     let ylab = settings.ylab;
     let xlab = settings.xlab;
     let title = settings.title;
-    let col = settings.col;
+    let cols = settings.col;
     let xInc = settings.xInc;
 
     if (!xlim) {
@@ -35,73 +36,78 @@ function graph(func, canvas, settings) {
     let ctx = canvas.getContext('2d');
     drawGrid(canvas, xInc, xlab, ylab, title, xlim, ylim, coords);
     //graph
-    ctx.globalAlpha = 1;
+    console.log(funcs);
+    for (let funcIdx = 0; funcIdx < funcs.length; funcIdx++) {
+        func = funcs[funcIdx];
+        ctx.globalAlpha = 1;
 
-    ctx.beginPath();
-    if (col.includes("#") || col.includes("rgb"))
-        ctx.strokeStyle = col;
-    else
-        ctx.strokeStyle = "#00FFA0";
-    ctx.moveTo(coords.x + padding, coords.y + coords.h - padding);
-    let lastOvershoot = -2;
-    let overshoot = -1;
-    let x = xlim[0];
-    let pctY = 0;
-    let val = 0;
-    let wasNaN = isNaN(val);
-
-    for (let i = 0; i < coords.w - padding; i++) {
-        if (isFunction)
-            val = solve(func.replaceAll('x', x));
+        let col = cols[funcIdx];
+        ctx.beginPath();
+        if (col.includes("#") || col.includes("rgb"))
+            ctx.strokeStyle = col;
         else
-            val = func[i];
-        if (wasNaN && !isNaN(val)) {
-            pctY = (val - ylim[0]) / (ylim[1] - ylim[0]);
-            ctx.moveTo(coords.x + padding + i, coords.y + (coords.h - padding) * (1 - Math.max(0, Math.min(1, pctY))));
-        }
-        wasNaN = isNaN(val);
+            ctx.strokeStyle = "#00FFA0";
+        ctx.moveTo(coords.x + padding, coords.y + coords.h - padding);
+        let lastOvershoot = -2;
+        let overshoot = -1;
+        let x = xlim[0];
+        let pctY = 0;
+        let val = 0;
+        let wasNaN = isNaN(val);
 
-        pctY = (val - ylim[0]) / (ylim[1] - ylim[0]);
-        if (isFunction) {
-            overshoot = -1;
-            for (let s = 0; s < 1; s += .1) {
-                val = solve(func.replaceAll('x', x + s * xInc));
+        for (let i = 0; i < coords.w - padding; i++) {
+            if (isFunction)
+                val = solve(func.replaceAll('x', x));
+            else
+                val = func[i];
+            if (wasNaN && !isNaN(val)) {
                 pctY = (val - ylim[0]) / (ylim[1] - ylim[0]);
-                if (pctY >= 1) {
-                    if (overshoot == -1 && lastOvershoot == -1) {
-                        overshoot = 0;
-                        ctx.lineTo(coords.x + padding + i, coords.y);
-                    }
-                    else
-                        ctx.moveTo(coords.x + padding + i, coords.y);
-                    lastOvershoot = 0;
-                } else if (pctY <= 0) {
-                    if (overshoot == -1 && lastOvershoot == -1) {
-                        overshoot = 1;
-                        ctx.lineTo(coords.x + padding + i, coords.y + (coords.h - padding));
-                    }
-                    else
-                        ctx.moveTo(coords.x + padding + i, coords.y + (coords.h - padding));
-                    lastOvershoot = 1;
-
-                } else if (wasNaN && !isNaN(val)) {
-                    ctx.moveTo(coords.x + padding + i, coords.y + (coords.h - padding) * (1 - Math.max(0, Math.min(1, pctY))));
-                    wasNaN = false;
-                }
+                ctx.moveTo(coords.x + padding + i, coords.y + (coords.h - padding) * (1 - Math.max(0, Math.min(1, pctY))));
             }
-            if (pctY >= 0 && pctY <= 1)
-                lastOvershoot = -1;
+            wasNaN = isNaN(val);
+
+            pctY = (val - ylim[0]) / (ylim[1] - ylim[0]);
+            if (isFunction) {
+                overshoot = -1;
+                for (let s = 0; s < 1; s += .1) {
+                    val = solve(func.replaceAll('x', x + s * xInc));
+                    pctY = (val - ylim[0]) / (ylim[1] - ylim[0]);
+                    if (pctY >= 1) {
+                        if (overshoot == -1 && lastOvershoot == -1) {
+                            overshoot = 0;
+                            ctx.lineTo(coords.x + padding + i, coords.y);
+                        }
+                        else
+                            ctx.moveTo(coords.x + padding + i, coords.y);
+                        lastOvershoot = 0;
+                    } else if (pctY <= 0) {
+                        if (overshoot == -1 && lastOvershoot == -1) {
+                            overshoot = 1;
+                            ctx.lineTo(coords.x + padding + i, coords.y + (coords.h - padding));
+                        }
+                        else
+                            ctx.moveTo(coords.x + padding + i, coords.y + (coords.h - padding));
+                        lastOvershoot = 1;
+
+                    } else if (wasNaN && !isNaN(val)) {
+                        ctx.moveTo(coords.x + padding + i, coords.y + (coords.h - padding) * (1 - Math.max(0, Math.min(1, pctY))));
+                        wasNaN = false;
+                    }
+                }
+                if (pctY >= 0 && pctY <= 1)
+                    lastOvershoot = -1;
+            }
+            ctx.lineTo(coords.x + padding + i, coords.y + (coords.h - padding) * (1 - Math.max(0, Math.min(1, pctY))));
+            //console.log(x+" "+pctY*(ylim[1] - ylim[0]));
+            // }
+            if (Math.abs(pctY - .5) <= 1)
+                ctx.stroke();
+
+            x += xInc;
+
         }
-        ctx.lineTo(coords.x + padding + i, coords.y + (coords.h - padding) * (1 - Math.max(0, Math.min(1, pctY))));
-        //console.log(x+" "+pctY*(ylim[1] - ylim[0]));
-        // }
-        if (Math.abs(pctY - .5) <= 1)
-            ctx.stroke();
-
-        x += xInc;
-
+        ctx.closePath();
     }
-    ctx.closePath();
     //axes
     drawAxes(canvas, coords);
 }
@@ -174,7 +180,7 @@ function drawAxes(canvas, coords) {
     ctx.beginPath();
     //horizontal axis
     ctx.moveTo(coords.x + padding, coords.y + coords.h - padding);
-    ctx.lineTo(coords.x + coords.w - padding, coords.y + coords.h - padding);
+    ctx.lineTo(coords.x + coords.w, coords.y + coords.h - padding);
     //vertical axis
     ctx.moveTo(coords.x + padding, coords.y + coords.h - padding);
     ctx.stroke();
@@ -343,7 +349,7 @@ function hist(canvas, data, numBins, settings) {
     if (settings.title) {
         ctx.fillText(settings.title, coords.x + coords.w / 2 + padding / 2, coords.y + 24);
     }
-    if(settings.mean){
+    if (settings.mean) {
         ctx.fillText(`Mean: ${settings.mean}`, coords.x + coords.w / 2 + padding / 2, coords.y + 48);
 
     }
@@ -369,8 +375,8 @@ function hist(canvas, data, numBins, settings) {
             ctx.strokeStyle = settings.highlightCol;
         }
         ctx.strokeRect(padding + coords.x + binWidth * i, coords.y + padding + ((coords.h - padding * 2) * (1 - numInBins[i] / total)), binWidth, (coords.h - padding * 2) * (numInBins[i] / total));
-        ctx.fillText(min+binSize*i,padding + coords.x + binWidth * i, coords.y +coords.h-padding+13, binWidth/2);
-        
+        ctx.fillText(min + binSize * i, padding + coords.x + binWidth * i, coords.y + coords.h - padding + 13, binWidth / 2);
+
         ctx.globalAlpha = .4;
         ctx.fillRect(padding + coords.x + binWidth * i, coords.y + padding + ((coords.h - padding * 2) * (1 - numInBins[i] / total)), binWidth, (coords.h - padding * 2) * (numInBins[i] / total));
 
@@ -385,7 +391,7 @@ function hist(canvas, data, numBins, settings) {
         }
     }
     //makes frame of highlight bin go over the other bins
-    if (settings.highlight>=0&&settings.highlight<numBins) {
+    if (settings.highlight >= 0 && settings.highlight < numBins) {
         ctx.strokeStyle = settings.highlightCol;
         ctx.strokeRect(padding + coords.x + binWidth * settings.highlight, coords.y + padding + ((coords.h - padding * 2) * (1 - numInBins[settings.highlight] / total)), binWidth, (coords.h - padding * 2) * (numInBins[settings.highlight] / total));
 

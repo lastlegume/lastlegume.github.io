@@ -26,5 +26,5 @@ function updateGraph() {
     if (ylim[0] == ylim[1])
         ylim[1]++;
     
-    graph({"function":func}, canvas, {"xInc":.01, "xlab":"x", "ylab":"y", "title":"r - R", "xlim":xlim, "ylim":ylim, "col":colorInput.value})
+    graph({"function":[func]}, canvas, {"xInc":.01, "xlab":"x", "ylab":"y", "title":"r - R", "xlim":xlim, "ylim":ylim, "col":[colorInput.value]})
 }

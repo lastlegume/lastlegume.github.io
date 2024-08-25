@@ -30,7 +30,7 @@ function updateExpGraph() {
     expN0Value.innerHTML = "<math><msub><mi>N</mi><mn>0</mn></msub></math> value: " + expN0Slider.value;
 
     let func = "N0 * e ^ ( r * x )";
-    graph({ "function": func.replaceAll('r', expRSlider.value).replaceAll('N0', expN0Slider.value) }, expGraph, {"xInc":.005, "xlab":"Time", "ylab":"Population","xlim":[0, 7], "ylim":[0, 100], "col":"#00FFA0"});
+    graph({ "function": [func.replaceAll('r', expRSlider.value).replaceAll('N0', expN0Slider.value)] }, expGraph, {"xInc":.005, "xlab":"Time", "ylab":"Population","xlim":[0, 7], "ylim":[0, 100], "col":["#00FFA0"]});
 }
 function updateLogisticGraph() {
     logisticRValue.textContent = "r value: " + logisticRSlider.value;
@@ -61,9 +61,9 @@ function updateLogisticGraph() {
         n += nInc;
     }
 
-    graph({ "list": nVals }, logisticGraph, {"xInc":.005, "xlab":"Time", "ylab":"Population Size","xlim":nlim, "ylim":[0, 1000], "col":"#009FFF"});
-    graph({ "list": dNdtVals }, logisticGraphdNdt, {"xInc":.005, "xlab":"Population Size", "ylab":"Population Growth Rate","xlim":nlim, "ylim":[Math.min.apply(null, dNdtVals), Math.max.apply(null, dNdtVals)], "col":"#FF9FFF"});
-    graph({ "list": dNdtNVals }, logisticGraphdNdtN, {"xInc":.005, "xlab":"Population Size", "ylab":"Population Growth Rate Per Capita","xlim":nlim, "ylim":[Math.min.apply(null, dNdtNVals), Math.max.apply(null, dNdtNVals)], "col":"#55E0F0"});
+    graph({ "list": [nVals] }, logisticGraph, {"xInc":.005, "xlab":"Time", "ylab":"Population Size","xlim":nlim, "ylim":[0, 1000], "col":["#009FFF"]});
+    graph({ "list": [dNdtVals] }, logisticGraphdNdt, {"xInc":.005, "xlab":"Population Size", "ylab":"Population Growth Rate","xlim":nlim, "ylim":[Math.min.apply(null, dNdtVals), Math.max.apply(null, dNdtVals)], "col":["#FF9FFF"]});
+    graph({ "list": [dNdtNVals] }, logisticGraphdNdtN, {"xInc":.005, "xlab":"Population Size", "ylab":"Population Growth Rate Per Capita","xlim":nlim, "ylim":[Math.min.apply(null, dNdtNVals), Math.max.apply(null, dNdtNVals)], "col":["#55E0F0"]});
 
 }
 
