@@ -1,0 +1,48 @@
+---
+layout: default
+title: Guess the Color
+permalink: /color-guessing
+games: 2
+---
+<script defer src = "/assets/scripts/guessTheColor.js"></script>
+
+<style type="text/css" media="screen">
+    #box{
+        min-width: 100px;
+        min-height: 100px;
+        height: 50%;
+        width: inherit;
+        text-align: center;
+    }
+</style>
+
+<h1>Guess the color</h1>
+
+<p>Possibly the worst idea for a game that I've ever had...    </p>
+
+<div id="box"></div>
+<select id = "type">
+    <option value = "rgb" selected>RGB</option>
+</select>
+<div id="rgb-div" class="type-div">
+
+
+<h3>RGB</h3>
+
+R: <input type="number" class = "rgb" max = "255" min = "0" step="1"> 
+G: <input type="number" class = "rgb" max = "255" min = "0" step="1">
+B: <input type="number" class = "rgb" max = "255" min = "0" step="1">
+</div>
+
+<div id="hsl-div" class="type-div">
+<h3>HSL</h3>
+
+H: <input type="number" class = "hsl" max = "255" min = "0" step="1"> 
+S: <input type="number" class = "hsl" max = "255" min = "0" step="1">
+L: <input type="number" class = "hsl" max = "255" min = "0" step="1">
+</div>
+<button id="check">Check answer</button>
+
+
+
+<div id="error"></div>
