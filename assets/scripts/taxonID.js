@@ -147,7 +147,7 @@ function checkTiming() {
         return true;
     }
     if (Date.now() - lastCheckPress < timeBetweenCheckPress) {
-        reply.innerHTML = `Please wait <span style="color: LemonChiffon;">${((100 - (Date.now() - lastCheckPress)) / 1000).toPrecision(3)}</span> seconds before checking again`;
+        reply.innerHTML = `Please wait <span style="color: LemonChiffon;">${((timeBetweenCheckPress - (Date.now() - lastCheckPress)) / 1000).toPrecision(3)}</span> seconds before checking again`;
         reply.style.setProperty('background-color', 'burlywood');
 
         return true;
