@@ -1,0 +1,130 @@
+A. Protura:telsontails, proturans
+B. Collembola:springtails, snow fleas
+C. Diplura:diplurans
+D. Thysanura:bristletails, silverfish
+E. Ephemeroptera:mayflies
+*F. Odonata:dragon/damselflies
+1. Aeschnidae:darners
+2. Gomphidae:clubtails
+3. Libellulidae:skimmers
+4. Lestidae:spread-wing
+5. Coenagrionidae:narrow-winged
+G. Blattodea:cockroaches
+H. Mantodea:mantids
+I. Isoptera:termites
+J. Grylloblattodea:ice insects
+K. Dermaptera:earwigs
+L. Plecoptera:stoneflies
+M. Orthoptera:grasshoppers & crickets
+6. Tetrigidae: pygmy grasshopper
+7. Acrididae:short-horned grasshoppers
+8. Tettigoniidae:katydids
+9. Gryllacrididae: camel crickets
+10. Gryllidae:crickets/tree crickets
+11. Gryllotalpidae:mole crickets
+N. Phasmatodea:walkingsticks
+O. Psocoptera: Book/Bark Lice
+P. Mallophaga:chewing lice
+Q. Anoplura:sucking lice
+R. Hemiptera:true bugs
+12. Corixidae:water boatmen
+13. Notonectidae:backswimmers
+14. Belostomatidae:giant water bugs
+15. Nepidae:waterscorpions
+16. Gelastocoridae:toad bugs
+17. Gerridae:water striders
+18. Cimicidae:bed bugs
+19. Miridae:plant bugs
+20. Reduviidae:assassin bugs
+21. Phymatidae:ambush bugs
+22. Tingidae:lace bugs
+23. Lygaeidae:seed bugs
+24. Coreidae:leaf–footed bugs
+25. Pentatomidae:Stink bugs
+S. Homoptera:cicadas, aphids, hoppers, etc.
+26. Cicadidae:cicadas
+27. Membracidae:treehoppers
+28. Cercopidae:froghoppers, spittlebugs
+29. Cicadellidae:leafhoppers
+30. Fulgoridae:fulgorid planthoppers
+31. Aphididae:aphids
+32. Dactylopiidae:scale (twig or leaf)
+T. Thysanoptera:thrips
+U. Megaloptera: dobsonflies
+V. Neuroptera:lacewings, antlions
+33. Chrysopidae:green lacewings
+*34. Myrmeleontidae:antlions
+W. Coleoptera:beetles
+35. Cicindelidae:tiger beetles
+36. Carabidae:ground beetles
+37. Dytiscidae:predaceous diving beetles
+38. Gyrinidae:whirligig beetles
+39. Hydrophilidae:water scavenger beetles
+40. Histeridae:hister beetles
+41. Staphylinidae:rove beetles
+42. Silphidae:carrion beetles
+43. Lucanidae:stag beetles
+44. Passalidae:bess beetles
+45. Scarabaeidae:dung beetles
+46. Buprestidae:metallic wood-boring beetles
+47. Elateridae:click beetles
+48. Lampyridae:fireflies
+49. Cantharidae:soldier beetles
+50. Lycidae:net-winged beetles
+51. Cleridae:checkered beetles
+52. Coccinellidae:lady-bird beetles (ladybugs)
+*53. Tenebrionidae:darkling beetles
+54. Meloidae:blister beetles
+*55. Cerambycidae:long-horned beetles
+56. Chrysomelidae:leaf beetles
+57. Curculionidae:weevils
+X. Strepsiptera: Twisted-Wing Parasite
+Y. Mecoptera:scorpionflies
+58. Boreidae: snow scorpionflies 
+59. Panorpidae: common scorpionflies
+Z. Siphonaptera:fleas
+AA. Diptera:true flies
+60. Tipulidae:crane flies
+*61. Culicidae:mosquitoes
+62. Chironomidae:midges
+63. Simuliidae: black flies
+64. Stratiomyidae:soldier flies
+65. Tabanidae:horse flies
+66. Asilidae:robber flies
+67. Bombyliidae:bee flies
+68. Syrphidae:hover/flower flies
+69. Tephritidae:fruit flies, huskfly
+70. Drosophilidae:pomace flies
+71. Muscidae:house flies
+72. Hippoboscidae:louse flies
+*73. Calliphoridae: blow flies
+74. Tachinidae:tachinid flies
+*BB. Trichoptera:caddisflies
+CC. Lepidoptera:moths and butterflies
+75. Sesiidae:clear winged moths
+76. Tortricidae: Tortricid moths
+77. Hesperiidae:skippers
+*78. Papilionidae:swallowtails
+79. Pieridae:whites, sulfurs
+80. Lycaenidae: hairstreaks/blues
+81. Nymphalidae:brush-footed butterflies
+82. Satyridae:Satyrs, nymphs and arctics
+83. Danaidae:milkweed butterflies
+84. Pyralidae:pyralid moths
+*85. Saturniidae:Giant Silkworm moths
+*86. Sphingidae:sphinx moths, hornworms
+87. Arctiidae:tiger moths, wooly worms
+88. Lymantriidae:tussock moths
+89. Noctuidae:noctuid moths
+DD. Hymenoptera:bees/ants/wasps.
+90. Tenthredinidae: common sawflies
+91. Siricidae:horntails
+92. Ichneumonidae:ichneumons
+93. Cynipidae: gall wasps
+94. Mutillidae: velvet-ants
+95. Formicidae:ants
+96. Vespidae:paper wasps, hornets, yellowjackets
+97. Colletidae: Plaster bees
+98. Halictidae: Alkali bees
+99. Megachilidae: leaf cutter bees
+100. Apidae:bees

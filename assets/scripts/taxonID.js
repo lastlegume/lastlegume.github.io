@@ -62,6 +62,7 @@ async function makeQuestion() {
         if(document.getElementById(list[i][0]).checked)
             availableList.push(list[i]);
     }
+    console.log(availableList);
     if(availableList.length==0){
         availableList.push(list[0]);
     }
@@ -73,7 +74,7 @@ async function makeQuestion() {
             await new Promise(r => setTimeout(r, timeBetweenCheckPress - (Date.now() - lastCheckPress)))
         }
         speciesIdx = nextIndex;
-        if (speciesIdx == -1)
+        if (speciesIdx == -1||speciesIdx>=availableList.length||availableList[speciesIdx][0]!==nextIndex)
             speciesIdx = Math.floor(Math.random() * availableList.length);
         correctAnswer = availableList[speciesIdx];
         species = availableList[speciesIdx][0];
@@ -91,7 +92,6 @@ async function makeQuestion() {
     } else {
         response = JSON.parse(localData)
         localData = null;
-
     }
 
     let options = response.response;
@@ -102,7 +102,7 @@ async function makeQuestion() {
     random = weightedOptions[Math.floor(Math.random() * weightedOptions.length)]
     response.usage[random]++;
     localStorage.setItem("t+++"+species, JSON.stringify(response));
-    work.alt = "identify this";
+    work.alt = "Identify this";
 
     answer.value = "";
     hintIdx = 1;
@@ -199,9 +199,10 @@ function createList(includeOrders) {
     list=[];
     for (let i = 0; i < textList.length; i++) {
         textList[i] = textList[i].trim();
-        if (/^\*?[\w]+.\s/.test(textList[i])) {
+        // for 2015 list
+        if (/^\*?[\w]{1,3}\.\s/.test(textList[i])) {
             //        if (/^\*?[\d]+.\s/.test(textList[i]) || (i < textList.length - 1 && !/^\*?[\d]+.\s/.test(textList[i + 1].trim()) && /^\*?[a-zA-Z]+.\s/.test(textList[i]))) {
-            let tlist = textList[i].replaceAll(/^\*?[\w]+.\s/g, "").split(":");
+            let tlist = textList[i].replaceAll(/^\*?[\w]+\.\s/g, "").split(":");
             tlist.map((e) => e.split("/"));
             tlist = [].concat(...tlist);
             tlist.map((e) => e.split(", "));
@@ -216,24 +217,65 @@ function createList(includeOrders) {
             lab.appendChild(document.createElement("br"));
             cb.classList.add("indivCb");
 
-            if (/^\*?[a-zA-Z]+.\s/.test(textList[i])){
+            if (/^\*?[a-zA-Z]{1,2}\.\s/.test(textList[i])){
                 currentOrder = tlist[0];
-                if(/^\*?[\d]+.\s/.test(textList[i + 1].trim()))
+                if(/^\*?[\d]{1,2}\.\s/.test(textList[i + 1].trim()))
                     cb.addEventListener('change', () => updateCheckboxes())
                 else                    
                     list.push(tlist);
 
 
             }
-            if (includeOrders && /^\*?[\d]+.\s/.test(textList[i]))
+            if (includeOrders && (/^\*?[\d]+\.\s/.test(textList[i])))
                 tlist.push(currentOrder);
-            if (/^\*?[\d]+.\s/.test(textList[i])){
+            if (/^\*?[\d]+\.\s/.test(textList[i])){
                 list.push(tlist);
                 lab.classList.add("specific");
                 cb.classList.add(currentOrder);
             }
             individualCheckboxes.appendChild(lab);
-        } else if(textList[i].length>0){
+        // for 2024 list 
+        } else if (/^(sub)*?(order|family|class)\s/gi.test(textList[i])) {
+            let tlist = textList[i].replaceAll(/^(sub)*?(order|family|class)\s/gi, "").split(":");
+            tlist.map((e) => e.split("/"));
+            tlist = [].concat(...tlist);
+            tlist.map((e) => e.split(", "));
+            tlist = [].concat(...tlist);
+            if(/^(sub)*?class\s/gi.test(textList[i])){
+                let h6 = document.createElement("h6");
+                h6.innerText = textList[i].replaceAll(/^(sub)*?(order|family|class)\s/gi, "");
+                individualCheckboxes.appendChild(h6);
+            }else{
+                let lab = document.createElement("label");
+                let cb = document.createElement("input")
+                cb.type = "checkbox"
+                cb.id = tlist[0];
+                cb.checked = true;
+                lab.appendChild(cb);
+                lab.appendChild(document.createTextNode(textList[i].replaceAll(/^(sub)*?(order|family|class)\s/gi, "").replaceAll(/\s?:\s?/g, ": ")));
+                lab.appendChild(document.createElement("br"));
+                cb.classList.add("indivCb");
+    
+                if (/^order\s/i.test(textList[i])){
+                    currentOrder = tlist[0];
+                    if(/^family\s/i.test(textList[i + 1].trim()))
+                        cb.addEventListener('change', () => updateCheckboxes())
+                    else                    
+                        list.push(tlist);
+    
+    
+                }
+                if (includeOrders && /^family\s/i.test(textList[i]))
+                    tlist.push(currentOrder);
+                if (/^family\s/i.test(textList[i])){
+                    list.push(tlist);
+                    lab.classList.add("specific");
+                    cb.classList.add(currentOrder);
+                }
+                individualCheckboxes.appendChild(lab);
+            }
+            
+        }else if(textList[i].length>0){
             list.push(textList[i]);
         }
     }
