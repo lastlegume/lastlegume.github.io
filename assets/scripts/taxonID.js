@@ -79,12 +79,17 @@ async function makeQuestion() {
         correctAnswer = availableList[speciesIdx];
         species = availableList[speciesIdx][0];
         response = JSON.parse(localStorage.getItem("t+++"+species));
-        if (!response || (Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.reduce((prev, cur) => prev + cur) > 50) {
+        if (!response || (Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.length>0 && response.usage.reduce((prev, cur) => prev + cur) > 50) {
             work.alt = "Choosing an image...";
             await new Promise(r => setTimeout(r, 1500))
             lastAPICall = Date.now();
             response = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
             response = (await response.json()).results;
+            if(response.length==0){
+                response = await fetch(`https://api.inaturalist.org/v1/observations?q=${species}&has[]=photos`, { method: "GET" });
+                response = (await response.json()).results; 
+            }
+
             let photos = [];
             response.forEach((val) => photos.push(...val.photos.map((p) => p.url)))
             response = { "date": Math.floor(Date.now() / 86400000), "usage": new Array(photos.length).fill(0), "response": photos };
@@ -117,6 +122,10 @@ async function makeQuestion() {
         //    await new Promise(r => setTimeout(r, 1000))
         nextResponse = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
         nextResponse = (await nextResponse.json()).results;
+        if(response.length==0){
+            response = await fetch(`https://api.inaturalist.org/v1/observations?q=${species}&has[]=photos`, { method: "GET" });
+            response = (await response.json()).results; 
+        }
         lastAPICall = Date.now();
         let nextPhotos = [];
         nextResponse.forEach((val) => nextPhotos.push(...val.photos.map((p) => p.url)))
