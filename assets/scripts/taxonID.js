@@ -296,7 +296,7 @@ function clearStorage() {
     localStorage.clear();
 }
 function hint() {
-    hintBlank.innerText = list[speciesIdx][hintSci.checked ? 0 : 1].substring(0, hintIdx) + " _".repeat(Math.max(list[speciesIdx][hintSci.checked ? 0 : 1].length - hintIdx, 0));
+    hintBlank.innerText = correctAnswer[hintSci.checked ? 0 : 1].substring(0, hintIdx) + " _".repeat(Math.max(correctAnswer[hintSci.checked ? 0 : 1].length - hintIdx, 0));
     hintIdx++;
 }
 function newPicture() {
