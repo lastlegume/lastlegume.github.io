@@ -58,12 +58,12 @@ function check() {
 }
 async function makeQuestion() {
     let availableList = [];
-    for(let i = 0;i<list.length;i++){
-        if(document.getElementById(list[i][0]).checked)
+    for (let i = 0; i < list.length; i++) {
+        if (document.getElementById(list[i][0]).checked)
             availableList.push(list[i]);
     }
     console.log(availableList);
-    if(availableList.length==0){
+    if (availableList.length == 0) {
         availableList.push(list[0]);
     }
     if (!localData) {
@@ -74,20 +74,20 @@ async function makeQuestion() {
             await new Promise(r => setTimeout(r, timeBetweenCheckPress - (Date.now() - lastCheckPress)))
         }
         speciesIdx = nextIndex;
-        if (speciesIdx == -1||speciesIdx>=availableList.length||availableList[speciesIdx][0]!==nextIndex)
+        if (speciesIdx == -1 || speciesIdx >= availableList.length || availableList[speciesIdx][0] !== nextIndex)
             speciesIdx = Math.floor(Math.random() * availableList.length);
         correctAnswer = availableList[speciesIdx];
         species = availableList[speciesIdx][0];
-        response = JSON.parse(localStorage.getItem("t+++"+species));
-        if (!response || (Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.length>0 && response.usage.reduce((prev, cur) => prev + cur) > 50) {
+        response = JSON.parse(localStorage.getItem("t+++" + species));
+        if (!response || (Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.length > 0 && response.usage.reduce((prev, cur) => prev + cur) > 50) {
             work.alt = "Choosing an image...";
             await new Promise(r => setTimeout(r, 1500))
             lastAPICall = Date.now();
             response = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
             response = (await response.json()).results;
-            if(response.length==0){
+            if (response.length == 0) {
                 response = await fetch(`https://api.inaturalist.org/v1/observations?q=${species}&has[]=photos`, { method: "GET" });
-                response = (await response.json()).results; 
+                response = (await response.json()).results;
             }
 
             let photos = [];
@@ -106,7 +106,7 @@ async function makeQuestion() {
     }
     random = weightedOptions[Math.floor(Math.random() * weightedOptions.length)]
     response.usage[random]++;
-    localStorage.setItem("t+++"+species, JSON.stringify(response));
+    localStorage.setItem("t+++" + species, JSON.stringify(response));
     work.alt = "Identify this";
 
     answer.value = "";
@@ -117,20 +117,20 @@ async function makeQuestion() {
 
     nextIndex = Math.floor(Math.random() * availableList.length);
     species = availableList[nextIndex][0];
-    let nextResponse = JSON.parse(localStorage.getItem("t+++"+species));
+    let nextResponse = JSON.parse(localStorage.getItem("t+++" + species));
     if (!nextResponse || (Math.floor(Date.now() / 86400000) - nextResponse.date > 5) || nextResponse.usage.reduce((prev, cur) => prev + cur) > 50) {
         //    await new Promise(r => setTimeout(r, 1000))
         nextResponse = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
         nextResponse = (await nextResponse.json()).results;
-        if(response.length==0){
+        if (response.length == 0) {
             response = await fetch(`https://api.inaturalist.org/v1/observations?q=${species}&has[]=photos`, { method: "GET" });
-            response = (await response.json()).results; 
+            response = (await response.json()).results;
         }
         lastAPICall = Date.now();
         let nextPhotos = [];
         nextResponse.forEach((val) => nextPhotos.push(...val.photos.map((p) => p.url)))
         nextResponse = { "date": Math.floor(Date.now() / 86400000), "usage": new Array(nextPhotos.length).fill(0), "response": nextPhotos };
-        localStorage.setItem("t+++"+species, JSON.stringify(nextResponse));
+        localStorage.setItem("t+++" + species, JSON.stringify(nextResponse));
     }
 }
 
@@ -205,16 +205,16 @@ function createList(includeOrders) {
     let textList = speciesList.textContent.split("\n");
     individualCheckboxes.textContent = "";
     let currentOrder = "";
-    list=[];
+    list = [];
     for (let i = 0; i < textList.length; i++) {
         textList[i] = textList[i].trim();
         // for 2015 list
         if (/^\*?[\w]{1,3}\.\s/.test(textList[i])) {
             //        if (/^\*?[\d]+.\s/.test(textList[i]) || (i < textList.length - 1 && !/^\*?[\d]+.\s/.test(textList[i + 1].trim()) && /^\*?[a-zA-Z]+.\s/.test(textList[i]))) {
             let tlist = textList[i].replaceAll(/^\*?[\w]+\.\s/g, "").split(":");
-            tlist.map((e) => e.split("/"));
+            tlist = tlist.map((e) => e.split("/"));
             tlist = [].concat(...tlist);
-            tlist.map((e) => e.split(", "));
+            tlist = tlist.map((e) => e.split(", "));
             tlist = [].concat(...tlist);
             let lab = document.createElement("label");
             let cb = document.createElement("input")
@@ -226,35 +226,35 @@ function createList(includeOrders) {
             lab.appendChild(document.createElement("br"));
             cb.classList.add("indivCb");
 
-            if (/^\*?[a-zA-Z]{1,2}\.\s/.test(textList[i])){
+            if (/^\*?[a-zA-Z]{1,2}\.\s/.test(textList[i])) {
                 currentOrder = tlist[0];
-                if(/^\*?[\d]{1,2}\.\s/.test(textList[i + 1].trim()))
+                if (/^\*?[\d]{1,2}\.\s/.test(textList[i + 1].trim()))
                     cb.addEventListener('change', () => updateCheckboxes())
-                else                    
+                else
                     list.push(tlist);
 
 
             }
             if (includeOrders && (/^\*?[\d]+\.\s/.test(textList[i])))
                 tlist.push(currentOrder);
-            if (/^\*?[\d]+\.\s/.test(textList[i])){
+            if (/^\*?[\d]+\.\s/.test(textList[i])) {
                 list.push(tlist);
                 lab.classList.add("specific");
                 cb.classList.add(currentOrder);
             }
             individualCheckboxes.appendChild(lab);
-        // for 2024 list 
+            // for 2024 list 
         } else if (/^(sub)*?(order|family|class)\s/gi.test(textList[i])) {
             let tlist = textList[i].replaceAll(/^(sub)*?(order|family|class)\s/gi, "").split(":");
-            tlist.map((e) => e.split("/"));
+            tlist = tlist.map((e) => e.split("/"));
             tlist = [].concat(...tlist);
-            tlist.map((e) => e.split(", "));
+            tlist = tlist.map((e) => e.split(", "));
             tlist = [].concat(...tlist);
-            if(/^(sub)*?class\s/gi.test(textList[i])){
+            if (/^(sub)*?class\s/gi.test(textList[i])) {
                 let h6 = document.createElement("h6");
                 h6.innerText = textList[i].replaceAll(/^(sub)*?(order|family|class)\s/gi, "");
                 individualCheckboxes.appendChild(h6);
-            }else{
+            } else {
                 let lab = document.createElement("label");
                 let cb = document.createElement("input")
                 cb.type = "checkbox"
@@ -264,27 +264,27 @@ function createList(includeOrders) {
                 lab.appendChild(document.createTextNode(textList[i].replaceAll(/^(sub)*?(order|family|class)\s/gi, "").replaceAll(/\s?:\s?/g, ": ")));
                 lab.appendChild(document.createElement("br"));
                 cb.classList.add("indivCb");
-    
-                if (/^order\s/i.test(textList[i])){
+
+                if (/^order\s/i.test(textList[i])) {
                     currentOrder = tlist[0];
-                    if(/^family\s/i.test(textList[i + 1].trim()))
+                    if (/^family\s/i.test(textList[i + 1].trim()))
                         cb.addEventListener('change', () => updateCheckboxes())
-                    else                    
+                    else
                         list.push(tlist);
-    
-    
+
+
                 }
                 if (includeOrders && /^family\s/i.test(textList[i]))
                     tlist.push(currentOrder);
-                if (/^family\s/i.test(textList[i])){
+                if (/^family\s/i.test(textList[i])) {
                     list.push(tlist);
                     lab.classList.add("specific");
                     cb.classList.add(currentOrder);
                 }
                 individualCheckboxes.appendChild(lab);
             }
-            
-        }else if(textList[i].length>0){
+
+        } else if (textList[i].length > 0) {
             list.push(textList[i]);
         }
     }
@@ -321,24 +321,24 @@ function newPicture() {
 }
 function updateCheckboxes() {
     let cbs = document.getElementsByClassName('indivCb');
-    for(let i = 0;i<cbs.length;i++){
+    for (let i = 0; i < cbs.length; i++) {
         let specificCbs = document.getElementsByClassName(cbs[i].id);
-        for(let j = 0;j<specificCbs.length;j++){
+        for (let j = 0; j < specificCbs.length; j++) {
             specificCbs[j].checked = cbs[i].checked;
         }
     }
 }
-function adjustAll(){
-    selectAll.parentNode.childNodes[1].textContent = selectAll.checked?"Deselect All":"Select All"; 
+function adjustAll() {
+    selectAll.parentNode.childNodes[1].textContent = selectAll.checked ? "Deselect All" : "Select All";
     let cbs = document.getElementsByClassName('indivCb');
-    for(let i = 0;i<cbs.length;i++){
+    for (let i = 0; i < cbs.length; i++) {
         cbs[i].checked = selectAll.checked;
     }
 }
-function getValidKeys(str){
+function getValidKeys(str) {
     let list = [];
-    for(let i = 0;i<localStorage.length;i++){
-        if(localStorage.key(i).substring(0,str.length)===str){
+    for (let i = 0; i < localStorage.length; i++) {
+        if (localStorage.key(i).substring(0, str.length) === str) {
             list.push(i);
         }
     }
