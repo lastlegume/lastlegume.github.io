@@ -30,19 +30,23 @@ let response = "";
 let hintIdx = 1;
 let localData = "";
 let nextIndex = -1;
+let nextResponse = "";
 let timeBetweenCalls = 1500;
 let timeBetweenCheckPress = 500;
 let lastAPICall = Date.now() + 1000;
 let lastCheckPress = Date.now();
+let waitingForAPICall = false; 
 
 let apiCall = "https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research";
 answer.addEventListener("keydown", (e) => process(e));
 var list = [];
+let taxonIdList = [];
 createList(allowOrders.checked);
 
 function check() {
     if (checkTiming())
         return;
+    lastCheckPress = Date.now();
 
     if (fuzzyEquals(answer.value.toLowerCase().trim(), [...correctAnswer])) {
         reply.innerHTML = "Correct! The specimen is <span style = \"color: forestgreen;\">" + correctAnswer.join(" or ") + "</span>.";
@@ -53,19 +57,31 @@ function check() {
         reply.style.setProperty('background-color', 'crimson');
         response.usage[random] -= .75;
     }
-    lastCheckPress = Date.now()
+    lastCheckPress = Date.now();
     makeQuestion();
 }
+//makes the next question and starts querying for the question after
 async function makeQuestion() {
+    //availableList is the list of all checked families/orders
     let availableList = [];
+    // list of available taxon ids
+    let availableIds = [];
+
     for (let i = 0; i < list.length; i++) {
-        if (document.getElementById(list[i][0]).checked)
+        // gets the checkbox for the specific family/order and checks if it checked
+        if (document.getElementById(list[i][0]).checked) {
             availableList.push(list[i]);
+            availableIds.push(taxonIdList[i]);
+        }
     }
-    console.log(availableList);
+    //console.log(availableList);
+    //console.log(availableIds);
+
+    //failsafe in case they check nothing
     if (availableList.length == 0) {
         availableList.push(list[0]);
     }
+    //localData is to decrease the load time of the first question using a taxon that is in localstorage
     if (!localData) {
         if (Date.now() - lastAPICall < timeBetweenCalls) {
             await new Promise(r => setTimeout(r, timeBetweenCalls - (Date.now() - lastAPICall)))
@@ -74,30 +90,35 @@ async function makeQuestion() {
             await new Promise(r => setTimeout(r, timeBetweenCheckPress - (Date.now() - lastCheckPress)))
         }
         speciesIdx = nextIndex;
-        if (speciesIdx == -1 || speciesIdx >= availableList.length || availableList[speciesIdx][0] !== nextIndex)
+
+        //if next index is no longer a valid species, then choose a new index
+        if (speciesIdx == -1 || speciesIdx >= availableList.length || availableList[speciesIdx][0] !== species)
             speciesIdx = Math.floor(Math.random() * availableList.length);
         correctAnswer = availableList[speciesIdx];
-        species = availableList[speciesIdx][0];
-        response = JSON.parse(localStorage.getItem("t+++" + species));
-        if (!response || (Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.length > 0 && response.usage.reduce((prev, cur) => prev + cur) > 50) {
-            work.alt = "Choosing an image...";
-            await new Promise(r => setTimeout(r, 1500))
-            lastAPICall = Date.now();
-            response = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
-            response = (await response.json()).results;
-            if (response.length == 0) {
-                response = await fetch(`https://api.inaturalist.org/v1/observations?q=${species}&has[]=photos`, { method: "GET" });
-                response = (await response.json()).results;
-            }
+        if (species === availableList[speciesIdx][0] && nextResponse!=null) {
+            species = availableList[speciesIdx][0];
+            response = nextResponse;
+        } else {
+            species = availableList[speciesIdx][0];
+            response = JSON.parse(localStorage.getItem("t+++" + species));
+            if (!response || (Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.length > 0 && response.usage.reduce((prev, cur) => prev + cur) > 50) {
+                work.alt = "Choosing an image...";
+                await new Promise(r => setTimeout(r, 1500))
+                lastAPICall = Date.now();
+                waitingForAPICall = true;
+                response = await requestData(species, availableIds[speciesIdx])
 
-            let photos = [];
-            response.forEach((val) => photos.push(...val.photos.map((p) => p.url)))
-            response = { "date": Math.floor(Date.now() / 86400000), "usage": new Array(photos.length).fill(0), "response": photos };
+                let photos = [];
+                response.forEach((val) => photos.push(...val.photos.map((p) => p.url)))
+                response = { "date": Math.floor(Date.now() / 86400000), "usage": new Array(photos.length).fill(0), "response": photos };
+            }
         }
+
     } else {
         response = JSON.parse(localData)
         localData = null;
     }
+    console.log(species);
 
     let options = response.response;
     let weightedOptions = [];
@@ -117,21 +138,20 @@ async function makeQuestion() {
 
     nextIndex = Math.floor(Math.random() * availableList.length);
     species = availableList[nextIndex][0];
-    let nextResponse = JSON.parse(localStorage.getItem("t+++" + species));
+    nextResponse = JSON.parse(localStorage.getItem("t+++" + species));
     if (!nextResponse || (Math.floor(Date.now() / 86400000) - nextResponse.date > 5) || nextResponse.usage.reduce((prev, cur) => prev + cur) > 50) {
         //    await new Promise(r => setTimeout(r, 1000))
-        nextResponse = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
-        nextResponse = (await nextResponse.json()).results;
-        if (response.length == 0) {
-            response = await fetch(`https://api.inaturalist.org/v1/observations?q=${species}&has[]=photos`, { method: "GET" });
-            response = (await response.json()).results;
-        }
+        lastAPICall = Date.now();
+        waitingForAPICall = true;
+        nextResponse = await requestData(species, availableIds[nextIndex])
         lastAPICall = Date.now();
         let nextPhotos = [];
         nextResponse.forEach((val) => nextPhotos.push(...val.photos.map((p) => p.url)))
         nextResponse = { "date": Math.floor(Date.now() / 86400000), "usage": new Array(nextPhotos.length).fill(0), "response": nextPhotos };
         localStorage.setItem("t+++" + species, JSON.stringify(nextResponse));
     }
+    waitingForAPICall = false;
+
 }
 
 function contains(arr, val) {
@@ -150,6 +170,8 @@ function process(event) {
         check();
 }
 function checkTiming() {
+    if(waitingForAPICall)
+        lastCheckPress = Date.now();
     if (Date.now() - lastAPICall < timeBetweenCalls) {
         reply.innerHTML = `Please wait <span style="color: LemonChiffon;">${((timeBetweenCalls - (Date.now() - lastAPICall)) / 1000).toPrecision(3)}</span> seconds before checking again`;
         reply.style.setProperty('background-color', 'burlywood');
@@ -201,13 +223,25 @@ function fuzzy(guess, answer) {
     return score > neededFuzzyAmount ** fuzziness;
 }
 
-function createList(includeOrders) {
+async function createList(includeOrders) {
+    if (speciesList.textContent === "") {
+        let exList = await fetch("/assets/taxonid/lists/2024_so_ento.txt");
+        exList = await exList.text();
+        speciesList.textContent = exList;
+    }
+
     let textList = speciesList.textContent.split("\n");
     individualCheckboxes.textContent = "";
     let currentOrder = "";
     list = [];
     for (let i = 0; i < textList.length; i++) {
         textList[i] = textList[i].trim();
+        let id = "";
+        if (/%[\d]{1,9}/.test(textList[i])) {
+            id = textList[i].match(/%[\d]{1,9}/)[0].trim().substring(1);
+            textList[i] = textList[i].replaceAll(/%[\d]{1,9}/g, "").trim();
+        }
+
         // for 2015 list
         if (/^\*?[\w]{1,3}\.\s/.test(textList[i])) {
             //        if (/^\*?[\d]+.\s/.test(textList[i]) || (i < textList.length - 1 && !/^\*?[\d]+.\s/.test(textList[i + 1].trim()) && /^\*?[a-zA-Z]+.\s/.test(textList[i]))) {
@@ -250,6 +284,8 @@ function createList(includeOrders) {
             tlist = [].concat(...tlist);
             tlist = tlist.map((e) => e.split(", "));
             tlist = [].concat(...tlist);
+            tlist = tlist.map((e) => e.replaceAll("*", ""));
+
             if (/^(sub)*?class\s/gi.test(textList[i])) {
                 let h6 = document.createElement("h6");
                 h6.innerText = textList[i].replaceAll(/^(sub)*?(order|family|class)\s/gi, "");
@@ -269,8 +305,11 @@ function createList(includeOrders) {
                     currentOrder = tlist[0];
                     if (/^family\s/i.test(textList[i + 1].trim()))
                         cb.addEventListener('change', () => updateCheckboxes())
-                    else
+                    else {
                         list.push(tlist);
+                        taxonIdList.push(id);
+
+                    }
 
 
                 }
@@ -280,11 +319,18 @@ function createList(includeOrders) {
                     list.push(tlist);
                     lab.classList.add("specific");
                     cb.classList.add(currentOrder);
+                    taxonIdList.push(id);
+
                 }
                 individualCheckboxes.appendChild(lab);
             }
 
         } else if (textList[i].length > 0) {
+            if (/%[\d]{1,9}/.test(textList[i])) {
+                taxonIdList.push(textList[i].match(/%[\d]{1,9}/)[0].trim().substring(1));
+                textList[i] = textList[i].replaceAll(/%[\d]{1,9}/g, "").trim();
+            } else
+                taxonIdList.push("");
             list.push(textList[i]);
         }
     }
@@ -343,4 +389,22 @@ function getValidKeys(str) {
         }
     }
     return list;
+}
+async function requestData(species, id) {
+    let tresponse = "";
+    if (id)
+        tresponse = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", id).replaceAll("q", "taxon_id"), { method: "GET" });
+    else
+        tresponse = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
+
+    tresponse = (await tresponse.json()).results;
+    if (tresponse.length == 0) {
+        if (id)
+            tresponse = await fetch(`https://api.inaturalist.org/v1/observations?taxon_id=${id}&has[]=photos`, { method: "GET" });
+        else
+            tresponse = await fetch(`https://api.inaturalist.org/v1/observations?q=${species}&has[]=photos`, { method: "GET" });
+        tresponse = (await tresponse.json()).results;
+    }
+    return tresponse;
+
 }

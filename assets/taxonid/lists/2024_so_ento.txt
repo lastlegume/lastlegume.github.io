@@ -1,7 +1,7 @@
 Class Entognatha
-Order Protura: telsontails, proturans
-Order Collembola: springtails, snow fleas
-Order Diplura: diplurans
+Order Protura: telsontails, proturans %83242
+Order Collembola: springtails, snow fleas %49470
+Order Diplura: diplurans %56215
 Class Insecta
 Order Archaeognatha: bristletails
 Order Zygentoma: silverfish, firebrats
@@ -54,7 +54,7 @@ Order Neuroptera: lacewings, antlions
 Family Chrysopidae: green lacewings
 Family Myrmeleontidae: antlions *
 Order Coleoptera:beetles
-Family Cicindelidae:tiger beetles1
+Family Cicindelidae:tiger beetles
 Family Carabidae:ground beetles
 Family Dytiscidae:predaceous diving beetles
 Family Gyrinidae:whirligig beetles
@@ -79,7 +79,7 @@ Family Chrysomelidae:leaf beetles
 Family Curculionidae:weevils
 Order Strepsiptera: Twisted-Wing Parasite
 Order Mecoptera:scorpionflies
-Family Boreidae: snow scorpionflies
+Family Boreidae: snow scorpionflies %173350
 Family Panorpidae: common scorpionflies
 Order Raphidioptera: Snakeflies
 Family Raphidiidae: Raphidiid Snakeflies
