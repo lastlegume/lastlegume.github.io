@@ -36,6 +36,8 @@ let timeBetweenCheckPress = 500;
 let lastAPICall = Date.now() + 1000;
 let lastCheckPress = Date.now();
 let waitingForAPICall = false; 
+let url = "";
+
 
 let apiCall = "https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research";
 answer.addEventListener("keydown", (e) => process(e));
@@ -49,11 +51,11 @@ function check() {
     lastCheckPress = Date.now();
 
     if (fuzzyEquals(answer.value.toLowerCase().trim(), [...correctAnswer])) {
-        reply.innerHTML = "Correct! The specimen is <span style = \"color: forestgreen;\">" + correctAnswer.join(" or ") + "</span>.";
+        reply.innerHTML = "Correct! The specimen is <span style = \"color: forestgreen;\">" + correctAnswer.join(" or ") + "</span>.<br><a class = \"correct\" href=\""+url+"\">Observation link</a>";
         reply.style.setProperty('background-color', 'darkseagreen');
     }
     else {
-        reply.innerHTML = "Incorrect. The specimen is <span style = \"color: lightsalmon;\">" + correctAnswer.join(" or ") + "</span>.";
+        reply.innerHTML = "Incorrect. The specimen is <span style = \"color: lightsalmon;\">" + correctAnswer.join(" or ") + "</span>.<br><a class = \"incorrect\" href=\""+url+"\">Observation link</a>";
         reply.style.setProperty('background-color', 'crimson');
         response.usage[random] -= .75;
     }
@@ -109,7 +111,7 @@ async function makeQuestion() {
                 response = await requestData(species, availableIds[speciesIdx])
 
                 let photos = [];
-                response.forEach((val) => photos.push(...val.photos.map((p) => p.url)))
+                response.forEach((val) => photos.push(...val.photos.map((p) => [p.url, val.uri])))
                 response = { "date": Math.floor(Date.now() / 86400000), "usage": new Array(photos.length).fill(0), "response": photos };
             }
         }
@@ -134,7 +136,9 @@ async function makeQuestion() {
     hintIdx = 1;
     question.textContent = "What taxon is this specimen a part of?";
 
-    work.src = options[random].replaceAll("square", "small");
+    console.log(options);
+    url = options[random][1];
+    work.src = options[random][0].replaceAll("square", "small");
 
     nextIndex = Math.floor(Math.random() * availableList.length);
     species = availableList[nextIndex][0];
@@ -146,7 +150,7 @@ async function makeQuestion() {
         nextResponse = await requestData(species, availableIds[nextIndex])
         lastAPICall = Date.now();
         let nextPhotos = [];
-        nextResponse.forEach((val) => nextPhotos.push(...val.photos.map((p) => p.url)))
+        nextResponse.forEach((val) => nextPhotos.push(...val.photos.map((p) => [p.url, val.uri])))
         nextResponse = { "date": Math.floor(Date.now() / 86400000), "usage": new Array(nextPhotos.length).fill(0), "response": nextPhotos };
         localStorage.setItem("t+++" + species, JSON.stringify(nextResponse));
     }
@@ -336,7 +340,7 @@ async function createList(includeOrders) {
     }
     console.log(list);
     let validKeys = getValidKeys("t+++");
-    if (validKeys.length > 0) {//needs to be rewritten
+    if (validKeys.length > 0) {//needs to be rewritten // appears to be resolved
         random = Math.floor(Math.random() * validKeys.length);
         localData = localStorage.getItem(localStorage.key(random))
         species = localStorage.key(random).substring(4);
