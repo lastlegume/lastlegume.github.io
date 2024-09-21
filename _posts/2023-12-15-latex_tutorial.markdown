@@ -89,13 +89,25 @@ This is the package that specifies text color (shocking, I know). In this case, 
 These are the only two packages that I include in the preamble. There are a lot of other useful ones like mhchem, amsmath, or circuitikz, but since the template does not require any more, I chose not to add any unneccessary packages.
 
 ```latex
+% When not commented, \printanswers will show all of the answers to questions and change some other things. Using this function, you can create both a key and test in the same document simply by uncommenting or commenting \printanswers
+%\printanswers
+```
+
+`\printanswers` switches the test from a test to a key by showing all of the answers. Any answers marked with `\correctchoice`, solution environments like solutionbox, or `\fillin` will appear when this line is not commented.
+
+```latex
+%*** Important - Update these 3 commands to update the entire test ***
 % Change "Event" to the name of the event
 \newcommand{\event}{Event}
 % Change "Tournament" to the name of the tournament
 \newcommand{\tournament}{Tournament}
+% If the test is a class set or answer sheet, change "0" to a 1 if this test is intended to be a class set or 2 if it is intended to be an answer sheet. Keep it at 0 if the test should be a normal test (not a class set). 
+%Any other type of test such as image sheet or stations must be created manually, though the presents may help in their creation.
+\def\type{0}
 ```
 
-These lines define two commands that are used later. To simply things, I use a special command that encodes the name of the tournament and the name of the event so that I can change event across the whole test with only one modification.
+These are probably the most important lines in the preamble for users. They define a few commands that are used later. To simply things, I use a special command that encodes the name of the tournament and the name of the event so that I can change event across the whole test with only one modification.   
+I also have a command to create a variable for the type of test: 0 for a normal test, 1 for a class set, and 2 for an answer sheet. When type is 1, the test switches to contain reminders that competitors are not supposed to write on the test. When type is 2, the text on the title page changes to answer sheet.
 
 ```latex
 \setlength\fillinlinelength{\textwidth}
@@ -125,12 +137,12 @@ This is commented by default, but if you are using the `\section{}` command, the
 ```latex
 \pagestyle{headandfoot}
 \runningheadrule
-\runningheader{\event}{\tournament}{Team Number:\hspace{1cm}}
+\runningheader{\event}{\tournament}{\ifnum\type=1 Class Set Test \else Team Number:\hspace{1cm} \fi }
 \runningfootrule
-\runningfooter{}{Page \thepage\   of \numpages}{}
-```
+\runningfooter{}{Page \the\numexpr\thepage-1\   of \the\numexpr\numpages-1}{}
+%\runningfooter{}{Page \thepage\   of \numpages}{}```
 
-These lines create the header and footer. The first line sets up the page to have a header and footer. `\runningheadrule` creates the line at the top of the page. `\runningheader{}{}{}` decides what text is shown in the header. Each set of braces corresponds to a part of the header, with the first being the left part of the header, second being middle, and third being right (i.e. text is right aligned). The next two lines do the same but for the footer. With these parameters, the header includes the event, tournament, and a space for team number, and the footer includes the page number and the total number of pages.       
+These lines create the header and footer. The first line sets up the page to have a header and footer. `\runningheadrule` creates the line at the top of the page. `\runningheader{}{}{}` decides what text is shown in the header. Each set of braces corresponds to a part of the header, with the first being the left part of the header, second being middle, and third being right (i.e. text is right aligned). The next two lines do the same but for the footer. With these parameters, the header includes the event, tournament, and a space for team number (or a reminder that the test is a class set), and the footer includes the page number and the total number of pages. The number of pages is subtracted by one to remove the title page from the page count. If you do not want this, comment the footer line and uncomment the commented line to add the title page to the page count.           
 Interestingly, the documentation states that `\pagestyle` "determines whether the exam will have headers, footers,
 both, or neither.", but removing this command does not change anything (the header and footer both still appear). Therefore, this first line might not be needed, but I've kept it in to make sure that it will still work if the default pagestyle changes. 
 
@@ -143,22 +155,23 @@ With the use of `\begin{document}`, the preamble has ended. This preamble is rel
     \ifprintanswers 
      \space Key
     \else 
-     \space Test 
+     \space \ifnum\type<2 Test \fi \ifnum\type=1 \textbf{(CLASS SET)} \fi \ifnum\type=2 Answer Sheet \fi
     \fi \\ \vspace{3mm}\tournament\vspace{1mm}}
 \end{center}
 ```
 
 These lines create a centered title. `\ifprintanswers` does exactly what it sounds like, use `\else` to specify what to show otherwise, and `\fi` to end the conditional. I use it here to toggle between the title being "Key" if answers are shown or "Test" if not. 
+The other conditionals change the text from test to class set or answer sheet when the type is different.  
 
 ```latex
 \begin{figure}[h]
     \centering
     % The braces include the reference to the image, so they must be changed to add/change to a new image 
-    \includegraphics[height=.3\textheight]{Logo.png}
+    \includegraphics[height=.3\textheight, width=.6\textwidth, keepaspectratio]{placeholder.png}
 \end{figure}
 ```
 
-Figures allow for the insertion of an image. You do not need a figure to insert an image, but it's usually better to use one instead of just using includegraphics. The `[h]` after the environment begins is a float specifier which you can read more about [here](https://www.overleaf.com/learn/latex/Positioning_images_and_tables), and it tries to place the image where the image is in the text. This often will not work and LaTeX will automatically switch it to [ht], which places it at the top of the page. In this case, this figure is for a cover image if desired (I usually use the logo of the tournament that the test is for). 
+Figures allow for the insertion of an image. You do not need a figure to insert an image, but it's usually better to use one instead of just using includegraphics. The `[h]` after the environment begins is a [float specifier](https://www.overleaf.com/learn/latex/Positioning_images_and_tables), and it tries to place the image where the image is in the text. This often will not work and LaTeX will automatically switch it to [ht], which places it at the top of the page. In this case, this figure is for a cover image if desired (I usually use the logo of the tournament that the test is for). 
 
 ```latex
 \begin{center}
@@ -176,12 +189,13 @@ These lines add a line for teams to write their name on. It changes the team nam
 ```latex
 \noindent\textbf{\underline{Directions:}}
 \begin{itemize}
+    \ifnum\type=1 \item \textbf{This test is a class set.} Please do not write any answers on this paper. \fi
     \item This is an instruction
     \item Use \verb+\item+ to add more instructions
 \end{itemize}
 ```
 
-The itemize environment creates a bulleted or unordered list. I use this here to list instructions for the test. 
+The itemize environment creates a bulleted or unordered list. I use this here to list instructions for the test, with another conditional to show an extra instruction about not writing on the test when the test has been marked as a class set.
 
 ```latex
 \begin{center}
@@ -194,3 +208,7 @@ The itemize environment creates a bulleted or unordered list. I use this here to
 The gradetable shows a list of all of the pages and number of points on each page. It leaves a space underneath the point value for you to write the score of the test taker. If you don't plan on writing on the gradetable, `\multirowpointtable` could be used instead because it lacks the space underneath the points for the score and shows only the page and number of points. Like the comments say, it's probably better to change the formula into a number of rows manually, but the formula can serve as a starting point for the number of rows. 
 
 That's everything in the template explained, so I hope this helps make the meaning behind every line more clear. Thanks for reading to the end, and I hope this helps you write something easier.  
+
+
+Last updated: September 21, 2024
+
