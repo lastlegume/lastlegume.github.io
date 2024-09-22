@@ -71,7 +71,7 @@ Family Lampyridae:fireflies
 Family Cantharidae:soldier beetles
 Family Lycidae:net-winged beetles
 Family Cleridae:checkered beetles
-Family Coccinellidae:lady-bird beetles (ladybugs)
+Family Coccinellidae:lady-bird beetles/ladybugs
 Family Tenebrionidae:darkling beetles *
 Family Meloidae:blister beetles
 Family Cerambycidae:long-horned beetles *
