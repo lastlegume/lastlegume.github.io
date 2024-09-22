@@ -16,6 +16,8 @@ var strict = document.getElementById("strict");
 var allowOrders = document.getElementById("allowOrders");
 var hintSci = document.getElementById("hintSci");
 var selectAll = document.getElementById("selectAll");
+var showAnswerIfIncorrect = document.getElementById("showAnswerIfIncorrect");
+
 allowOrders.addEventListener('change', () => createList(allowOrders.checked));
 selectAll.addEventListener('change', () => adjustAll());
 
@@ -53,14 +55,20 @@ function check() {
     if (fuzzyEquals(answer.value.toLowerCase().trim(), [...correctAnswer])) {
         reply.innerHTML = "Correct! The specimen is <span style = \"color: forestgreen;\">" + correctAnswer.join(" or ") + "</span>.<br><a class = \"correct\" href=\""+url+"\">Observation link</a>";
         reply.style.setProperty('background-color', 'darkseagreen');
+        makeQuestion();
+
     }
-    else {
+    else if (showAnswerIfIncorrect.checked){
         reply.innerHTML = "Incorrect. The specimen is <span style = \"color: lightsalmon;\">" + correctAnswer.join(" or ") + "</span>.<br><a class = \"incorrect\" href=\""+url+"\">Observation link</a>";
         reply.style.setProperty('background-color', 'crimson');
         response.usage[random] -= .75;
+        makeQuestion();
+
+    }else{
+        reply.innerHTML = "Incorrect. Try again.";
+        reply.style.setProperty('background-color', 'crimson');
     }
     lastCheckPress = Date.now();
-    makeQuestion();
 }
 //makes the next question and starts querying for the question after
 async function makeQuestion() {
