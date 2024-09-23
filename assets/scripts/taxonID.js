@@ -45,6 +45,7 @@ let apiCall = "https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[
 answer.addEventListener("keydown", (e) => process(e));
 var list = [];
 let taxonIdList = [];
+
 createList(allowOrders.checked);
 
 function check() {
@@ -419,4 +420,8 @@ async function requestData(species, id) {
     }
     return tresponse;
 
+}
+
+function isIconicTaxa(taxa){
+    return taxa==="Plantae" || taxa==="Animalia" || taxa==="Mollusca" || taxa==="Reptilia" || taxa==="Aves" || taxa==="Amphibia" || taxa==="Actinopterygii" || taxa==="Mammalia" || taxa==="Insecta" || taxa==="Arachnida" || taxa==="Fungi" || taxa==="Protozoa" || taxa==="Chromista" 
 }
