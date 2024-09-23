@@ -376,7 +376,7 @@ function newPicture() {
     }
     random = weightedOptions[Math.floor(Math.random() * weightedOptions.length)]
     response.usage[random] += .1;
-    work.src = options[random].replaceAll("square", "small");
+    work.src = options[random][0].replaceAll("square", "small");
 }
 function updateCheckboxes() {
     let cbs = document.getElementsByClassName('indivCb');
