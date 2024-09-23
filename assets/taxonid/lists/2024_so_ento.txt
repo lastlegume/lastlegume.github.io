@@ -122,7 +122,7 @@ Family Cynipidae: gall wasps
 Family Mutillidae: velvet-ants
 Family Formicidae:ants
 Family Vespidae:paper wasps, hornets, yellowjackets
-Family Sphecidae: thread: waisted wasps
+Family Sphecidae: thread-waisted wasps
 Family Colletidae: Plaster bees
 Family Halictidae: Sweat bees
 Family Megachilidae: leaf cutter bees
