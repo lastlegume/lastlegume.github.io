@@ -15,7 +15,7 @@ Family Coenagrionidae: narrow-winged
 Order Blattodea: cockroaches/termites
 Order Mantodea: mantids
 Order Notoptera: ice crawlers %53795
-Order Dermaptera: earwigs
+Order Dermaptera: earwigs %47793
 Order Plecoptera: stoneflies
 Order Orthoptera: grasshoppers & crickets
 Family Tetrigidae: pygmy grasshopper
