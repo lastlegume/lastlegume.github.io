@@ -69,7 +69,7 @@ Family Buprestidae-metallic wood-boring/jewel beetles
 Family Elateridae:click beetles
 Family Lampyridae:fireflies
 Family Cantharidae:soldier beetles
-Family Lycidae:net-winged beetles
+Family Lycidae:net-winged beetles %49360
 Family Cleridae:checkered beetles
 Family Coccinellidae:lady-bird beetles/ladybugs
 Family Tenebrionidae:darkling beetles *
