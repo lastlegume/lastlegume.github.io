@@ -126,7 +126,7 @@ Family Sphecidae: thread-waisted wasps
 Family Colletidae: Plaster bees
 Family Halictidae: Sweat bees
 Family Megachilidae: leaf cutter bees
-Family Apidae:bees
+Family Apidae:bees %47221
 Subclass Acari: Mites and Ticks
 Order Ixodida: Ticks
 Family Ixodidae: Hardbacked ticks
