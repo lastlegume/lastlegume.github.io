@@ -238,7 +238,7 @@ function fuzzy(guess, answer) {
 
 async function createList(includeOrders) {
     if (speciesList.textContent === "") {
-        let exList = await fetch("/assets/taxonid/lists/2024_so_ento.txt");
+        let exList = await fetch("/assets/taxonid/lists/2025_so_ento.txt");
         exList = await exList.text();
         speciesList.textContent = exList;
     }
