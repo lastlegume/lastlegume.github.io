@@ -22,7 +22,9 @@ Still very much a work in progress. There are many bugs left to be ironed out, a
     <h3 class="header">Graph Settings</h3>
     <button class = "btn btn-submit" id="play">Play</button><button class = "btn btn-submit" id="step">Step</button><br>
     <label>Method: <select id="method">
-            <option selected value="euler">Euler's method</option>
+            <option value="euler">Euler's method</option>
+            <option selected value="rk2">2nd order Runge-Kutta (RK2)</option>
+
         </select></label><br>
     <label>Step size: <input id="step-size" type="number" min=".001" max="10" step="0.01" value="0.1"></label><br>
     <label for="prey">Prey growth type: </label>

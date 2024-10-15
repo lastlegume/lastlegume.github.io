@@ -84,10 +84,20 @@ function step() {
         clearInterval(intID);
         return;
     }
-    slopes[0].push(solve(eqs[0].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", populations[0][currentT]).replaceAll("P", populations[1][currentT])));
-    slopes[1].push(solve(eqs[1].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", populations[0][currentT]).replaceAll("P", populations[1][currentT])));
-    populations[0].push(populations[0][currentT] * 1 + stepSizeInput.value * slopes[0][currentT]);
-    populations[1].push(populations[1][currentT] * 1 + stepSizeInput.value * slopes[1][currentT]);
+    if(methodSelect.value==="euler"){
+        slopes[0].push(solve(eqs[0].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", populations[0][currentT]).replaceAll("P", populations[1][currentT])));
+        slopes[1].push(solve(eqs[1].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", populations[0][currentT]).replaceAll("P", populations[1][currentT])));
+        populations[0].push(populations[0][currentT] * 1 + stepSizeInput.value * slopes[0][currentT]);
+        populations[1].push(populations[1][currentT] * 1 + stepSizeInput.value * slopes[1][currentT]);
+    } else if(methodSelect.value==="rk2"){
+        let nstar = populations[0][currentT] * 1 + stepSizeInput.value/2 * solve(eqs[0].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", populations[0][currentT]).replaceAll("P", populations[1][currentT]));
+        let pstar = populations[1][currentT] * 1 + stepSizeInput.value/2 * solve(eqs[1].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", populations[0][currentT]).replaceAll("P", populations[1][currentT])); 
+        slopes[0].push(solve(eqs[0].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", nstar).replaceAll("P", pstar)));
+        slopes[1].push(solve(eqs[1].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", nstar).replaceAll("P", pstar)));
+        populations[0].push(populations[0][currentT] * 1 + stepSizeInput.value * slopes[0][currentT]);
+        populations[1].push(populations[1][currentT] * 1 + stepSizeInput.value * slopes[1][currentT]);
+    }
+
     if (populations[0].length > timeGraph.width - 80) {
         populations[0] = populations[0].slice(1);
         populations[1] = populations[1].slice(1);
