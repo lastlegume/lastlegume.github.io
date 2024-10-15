@@ -12,3 +12,5 @@ I've been writing Science Olympiad tests in LaTeX for a while, so recently, I de
 The [ScilympiadToLaTeX extension](/extensions#stl) also includes an option to export scilympiad into this template. Some code will still need to be manually changed, but the text from the export will be fairly close to being a finished test.
 
 I have also written a [guide](/blog/latex_tutorial) to the basics of writing a test with LaTeX to go along with the template. 
+
+Update 10/14/24: Now available as a [template on the official Overleaf gallery!](https://www.overleaf.com/latex/templates/science-olympiad-test-template/bmwwkvsbhkhj)
