@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Lotka Volterra Model
+title: Lotka-Volterra Model
 permalink: /lvmodel
 tools: 10
 ---
@@ -8,7 +8,8 @@ tools: 10
 
 <script defer src="/assets/scripts/graph.js"></script>
 <script defer src="/assets/scripts/lotkaVolterraModel.js"></script>
-# Basic LV Mechanics
+
+# Predator Prey Interactions and modifications of the Lotka-Volterra Model
 
 Still very much a work in progress. There are many bugs left to be ironed out, and I am planning to add a plot to show the ZNGIs (zero net growth isoclines).
 
@@ -24,9 +25,10 @@ Still very much a work in progress. There are many bugs left to be ironed out, a
     <label>Method: <select id="method">
             <option value="euler">Euler's method</option>
             <option selected value="rk2">2nd order Runge-Kutta (RK2)</option>
-
+            <!-- <option value="rk4">4th order Runge-Kutta (RK4)</option> -->
         </select></label><br>
     <label>Step size: <input id="step-size" type="number" min=".001" max="10" step="0.01" value="0.1"></label><br>
+    <label>Refresh Rate: <input id="refresh-rate" type="number" min="1" max="50" step="1" value="7"></label><br>
     <label for="prey">Prey growth type: </label>
     <label><input class="prey-growth" type="radio" checked name="prey" value="Exponential">Exponential</label>
     <label><input class="prey-growth" type="radio" name="prey" value="Logistic">Logistic</label>
@@ -91,6 +93,8 @@ Still very much a work in progress. There are many bugs left to be ironed out, a
 </label><br>
 </div>
 
+
+Variable names and equations taken from the second edition of Community Ecology by Gary G. Mittelbach & Brian J. McGill. 
 <!-- <br>
 Prey:
 

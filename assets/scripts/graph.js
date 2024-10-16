@@ -36,7 +36,7 @@ function graph(func, canvas, settings) {
     let ctx = canvas.getContext('2d');
     drawGrid(canvas, xInc, xlab, ylab, title, xlim, ylim, coords);
     //graph
-    console.log(funcs);
+    //console.log(funcs);
     for (let funcIdx = 0; funcIdx < funcs.length; funcIdx++) {
         func = funcs[funcIdx];
         ctx.globalAlpha = 1;
