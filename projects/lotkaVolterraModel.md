@@ -23,9 +23,9 @@ Still very much a work in progress. There are many bugs left to be ironed out, a
     <h3 class="header">Graph Settings</h3>
     <button class = "btn btn-submit" id="play">Play</button><button class = "btn btn-submit" id="step">Step</button><br>
     <label>Method: <select id="method">
-            <option value="euler">Euler's method</option>
+            <option value="euler">Euler's method (RK1)</option>
             <option selected value="rk2">2nd order Runge-Kutta (RK2)</option>
-            <!-- <option value="rk4">4th order Runge-Kutta (RK4)</option> -->
+            <option value="rk4">4th order Runge-Kutta (RK4)</option>
         </select></label><br>
     <label>Step size: <input id="step-size" type="number" min=".001" max="10" step="0.01" value="0.1"></label><br>
     <label>Refresh Rate: <input id="refresh-rate" type="number" min="1" max="50" step="1" value="7"></label><br>

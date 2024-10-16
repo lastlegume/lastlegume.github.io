@@ -112,6 +112,7 @@ function step() {
         clearInterval(intID);
         return;
     }
+    
     if (methodSelect.value === "euler") {
         let sol = f(populations[0][currentT], populations[1][currentT]);
         slopes[0].push(sol[0]);
@@ -127,6 +128,15 @@ function step() {
         slopes[1].push(sol[1]);
         populations[0].push(populations[0][currentT] + stepSize * slopes[0][currentT]);
         populations[1].push(populations[1][currentT] + stepSize * slopes[1][currentT]);
+    } else if (methodSelect.value === "rk4") {
+        let k1 = f(populations[0][currentT], populations[1][currentT]).map((e)=>e*stepSize);
+        let k2 = f(populations[0][currentT]+k1[0]/2, populations[1][currentT]+k1[1]/2).map((e)=>e*stepSize);
+        let k3 = f(populations[0][currentT]+k2[0]/2, populations[1][currentT]+k2[1]/2).map((e)=>e*stepSize);
+        let k4 = f(populations[0][currentT]+k3[0], populations[1][currentT]+k3[1]).map((e)=>e*stepSize);
+        slopes[0].push(1/6*(k1[0]+2*k2[0]+2*k3[0]+k4[0]));
+        slopes[1].push(1/6*(k1[1]+2*k2[1]+2*k3[1]+k4[1]));
+        populations[0].push(populations[0][currentT] + slopes[0][currentT]);
+        populations[1].push(populations[1][currentT] + slopes[1][currentT]);
     }
     if (populations[0].length > timeGraph.width - 80) {
         populations[0] = populations[0].slice(1);
@@ -146,8 +156,8 @@ function step() {
     minSlope = Math.min(slopes[0][currentT - 1], minSlope);
     minSlope = Math.min(slopes[1][currentT - 1], minSlope);
     if (refreshCounter % refreshRate == 0) {
-        graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": [0, 10], "ylim": [0, maxPop], "col": colors });
-        graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Growth Rate", "xlim": [0, 10], "ylim": [minSlope, maxSlope], "col": colors });
+        graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, maxPop], "col": colors });
+        graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": [minSlope, maxSlope], "col": colors });
     }
     refreshCounter++;
 }
