@@ -9,9 +9,9 @@ tools: 10
 <script defer src="/assets/scripts/graph.js"></script>
 <script defer src="/assets/scripts/lotkaVolterraModel.js"></script>
 
-# Predator Prey Interactions and modifications of the Lotka-Volterra Model
+# Predator-Prey Interactions and modifications of the Lotka-Volterra Model
 
-Still very much a work in progress. There are many bugs left to be ironed out, and I am planning to add a plot to show the ZNGIs (zero net growth isoclines).
+Still very much a work in progress. Addition of a plot to show the ZNGIs (zero net growth isoclines) is planned for the future.
 
 <br>
 <div class="graph panel" >
@@ -24,10 +24,11 @@ Still very much a work in progress. There are many bugs left to be ironed out, a
     <button class = "btn btn-submit" id="play">Play</button><button class = "btn btn-submit" id="step">Step</button><br>
     <label>Method: <select id="method">
             <option value="euler">Euler's method (RK1)</option>
-            <option selected value="rk2">2nd order Runge-Kutta (RK2)</option>
-            <option value="rk4">4th order Runge-Kutta (RK4)</option>
+            <option value="rk2">2nd order Runge-Kutta (RK2)</option>
+            <option selected value="rk4">4th order Runge-Kutta (RK4)</option>
         </select></label><br>
     <label>Step size: <input id="step-size" type="number" min=".001" max="10" step="0.01" value="0.1"></label><br>
+    <label>Scale graph based on step size: <input id="step-scaling" type="checkbox" checked> <span class = "descriptor" hover-text = "When checked, the graph will increment by step size for each pixel of the graph, so a larger step size would cause the graph to be horizontally compressed and a smaller step size would cause horizontal stretching. When unchecked, this no longer applies, and each pixel will always correspond to 0.1 units of time. Therefore, if the step size is 0.01, the program will do 10 consecutive approximations to find each pixel.">?</span> </label><br>
     <label>Refresh Rate: <input id="refresh-rate" type="number" min="1" max="50" step="1" value="7"></label><br>
     <label for="prey">Prey growth type: </label>
     <label><input class="prey-growth" type="radio" checked name="prey" value="Exponential">Exponential</label>
@@ -95,198 +96,3 @@ Still very much a work in progress. There are many bugs left to be ironed out, a
 
 
 Variable names and equations taken from the second edition of Community Ecology by Gary G. Mittelbach & Brian J. McGill. 
-<!-- <br>
-Prey:
-
-Original:
-
-<math>
-    <mfrac>
-        <mrow>
-            <mi>d</mi>
-            <mi>N</mi>
-        </mrow>
-        <mrow>
-            <mi>d</mi>
-            <mi>t</mi>
-        </mrow>
-    </mfrac>
-    <mo>=</mo>
-    <mi>r</mi>
-    <mi>N</mi>
-    <mo>-</mo>
-    <mi>a</mi>
-    <mi>N</mi>
-    <mi>P</mi>
-</math>
-
-Logistic:
-
-<math>
-    <mfrac>
-        <mrow>
-            <mi>d</mi>
-            <mi>N</mi>
-        </mrow>
-        <mrow>
-            <mi>d</mi>
-            <mi>t</mi>
-        </mrow>
-    </mfrac>
-    <mo>=</mo>
-    <mi>r</mi>
-    <mi>N</mi>
-    <mrow>
-        <mo stretchy="true" form="prefix">(</mo>
-        <mrow>
-            <mn>1</mn>
-            <mo>-</mo>
-            <mfrac>
-                <mi>N</mi>
-                <mi>K</mi>
-            </mfrac>
-        </mrow>
-        <mo stretchy="true" form="postfix">)</mo>
-    </mrow>
-    <mo>-</mo>
-    <mi>a</mi>
-    <mi>N</mi>
-    <mi>P</mi>
-</math>
-
-Type II exponential:
-
-<math>
-    <mfrac>
-        <mrow>
-            <mi>d</mi>
-            <mi>N</mi>
-        </mrow>
-        <mrow>
-            <mi>d</mi>
-            <mi>t</mi>
-        </mrow>
-    </mfrac>
-    <mo>=</mo>
-    <mi>r</mi>
-    <mi>N</mi>
-    <mo>-</mo>
-    <mfrac>
-        <mrow>
-            <mi>a</mi>
-            <mi>N</mi>
-            <mi>P</mi>
-        </mrow>
-        <mrow>
-            <mn>1</mn>
-            <mo>+</mo>
-            <mi>a</mi>
-            <mi>h</mi>
-            <mi>N</mi>
-        </mrow>
-    </mfrac>
-</math>
-
-Type II logistic
-
-<math>
-    <mfrac>
-        <mrow>
-            <mi>d</mi>
-            <mi>N</mi>
-        </mrow>
-        <mrow>
-            <mi>d</mi>
-            <mi>t</mi>
-        </mrow>
-    </mfrac>
-    <mo>=</mo>
-    <mi>r</mi>
-    <mi>N</mi>
-    <mrow>
-        <mo stretchy="true" form="prefix">(</mo>
-        <mrow>
-            <mn>1</mn>
-            <mo>-</mo>
-            <mfrac>
-                <mi>N</mi>
-                <mi>K</mi>
-            </mfrac>
-        </mrow>
-        <mo stretchy="true" form="postfix">)</mo>
-    </mrow>
-    <mo>-</mo>
-    <mfrac>
-        <mrow>
-            <mi>a</mi>
-            <mi>N</mi>
-            <mi>P</mi>
-        </mrow>
-        <mrow>
-            <mn>1</mn>
-            <mo>+</mo>
-            <mi>a</mi>
-            <mi>h</mi>
-            <mi>N</mi>
-        </mrow>
-    </mfrac>
-</math>
-
-Predator:
-
-Type I:
-
-<math>
-    <mfrac>
-        <mrow>
-            <mi>d</mi>
-            <mi>P</mi>
-        </mrow>
-        <mrow>
-            <mi>d</mi>
-            <mi>t</mi>
-        </mrow>
-    </mfrac>
-    <mo>=</mo>
-    <mi>f</mi>
-    <mi>a</mi>
-    <mi>N</mi>
-    <mi>P</mi>
-    <mo>-</mo>
-    <mi>q</mi>
-    <mi>P</mi>
-</math>
-
-Type II:
-
-<math>
-    <mfrac>
-        <mrow>
-            <mi>d</mi>
-            <mi>P</mi>
-        </mrow>
-        <mrow>
-            <mi>d</mi>
-            <mi>t</mi>
-        </mrow>
-    </mfrac>
-    <mo>=</mo>
-    <mfrac>
-        <mrow>
-            <mi>f</mi>
-            <mi>a</mi>
-            <mi>N</mi>
-            <mi>P</mi>
-        </mrow>
-        <mrow>
-            <mn>1</mn>
-            <mo>+</mo>
-            <mi>a</mi>
-            <mi>h</mi>
-            <mi>N</mi>
-        </mrow>
-    </mfrac>
-    <mo>-</mo>
-    <mi>q</mi>
-    <mi>P</mi>
-</math> -->

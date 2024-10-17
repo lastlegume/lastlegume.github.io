@@ -304,7 +304,7 @@ async function verifyData() {
     }else{
         if(verifyWorker)
             verifyWorker.terminate();
-        verifyWorker = new Worker("/assets/blog/prizeprobs/workers/prizeWorker.js");
+        verifyWorker = new Worker("/assets/workers/prizeWorker.js");
         console.log("start");
         verifyWorker.onmessage = function (e) {
             if (e.data[0] === "done"){
@@ -341,7 +341,7 @@ function simOneCopy() {
     } else {
         if (simOneWorker)
             simOneWorker.terminate();
-        simOneWorker = new Worker("/assets/blog/prizeprobs/workers/prizeWorker.js");
+        simOneWorker = new Worker("/assets/workers/prizeWorker.js");
 
         simOneWorker.onmessage = function (e) {
             results[0] = e.data.slice(1);
@@ -382,7 +382,7 @@ function simulate() {
     } else {
         if (simWorker)
             simWorker.terminate();
-        simWorker = new Worker("/assets/blog/prizeprobs/workers/prizeWorker.js");
+        simWorker = new Worker("/assets/workers/prizeWorker.js");
 
         simWorker.onmessage = function (e) {
             results[1] = e.data.slice(1);

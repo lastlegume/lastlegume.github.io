@@ -1,5 +1,7 @@
 const timeGraph = document.getElementById("timeGraph");
 const slopeGraph = document.getElementById("slopeGraph");
+const graphWorker = new Worker("/assets/workers/lvWorker.js");
+graphWorker.addEventListener("message", (m) => processMessage(m));
 
 //settings
 const stepButton = document.getElementById("step");
@@ -7,21 +9,23 @@ const playButton = document.getElementById("play");
 const resetButton = document.getElementById("reset");
 
 const stepSizeInput = document.getElementById("step-size");
+const stepScaleCheckbox = document.getElementById("step-scaling");
 const refreshRateInput = document.getElementById("refresh-rate");
 const methodSelect = document.getElementById("method");
 const preyGrowth = document.getElementsByClassName("prey-growth");
 const predatorResponse = document.getElementsByClassName("predator-func-response");
 
-stepButton.addEventListener('click', step);
+stepButton.addEventListener('click', preStep);
 playButton.addEventListener('click', toggle);
 resetButton.addEventListener('click', reset);
 
 for (let i = 0; i < preyGrowth.length; i++) {
-    preyGrowth[i].addEventListener('change', updateEquations);
+    preyGrowth[i].addEventListener('change', updateVals);
 }
 for (let i = 0; i < predatorResponse.length; i++) {
-    predatorResponse[i].addEventListener('change', updateEquations);
+    predatorResponse[i].addEventListener('change', updateVals);
 }
+stepScaleCheckbox.addEventListener('change', updateVals);
 
 //parameters
 const rSlider = document.getElementById("r");
@@ -63,6 +67,7 @@ let variables = [rSlider.value, aSlider.value, fSlider.value, qSlider.value, KSl
 let slopes = [[], []];
 var eqs = ["", ""]
 let running = false;
+let updated = true;
 let currentT = 0;
 let refreshCounter = 0;
 let colors = ["#00FFA0", "#FFFF00"];
@@ -71,20 +76,20 @@ let maxPop = -1;
 let maxSlope = -1;
 let minSlope = 1;
 
-let stepSize = stepSizeInput.value*1;
-let refreshRate = refreshRateInput.value*1;
+let stepSize = stepSizeInput.value * 1;
+let refreshRate = refreshRateInput.value * 1;
 let xInc = 0.1;
 let stepReps = 1;
-let xlim = [0,10];
+let xlim = [0, 10];
+let intID = 0;
 
 updateVals();
-updateEquations();
 updateNonessential();
-
-let intID = 0;
 
 function updateVals() {
     running = false;
+    clearInterval(intID);
+    updated = true;
     reset();
 
     rValue.textContent = "r value: " + rSlider.value;
@@ -99,119 +104,117 @@ function updateVals() {
 
     variables = [rSlider.value, aSlider.value, fSlider.value, qSlider.value, KSlider.value, hSlider.value];
 
-    stepSize = stepSizeInput.value*1;
-    stepReps = Math.round(0.1/stepSize);
-    xInc = stepReps*stepSize;
-    xlim = [0,xInc*timeGraph.width-40];
+    eqs = ["", ""]
+    eqs[0] = `${preyGrowth[0].checked ? "r * N" : preyGrowth[1].checked ? "r * N * ( 1 - N / K )" : ""} - ${predatorResponse[0].checked ? "a * P * N" : predatorResponse[1].checked ? "a * P * N / ( 1 + a * h * N )" : ""}`;
+    eqs[1] = `${predatorResponse[0].checked ? "f * a * P * N" : predatorResponse[1].checked ? "f * a * P * N / ( 1 + a * h * N )" : ""} - q * P`
+
+
+    stepSize = stepSizeInput.value * 1;
+    if (!stepScaleCheckbox.checked) {
+        stepSizeInput.max = 0.1;
+        if (stepSizeInput.value > 0.1)
+            stepSizeInput.value = 0.1;
+        stepReps = Math.round(0.1 / stepSize);
+        xInc = stepReps * stepSize;
+    } else {
+        xInc = stepSize;
+        stepSizeInput.max = 10;
+    }
+    xlim = [0, xInc * (timeGraph.width - 40)];
+
+    
+    graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, Math.max(...populations[0], ...populations[1])], "col": colors });
+    graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, 100], "col": colors });
+
+
 }
-function updateNonessential(){
-    refreshRate = refreshRateInput.value*1;
+function updateNonessential() {
+    refreshRate = refreshRateInput.value * 1;
+}
+function preStep(){
+    if(updated){
+        updateWorker();
+        updated = false;
+    }
+    step();
 }
 function step() {
-    if (!running) {
+    graphWorker.postMessage(["step"]);
+    if (!running)
+        refreshCounter = 0;
+}
+function toggle() {
+    running = !running;
+    playButton.innerText = running ? "Stop" : "Start";
+    if (running) {
+        if (updated) {
+            updateWorker();
+        }
+        intID = setInterval(step, 10);
+    }
+    else
         clearInterval(intID);
-        return;
-    }
-    
-    if (methodSelect.value === "euler") {
-        let sol = f(populations[0][currentT], populations[1][currentT]);
-        slopes[0].push(sol[0]);
-        slopes[1].push(sol[1]);
-        populations[0].push(populations[0][currentT] + stepSize * slopes[0][currentT]);
-        populations[1].push(populations[1][currentT] + stepSize * slopes[1][currentT]);
-    } else if (methodSelect.value === "rk2") {
-        let sol = f(populations[0][currentT], populations[1][currentT]);
-        let nstar = populations[0][currentT] + stepSize / 2 * sol[0];
-        let pstar = populations[1][currentT] + stepSize / 2 * sol[1];
-        sol = f(nstar, pstar);
-        slopes[0].push(sol[0]);
-        slopes[1].push(sol[1]);
-        populations[0].push(populations[0][currentT] + stepSize * slopes[0][currentT]);
-        populations[1].push(populations[1][currentT] + stepSize * slopes[1][currentT]);
-    } else if (methodSelect.value === "rk4") {
-        let k1 = f(populations[0][currentT], populations[1][currentT]).map((e)=>e*stepSize);
-        let k2 = f(populations[0][currentT]+k1[0]/2, populations[1][currentT]+k1[1]/2).map((e)=>e*stepSize);
-        let k3 = f(populations[0][currentT]+k2[0]/2, populations[1][currentT]+k2[1]/2).map((e)=>e*stepSize);
-        let k4 = f(populations[0][currentT]+k3[0], populations[1][currentT]+k3[1]).map((e)=>e*stepSize);
-        slopes[0].push(1/6*(k1[0]+2*k2[0]+2*k3[0]+k4[0]));
-        slopes[1].push(1/6*(k1[1]+2*k2[1]+2*k3[1]+k4[1]));
-        populations[0].push(populations[0][currentT] + slopes[0][currentT]);
-        populations[1].push(populations[1][currentT] + slopes[1][currentT]);
-    }
-    if (populations[0].length > timeGraph.width - 80) {
+    updated = false;
+}
+
+
+function reset() {
+    running = false;
+    clearInterval(intID);
+    updated = true;
+    graphWorker.postMessage(["reset"]);
+    playButton.innerText = "Start";
+    populations = [[N0Slider.value * 1], [P0Slider.value * 1]];
+    slopes = [[], []];
+    currentT = 0;
+
+    graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, Math.max(...populations[0], ...populations[1])], "col": colors });
+    graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, 100], "col": colors });
+
+    maxPop = -1;
+    maxSlope = -1;
+    minSlope = 1;
+}
+
+function processMessage(message) {
+    if (message.data[0] === "stepped")
+        finishStep(message.data.slice(1));
+}
+
+function finishStep(m) {
+    populations[0].push(m[0][0]);
+    populations[1].push(m[0][1]);
+
+    slopes[0].push(m[1][0]);
+    slopes[1].push(m[1][1]);
+
+    if (populations[0].length > timeGraph.width - 40) {
         populations[0] = populations[0].slice(1);
         populations[1] = populations[1].slice(1);
         slopes[0] = slopes[0].slice(1);
         slopes[1] = slopes[1].slice(1);
         currentT--;
-        xlim.map((e)=>e+xInc);
+        xlim = xlim.map((e) => e + xInc);
     }
-    currentT++;
-    if (populations[0][currentT] > maxPop)
-        maxPop = populations[0][currentT];
-    if (populations[1][currentT] > maxPop)
-        maxPop = populations[1][currentT];
-    maxSlope = Math.max(slopes[0][currentT - 1], maxSlope);
-    maxSlope = Math.max(slopes[1][currentT - 1], maxSlope);
-    minSlope = Math.min(slopes[0][currentT - 1], minSlope);
-    minSlope = Math.min(slopes[1][currentT - 1], minSlope);
     if (refreshCounter % refreshRate == 0) {
-        graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, maxPop], "col": colors });
-        graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": [minSlope, maxSlope], "col": colors });
+        graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": m[2], "col": colors });
+        graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": m[3], "col": colors });
     }
     refreshCounter++;
 }
-function toggle() {
-    running = !running;
-    playButton.innerText = running ? "Stop" : "Start";
-    intID = setInterval(step, 10);
-    //reset();
-    //graph({"list": populations}, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": [0, 10], "ylim": [0, 100], "col": colors });
+
+function updateWorker() {
+    let pG = [];
+    let pR = [];
+    for (let i = 0; i < preyGrowth.length; i++) {
+        pG.push(preyGrowth[i].checked);
+    }
+    for (let i = 0; i < predatorResponse.length; i++) {
+        pR.push(predatorResponse[i].checked);
+    }
+    graphWorker.postMessage(["init", [N0Slider.value * 1, P0Slider.value * 1], variables, [stepSize, stepScaleCheckbox.checked], methodSelect.value, pG, pR]);
 
 }
-function updateEquations() {
-    running = false;
-    reset();
-    eqs = ["", ""]
-    eqs[0] = `${preyGrowth[0].checked ? "r * N" : preyGrowth[1].checked ? "r * N * ( 1 - N / K )" : ""} - ${predatorResponse[0].checked ? "a * P * N" : predatorResponse[1].checked ? "a * P * N / ( 1 + a * h * N )" : ""}`;
-    eqs[1] = `${predatorResponse[0].checked ? "f * a * P * N" : predatorResponse[1].checked ? "f * a * P * N / ( 1 + a * h * N )" : ""} - q * P`
-    console.log(eqs);
-}
-function reset() {
-    running = false;
-    playButton.innerText = running ? "Stop" : "Start";
-    populations = [[N0Slider.value * 1], [P0Slider.value * 1]];
-    slopes = [[], []];
-    currentT = 0;
-    graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": [0, 10], "ylim": [0, Math.max(...populations[0], ...populations[1])], "col": colors });
-    graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": [0, 10], "ylim": [0, 100], "col": colors });
-
-}
-function f(N, P) {
-
-    //variables is a list of [r, a, f, q, K, h]
-    let answers = [0, 0];
-    // dN/dt
-    answers[0] = (preyGrowth[0].checked ? (variables[0] * N) : preyGrowth[1].checked ? (variables[0] * N * (1 - N / variables[4])) : 0) - (predatorResponse[0].checked ? (variables[1] * P * N) : predatorResponse[1].checked ? (variables[1] * P * N / (1 + variables[1] * variables[5] * N)) : 0);
-    // dP/dt
-    answers[1] = (predatorResponse[0].checked ? (variables[1] * variables[2] * P * N) : predatorResponse[1].checked ? (variables[1] * variables[2] * P * N / (1 + variables[1] * variables[5] * N)) : 0) - (variables[3] * P);
-    return answers;
-}
 
 
 
-
-// old method using equation solver to find values
-// if(methodSelect.value==="euler"){
-//     slopes[0].push(solve(eqs[0].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", populations[0][currentT]).replaceAll("P", populations[1][currentT])));
-//     slopes[1].push(solve(eqs[1].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", populations[0][currentT]).replaceAll("P", populations[1][currentT])));
-//     populations[0].push(populations[0][currentT] * 1 + stepSizeInput.value * slopes[0][currentT]);
-//     populations[1].push(populations[1][currentT] * 1 + stepSizeInput.value * slopes[1][currentT]);
-// } else if(methodSelect.value==="rk2"){
-//     let nstar = populations[0][currentT] * 1 + stepSizeInput.value/2 * solve(eqs[0].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", populations[0][currentT]).replaceAll("P", populations[1][currentT]));
-//     let pstar = populations[1][currentT] * 1 + stepSizeInput.value/2 * solve(eqs[1].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", populations[0][currentT]).replaceAll("P", populations[1][currentT]));
-//     slopes[0].push(solve(eqs[0].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", nstar).replaceAll("P", pstar)));
-//     slopes[1].push(solve(eqs[1].replaceAll("r", rSlider.value).replaceAll("K", KSlider.value).replaceAll("h", hSlider.value).replaceAll("f", fSlider.value).replaceAll("q", qSlider.value).replaceAll("a", aSlider.value).replaceAll("N", nstar).replaceAll("P", pstar)));
-//     populations[0].push(populations[0][currentT] * 1 + stepSizeInput.value * slopes[0][currentT]);
-//     populations[1].push(populations[1][currentT] * 1 + stepSizeInput.value * slopes[1][currentT]);
-// }
