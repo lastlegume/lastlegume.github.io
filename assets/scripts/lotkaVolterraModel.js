@@ -10,6 +10,7 @@ const stepButton = document.getElementById("step");
 const playButton = document.getElementById("play");
 const resetButton = document.getElementById("reset");
 const graphAllButton = document.getElementById("graph-all");
+const downloadButton = document.getElementById("download");
 
 const stepSizeInput = document.getElementById("step-size");
 const stepScaleCheckbox = document.getElementById("step-scaling");
@@ -21,8 +22,11 @@ const predatorResponse = document.getElementsByClassName("predator-func-response
 stepButton.addEventListener('click', preStep);
 playButton.addEventListener('click', toggle);
 resetButton.addEventListener('click', reset);
-graphAllButton.addEventListener('click', function(){
-    graphWorker.postMessage(["graph all"]);
+graphAllButton.addEventListener('click', function () {
+    graphWorker.postMessage(["send all", "graph"]);
+});
+downloadButton.addEventListener('click', function () {
+    graphWorker.postMessage(["send all", "download"]);
 });
 
 for (let i = 0; i < preyGrowth.length; i++) {
@@ -128,7 +132,7 @@ function updateVals() {
     }
     xlim = [0, xInc * (timeGraph.width - 40)];
 
-    
+
     graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, Math.max(...populations[0], ...populations[1])], "col": colors });
     graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, 100], "col": colors });
 
@@ -137,8 +141,8 @@ function updateVals() {
 function updateNonessential() {
     refreshRate = refreshRateInput.value * 1;
 }
-function preStep(){
-    if(updated){
+function preStep() {
+    if (updated) {
         updateWorker();
         updated = false;
     }
@@ -186,8 +190,12 @@ function reset() {
 function processMessage(message) {
     if (message.data[0] === "stepped")
         finishStep(message.data.slice(1));
-    else if (message.data[0] === "sent all")
-        graphAll(message.data.slice(1));
+    else if (message.data[0] === "sent all") {
+        if (message.data[1] === "graph")
+            graphAll(message.data.slice(2));
+        else if (message.data[1] === "download")
+            download(message.data.slice(2));
+    }
 }
 
 function finishStep(m) {
@@ -206,8 +214,8 @@ function finishStep(m) {
         xlim = xlim.map((e) => e + xInc);
     }
     if (refreshCounter % refreshRate == 0) {
-        graph({ "list": populations }, timeGraph, {"xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": m[2], "col": colors });
-        graph({ "list": slopes }, slopeGraph, {"xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": m[3], "col": colors });
+        graph({ "list": populations }, timeGraph, { "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": m[2], "col": colors });
+        graph({ "list": slopes }, slopeGraph, { "xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": m[3], "col": colors });
     }
     refreshCounter++;
 }
@@ -225,10 +233,28 @@ function updateWorker() {
 
 }
 
-function graphAll(m){
-    console.log(m);
+function graphAll(m) {
     allGraph.width = m[0][0].length;
-    graph({ "list": m[0] }, allGraph, {"xlab": "Time", "ylab": "Population", "xlim": [0,xlim[1]], "ylim": [0, Math.max(...m[0][0], ...m[0][1])], "col": colors });
+    graph({ "list": m[0] }, allGraph, { "xlab": "Time", "ylab": "Population", "xlim": [0, xlim[1]], "ylim": [0, Math.max(...m[0][0], ...m[0][1])], "col": colors });
     allGraph.classList.remove("hide");
 }
 
+function download(m) {
+    let time = []
+    for (let i = 0; i < m[0][0].length; i++) {
+        time.push((i * xInc).toPrecision(5));
+    }
+    let csv = `Time,Prey,Predator\n`;
+    for (let i = 0; i < m[0][0].length; i++) {
+        csv+=`${time[i]},${m[0][0][i]},${m[0][1][i]}\n`;
+    }
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    var url = URL.createObjectURL(blob);
+    // Create a link to download it
+    var a = document.createElement('a');
+    a.href = url;
+    a.setAttribute('download', "populations.csv");
+
+    a.click();
+
+}

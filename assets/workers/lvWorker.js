@@ -21,10 +21,8 @@ onmessage = function (m) {
         step();
     else if (m.data[0] === "reset")
         reset();
-    else if (m.data[0] === "download")
-        download();
-    else if (m.data[0] === "graph all")
-        sendAll();
+    else if (m.data[0] === "send all")
+        sendAll(m.data[1]);
 }
 
 function step() {
@@ -89,16 +87,10 @@ function initialize(m) {
     minSlope = 1;
 }
 
-function download() {
-
-}
-
 //pretty sure this won't be needed
 function reset() {
     populations = [[], []];
     slopes = [[], []];
-
-
 }
 function f(N, P) {
     //variables is a list of [r, a, f, q, K, h]
@@ -110,7 +102,6 @@ function f(N, P) {
     return answers;
 }
 
-function sendAll(){
-    console.log("sent");
-    postMessage(["sent all", populations]);
+function sendAll(m){
+    postMessage(["sent all", m, populations]);
 }

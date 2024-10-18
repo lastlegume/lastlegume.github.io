@@ -49,6 +49,8 @@ Still very much a work in progress. Addition of a plot to show the ZNGIs (zero n
     <br>
     <button class = "btn btn-submit x-small" id="reset">Reset</button><br>
     <button class = "btn btn-submit x-small" id="graph-all" title="Graphs everything that has been calculated since the initial conditions. You will have to scroll sideways to see everything.">Graph all</button>
+    <button class = "btn btn-submit x-small" id="download" title="Downloads the numbers for both populations with respect to time.">Download numbers</button>
+
 
     <h3 class="header" id="expParams">Graph Parameters</h3>
     <label><math>
