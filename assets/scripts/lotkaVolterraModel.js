@@ -1,5 +1,7 @@
 const timeGraph = document.getElementById("timeGraph");
 const slopeGraph = document.getElementById("slopeGraph");
+const allGraph = document.getElementById("allGraph");
+
 const graphWorker = new Worker("/assets/workers/lvWorker.js");
 graphWorker.addEventListener("message", (m) => processMessage(m));
 
@@ -7,6 +9,7 @@ graphWorker.addEventListener("message", (m) => processMessage(m));
 const stepButton = document.getElementById("step");
 const playButton = document.getElementById("play");
 const resetButton = document.getElementById("reset");
+const graphAllButton = document.getElementById("graph-all");
 
 const stepSizeInput = document.getElementById("step-size");
 const stepScaleCheckbox = document.getElementById("step-scaling");
@@ -18,6 +21,9 @@ const predatorResponse = document.getElementsByClassName("predator-func-response
 stepButton.addEventListener('click', preStep);
 playButton.addEventListener('click', toggle);
 resetButton.addEventListener('click', reset);
+graphAllButton.addEventListener('click', function(){
+    graphWorker.postMessage(["graph all"]);
+});
 
 for (let i = 0; i < preyGrowth.length; i++) {
     preyGrowth[i].addEventListener('change', updateVals);
@@ -167,6 +173,7 @@ function reset() {
     populations = [[N0Slider.value * 1], [P0Slider.value * 1]];
     slopes = [[], []];
     currentT = 0;
+    allGraph.classList.add("hide");
 
     graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, Math.max(...populations[0], ...populations[1])], "col": colors });
     graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, 100], "col": colors });
@@ -179,6 +186,8 @@ function reset() {
 function processMessage(message) {
     if (message.data[0] === "stepped")
         finishStep(message.data.slice(1));
+    else if (message.data[0] === "sent all")
+        graphAll(message.data.slice(1));
 }
 
 function finishStep(m) {
@@ -197,8 +206,8 @@ function finishStep(m) {
         xlim = xlim.map((e) => e + xInc);
     }
     if (refreshCounter % refreshRate == 0) {
-        graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": m[2], "col": colors });
-        graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": m[3], "col": colors });
+        graph({ "list": populations }, timeGraph, {"xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": m[2], "col": colors });
+        graph({ "list": slopes }, slopeGraph, {"xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": m[3], "col": colors });
     }
     refreshCounter++;
 }
@@ -216,5 +225,10 @@ function updateWorker() {
 
 }
 
-
+function graphAll(m){
+    console.log(m);
+    allGraph.width = m[0][0].length;
+    graph({ "list": m[0] }, allGraph, {"xlab": "Time", "ylab": "Population", "xlim": [0,xlim[1]], "ylim": [0, Math.max(...m[0][0], ...m[0][1])], "col": colors });
+    allGraph.classList.remove("hide");
+}
 

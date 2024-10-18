@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Lotka-Volterra Model
+title: Predator-Prey Interactions
 permalink: /lvmodel
 tools: 10
 ---
@@ -8,6 +8,15 @@ tools: 10
 
 <script defer src="/assets/scripts/graph.js"></script>
 <script defer src="/assets/scripts/lotkaVolterraModel.js"></script>
+
+<style type="text/css" media="screen">
+    .stretch {
+  position: relative;
+  left: calc(-50vw + 50%);
+    }
+
+
+</style>
 
 # Predator-Prey Interactions and modifications of the Lotka-Volterra Model
 
@@ -21,7 +30,7 @@ Still very much a work in progress. Addition of a plot to show the ZNGIs (zero n
 
 <div class="panel" style="min-width:300px;">
     <h3 class="header">Graph Settings</h3>
-    <button class = "btn btn-submit" id="play">Play</button><button class = "btn btn-submit" id="step">Step</button><br>
+    <button class = "btn btn-submit" id="play">Play</button><button class = "btn btn-submit" id="step" title="Steps forward by one step size using the method specified below.">Step</button><br>
     <label>Method: <select id="method">
             <option value="euler">Euler's method (RK1)</option>
             <option value="rk2">2nd order Runge-Kutta (RK2)</option>
@@ -38,7 +47,9 @@ Still very much a work in progress. Addition of a plot to show the ZNGIs (zero n
     <label><input class="predator-func-response" type="radio" checked name="predator" value="t1">Type I</label>
     <label><input class="predator-func-response" type="radio" name="predator" value="t2">Type II</label>
     <br>
-    <button class = "btn btn-submit x-small" id="reset">Reset</button>
+    <button class = "btn btn-submit x-small" id="reset">Reset</button><br>
+    <button class = "btn btn-submit x-small" id="graph-all" title="Graphs everything that has been calculated since the initial conditions. You will have to scroll sideways to see everything.">Graph all</button>
+
     <h3 class="header" id="expParams">Graph Parameters</h3>
     <label><math>
         <msub>
@@ -93,6 +104,8 @@ Still very much a work in progress. Addition of a plot to show the ZNGIs (zero n
     <p id="h-value">h value: </p>
 </label><br>
 </div>
+
+<canvas class="graph hide stretch" id="allGraph" height=400 width=610></canvas><br>
 
 
 Variable names and equations taken from the second edition of Community Ecology by Gary G. Mittelbach & Brian J. McGill. 

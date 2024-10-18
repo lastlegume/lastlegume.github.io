@@ -23,6 +23,8 @@ onmessage = function (m) {
         reset();
     else if (m.data[0] === "download")
         download();
+    else if (m.data[0] === "graph all")
+        sendAll();
 }
 
 function step() {
@@ -54,7 +56,6 @@ function step() {
             populations[1].push(populations[1][currentT] + stepSize * slopes[1][currentT]);
         }
         currentT++;
-        console.log(i);
     }
     if (populations[0][currentT] > maxPop)
         maxPop = populations[0][currentT];
@@ -107,4 +108,9 @@ function f(N, P) {
     // dP/dt
     answers[1] = (predatorResponse[0] ? (variables[1] * variables[2] * P * N) : predatorResponse[1] ? (variables[1] * variables[2] * P * N / (1 + variables[1] * variables[5] * N)) : 0) - (variables[3] * P);
     return answers;
+}
+
+function sendAll(){
+    console.log("sent");
+    postMessage(["sent all", populations]);
 }
