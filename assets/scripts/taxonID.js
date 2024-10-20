@@ -73,6 +73,7 @@ function check() {
 }
 //makes the next question and starts querying for the question after
 async function makeQuestion() {
+    hintBlank.innerText = "";
     //availableList is the list of all checked families/orders
     let availableList = [];
     // list of available taxon ids
