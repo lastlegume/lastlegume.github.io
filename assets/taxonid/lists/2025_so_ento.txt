@@ -48,7 +48,7 @@ Family Cicadellidae: leafhoppers
 Family Fulgoridae: fulgorid planthoppers
 Family Aphididae: aphids
 Family Dactylopiidae: scale(twig or leaf)
-Order Thysanoptera: thrips
+Order Thysanoptera: thrips %83201
 Order Megaloptera: dobsonflies
 Order Neuroptera: lacewings, antlions
 Family Chrysopidae: green lacewings
@@ -107,7 +107,7 @@ Family Tortricidae: Tortrix moths
 Family Hesperiidae:skippers
 Family Papilionidae:swallowtails*
 Family Pieridae:whites, sulfurs
-Family Lycaenidae: hairstreaks/blues
+Family Lycaenidae: hairstreaks/blues %47923
 Family Nymphalidae:brush-footed butterflies
 Family Danaidae:milkweed butterflies
 Family Pyralidae: snout moths
