@@ -120,7 +120,7 @@ Family Siricidae:horntails
 Family Ichneumonidae:ichneumons
 Family Cynipidae: gall wasps
 Family Mutillidae: velvet-ants
-Family Formicidae:ants
+Family Formicidae:ants %47336
 Family Vespidae:paper wasps, hornets, yellowjackets
 Family Sphecidae: thread-waisted wasps
 Family Colletidae: Plaster bees
