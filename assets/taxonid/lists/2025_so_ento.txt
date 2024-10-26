@@ -100,7 +100,7 @@ Family Muscidae:house flies
 Family Hippoboscidae:louse flies
 Family Calliphoridae: blow flies*
 Family Tachinidae:tachinid flies
-Order Trichoptera:caddisflies*
+Order Trichoptera:caddisflies* %62164
 Order Lepidoptera:moths and butterflies
 Family Sesiidae:clear winged moths
 Family Tortricidae: Tortrix moths
