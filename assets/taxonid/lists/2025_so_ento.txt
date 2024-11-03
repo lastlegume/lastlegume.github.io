@@ -3,129 +3,129 @@ Order Protura: telsontails, proturans %83242
 Order Collembola: springtails, snow fleas %49470
 Order Diplura: diplurans %56215
 Class Insecta
-Order Archaeognatha: bristletails
-Order Zygentoma: silverfish, firebrats
-Order Ephemeroptera: mayflies
+Order Archaeognatha: bristletails %461443
+Order Zygentoma: silverfish, firebrats %48301
+Order Ephemeroptera: mayflies %48011
 Order Odonata: dragon/damselflies *
-Family Aeshnidae: darners
-Family Gomphidae: clubtails
-Family Libellulidae: skimmers
-Family Lestidae: spread-wing
-Family Coenagrionidae: narrow-winged
-Order Blattodea: cockroaches/termites
-Order Mantodea: mantids
+Family Aeshnidae: darners %51469
+Family Gomphidae: clubtails %51128
+Family Libellulidae: skimmers %47819
+Family Lestidae: spread-wing %47930
+Family Coenagrionidae: narrow-winged %47925
+Order Blattodea: cockroaches/termites %81769
+Order Mantodea: mantids %48112
 Order Notoptera: ice crawlers %53795
 Order Dermaptera: earwigs %47793
 Order Plecoptera: stoneflies %47504
 Order Orthoptera: grasshoppers & crickets
-Family Tetrigidae: pygmy grasshopper
-Family Acrididae: short-horned grasshoppers
-Family Tettigoniidae: katydids
-Family Gryllacrididae: camel crickets
-Family Gryllidae: crickets/tree crickets
-Family Gryllotalpidae: mole crickets
-Order Phasmatodea: walkingsticks
-Order Psocodea: Book/Bark Lice
+Family Tetrigidae: pygmy grasshopper %57658
+Family Acrididae: short-horned grasshoppers %47649
+Family Tettigoniidae: katydids %48124
+Family Gryllacrididae: camel crickets %68859
+Family Gryllidae: crickets/tree crickets %52884
+Family Gryllotalpidae: mole crickets %71220
+Order Phasmatodea: walkingsticks %47198
+Order Psocodea: Book/Bark Lice %83187
 Order Hemiptera: true bugs
-Family Corixidae: water boatmen
-Family Notonectidae: backswimmers
-Family Belostomatidae: giant water bugs
-Family Nepidae: waterscorpions
-Family Gelastocoridae: toad bugs
-Family Gerridae: water striders
-Family Cimicidae: bed bugs
-Family Miridae: plant bugs
-Family Reduviidae: assassin bugs
-Family Phymatidae: ambush bugs
-Family Tingidae: lace bugs
-Family Lygaeidae: seed bugs
-Family Coreidae: leaf-footed bugs
-Family Pentatomidae: Stink bugs
-Family Cicadidae: cicadas
-Family Membracidae: treehoppers
-Family Cercopidae: froghoppers, spittlebugs
-Family Cicadellidae: leafhoppers
-Family Fulgoridae: fulgorid planthoppers
-Family Aphididae: aphids
-Family Dactylopiidae: scale(twig or leaf)
+Family Corixidae: water boatmen %84735
+Family Notonectidae: backswimmers %56556
+Family Belostomatidae: giant water bugs %81570
+Family Nepidae: waterscorpions %119347
+Family Gelastocoridae: toad bugs %53499
+Family Gerridae: water striders %59653
+Family Cimicidae: bed bugs %53667
+Family Miridae: plant bugs %53505
+Family Reduviidae: assassin bugs %48959
+Family Phymatidae: ambush bugs %133753
+Family Tingidae: lace bugs %53506
+Family Lygaeidae: seed bugs %55558
+Family Coreidae: leaf-footed bugs %51777
+Family Pentatomidae: Stink bugs %47742
+Family Cicadidae: cicadas %50186
+Family Membracidae: treehoppers %49024
+Family Cercopidae: froghoppers, spittlebugs %61863
+Family Cicadellidae: leafhoppers %53237
+Family Fulgoridae: fulgorid planthoppers %54944
+Family Aphididae: aphids %52381
+Family Dactylopiidae: scale(twig or leaf) %202092
 Order Thysanoptera: thrips %83201
-Order Megaloptera: dobsonflies
+Order Megaloptera: dobsonflies %47864
 Order Neuroptera: lacewings, antlions
-Family Chrysopidae: green lacewings
-Family Myrmeleontidae: antlions *
+Family Chrysopidae: green lacewings %52425
+Family Myrmeleontidae: antlions * %49358
 Order Coleoptera:beetles
-Family Cicindelidae:tiger beetles
-Family Carabidae:ground beetles
-Family Dytiscidae:predaceous diving beetles
-Family Gyrinidae:whirligig beetles
-Family Hydrophilidae:water scavenger beetles
-Family Histeridae:hister beetles
-Family Staphylinidae:rove beetles
-Family Silphidae:carrion beetles
-Family Lucanidae:stag beetles
-Family Passalidae:bess beetles
-Family Scarabaeidae:dung beetles
-Family Buprestidae-metallic wood-boring/jewel beetles
-Family Elateridae:click beetles
-Family Lampyridae:fireflies
-Family Cantharidae:soldier beetles
+Family Cicindelidae:tiger beetles %149026
+Family Carabidae:ground beetles %49567
+Family Dytiscidae:predaceous diving beetles %57659
+Family Gyrinidae:whirligig beetles %119971
+Family Hydrophilidae:water scavenger beetles %127444
+Family Histeridae:hister beetles %68869
+Family Staphylinidae:rove beetles %47951
+Family Silphidae:carrion beetles %53849
+Family Lucanidae:stag beetles %49083
+Family Passalidae:bess beetles %84443
+Family Scarabaeidae:dung beetles %48201
+Family Buprestidae:metallic wood-boring/jewel beetles %54964
+Family Elateridae:click beetles %53248
+Family Lampyridae:fireflies %47731
+Family Cantharidae:soldier beetles %52932
 Family Lycidae:net-winged beetles %49360
-Family Cleridae:checkered beetles
-Family Coccinellidae:lady-bird beetles/ladybugs
-Family Tenebrionidae:darkling beetles *
-Family Meloidae:blister beetles
-Family Cerambycidae:long-horned beetles *
-Family Chrysomelidae:leaf beetles
-Family Curculionidae:weevils
-Order Strepsiptera: Twisted-Wing Parasite
+Family Cleridae:checkered beetles %55051
+Family Coccinellidae:lady-bird beetles/ladybugs %48486
+Family Tenebrionidae:darkling beetles * %53816
+Family Meloidae:blister beetles %59510
+Family Cerambycidae:long-horned beetles * %47961
+Family Chrysomelidae:leaf beetles %51146
+Family Curculionidae:weevils %48736
+Order Strepsiptera: Twisted-Wing Parasite %83202
 Order Mecoptera:scorpionflies
 Family Boreidae: snow scorpionflies %173350
-Family Panorpidae: common scorpionflies
+Family Panorpidae: common scorpionflies %51700
 Order Raphidioptera: Snakeflies
-Family Raphidiidae: Raphidiid Snakeflies
-Order Siphonaptera:fleas
+Family Raphidiidae: Raphidiid Snakeflies %60052
+Order Siphonaptera:fleas %83204
 Order Diptera:true flies
-Family Tipulidae:crane flies
-Family Culicidae:mosquitoes*
-Family Chironomidae:midges
-Family Simuliidae: black flies
-Family Stratiomyidae:soldier flies
-Family Tabanidae:horse flies
-Family Asilidae:robber flies
-Family Bombyliidae:bee flies
-Family Syrphidae:hover/flower flies
-Family Tephritidae:fruit flies, huskfly
-Family Drosophilidae:pomace flies, fruit/vinegar flies
-Family Muscidae:house flies
-Family Hippoboscidae:louse flies
-Family Calliphoridae: blow flies*
-Family Tachinidae:tachinid flies
+Family Tipulidae:crane flies %51225
+Family Culicidae:mosquitoes* %52134
+Family Chironomidae:midges %53275
+Family Simuliidae: black flies %63164
+Family Stratiomyidae:soldier flies %70127
+Family Tabanidae:horse flies %47821
+Family Asilidae:robber flies %47982
+Family Bombyliidae:bee flies %51558
+Family Syrphidae:hover/flower flies %49995
+Family Tephritidae:fruit flies, huskfly %47990
+Family Drosophilidae:pomace flies, fruit/vinegar flies %67742
+Family Muscidae:house flies %70144
+Family Hippoboscidae:louse flies %48818
+Family Calliphoridae: blow flies* %61860
+Family Tachinidae:tachinid flies %51953
 Order Trichoptera:caddisflies* %62164
 Order Lepidoptera:moths and butterflies
-Family Sesiidae:clear winged moths
-Family Tortricidae: Tortrix moths
-Family Hesperiidae:skippers
-Family Papilionidae:swallowtails*
-Family Pieridae:whites, sulfurs
+Family Sesiidae:clear winged moths %51573
+Family Tortricidae: Tortrix moths %47155
+Family Hesperiidae:skippers %47653
+Family Papilionidae:swallowtails* %47223
+Family Pieridae:whites, sulfurs %48508
 Family Lycaenidae: hairstreaks/blues %47923
-Family Nymphalidae:brush-footed butterflies
-Family Danaidae:milkweed butterflies
-Family Pyralidae: snout moths
-Family Saturniidae:Giant Silkworm moths*
-Family Sphingidae:sphinx/hawk moths, hornworms*
-Family Erebidae: tiger/tussock moths
-Order Hymenoptera:bees/ants/wasps.
-Family Tenthredinidae: common sawflies
-Family Siricidae:horntails
-Family Ichneumonidae:ichneumons
-Family Cynipidae: gall wasps
-Family Mutillidae: velvet-ants
+Family Nymphalidae:brush-footed butterflies %47922
+Family Danaidae:milkweed butterflies %61244
+Family Pyralidae: snout moths %49683
+Family Saturniidae:Giant Silkworm moths* %47918
+Family Sphingidae:sphinx/hawk moths, hornworms* %47213
+Family Erebidae: tiger/tussock moths %121850
+Order Hymenoptera:bees/ants/wasps
+Family Tenthredinidae: common sawflies %60628
+Family Siricidae:horntails %53256
+Family Ichneumonidae:ichneumons %47199
+Family Cynipidae: gall wasps %55594
+Family Mutillidae: velvet-ants %48511
 Family Formicidae:ants %47336
-Family Vespidae:paper wasps, hornets, yellowjackets
-Family Sphecidae: thread-waisted wasps
-Family Colletidae: Plaster bees
-Family Halictidae: Sweat bees
-Family Megachilidae: leaf cutter bees
+Family Vespidae:paper wasps, hornets, yellowjackets %52747
+Family Sphecidae: thread-waisted wasps %48742
+Family Colletidae: Plaster bees %127740
+Family Halictidae: Sweat bees %49707
+Family Megachilidae: leaf cutter bees %52777
 Family Apidae:bees %47221
 Subclass Acari: Mites and Ticks
 Order Ixodida: Ticks
