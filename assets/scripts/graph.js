@@ -1,16 +1,25 @@
 //give the method the function and it'll graph it
 //give the method a list of y coords and it'll graph it
-//func is an object with either key function and function string or key list and list of y values
-//settings contains keys xlab, ylab, xInc, xlim, ylim, col, coords, title
+//func is an object with either key function and list of function strings or key list and list of lists of y values
+//settings contains keys xlab, ylab, xInc, xlim, ylim, col, coords, title, layers
+//layers holds the layer of each function and/or list - list of layers should go in order from first function to last function to first list to last list (higher layer means drawn later)
 function graph(func, canvas, settings) {
     let isFunction = false;
     let funcs = [];
+    let layers = [];
+    if(Object.keys(settings).includes("layer"))
+        layers = settings.layers;
+    else
+        layers = [0];
     if (Object.keys(func).includes("function")) {
-        funcs = func.function;
+        funcs.push(...(func.function).map((e, i)=>[e, true, layers[Math.min(layers.length-1, i)]]));
         isFunction = true;
     }
     else if (Object.keys(func).includes("list"))
-        funcs = func.list;
+        funcs.push(...(func.list).map((e, i)=>[e, false, layers[funcs.length+Math.min(layers.length-1, i)]]));
+    console.log(funcs);
+    funcs.sort((a,b)=>a[2]-b[2]);
+    console.log(funcs);
     let coords = 0;
     if (settings.coords)
         coords = settings.coords;
@@ -38,8 +47,10 @@ function graph(func, canvas, settings) {
     //graph
     //console.log(funcs);
     for (let funcIdx = 0; funcIdx < funcs.length; funcIdx++) {
-        func = funcs[funcIdx];
-        ctx.globalAlpha = 1;
+        func = funcs[funcIdx][0];
+        isFunction = funcs[funcIdx][1]
+        if(func)
+            ctx.globalAlpha = 1;
 
         let col = cols[funcIdx];
         ctx.beginPath();
@@ -397,6 +408,16 @@ function hist(canvas, data, numBins, settings) {
 
     }
 
+
+    drawAxes(canvas, coords);
+
+}
+
+
+function zngi(params, canvas, settings){
+    let coords = { x: 0, y: 0, w: canvas.width, h: canvas.height, padding: 40 };
+    if(settings.coords)
+        coords = settings.coords;
 
     drawAxes(canvas, coords);
 

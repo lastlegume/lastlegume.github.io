@@ -214,7 +214,7 @@ function finishStep(m) {
         xlim = xlim.map((e) => e + xInc);
     }
     if (refreshCounter % refreshRate == 0) {
-        graph({ "list": populations }, timeGraph, { "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": m[2], "col": colors });
+        graph({ "list": populations }, timeGraph, { "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": m[2], "col": colors, "layers": [1,2] });
         graph({ "list": slopes }, slopeGraph, { "xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": m[3], "col": colors });
     }
     refreshCounter++;
