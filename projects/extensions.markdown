@@ -28,7 +28,7 @@ An extension that counts down until a certain date and time. You can add as many
 <a href="https://github.com/lastlegume/Countdown-Timer" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
 <div style="text-align: right">  
-<a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/countdown-timer/ihigneebhahgionaapclffdgiemkacib"><img src = "https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/countdown-timer/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a>
+<a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/countdown-timer/ihigneebhahgionaapclffdgiemkacib"><img src = "https://developer.chrome.com/static/docs/webstore/branding/image/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/countdown-timer/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a>
 
 </div>
 
@@ -40,7 +40,7 @@ An extension that removes the citations from websites to clean up reading. Conta
 
 <a href="https://github.com/lastlegume/ExCiter" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
-<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/exciter/eajamcgdondjhilgabhnebphhlnbdhnf"><img src = "https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png"></a>
+<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/exciter/eajamcgdondjhilgabhnebphhlnbdhnf"><img src = "https://developer.chrome.com/static/docs/webstore/branding/image/UV4C4ybeBTsZt43U4xis.png"></a>
 <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/exciter/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a> </div>
 
 ---
@@ -52,7 +52,7 @@ This extension isn't perfect and will need modifications such as pagebreaks to b
 
 <a href="https://github.com/lastlegume/ScilympiadToLaTeX" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
-<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/scilympiadtolatex/ompkjeefecnmejcmanlofimmclifefde"><img src = "https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/scilympiadtolatex/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a> </div>
+<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/scilympiadtolatex/ompkjeefecnmejcmanlofimmclifefde"><img src = "https://developer.chrome.com/static/docs/webstore/branding/image/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/scilympiadtolatex/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a> </div>
 
 ---
 
@@ -62,7 +62,7 @@ Creates a pie chart underneath the default timer in google that updates once per
 
 <a href="https://github.com/lastlegume/TimerPieChart" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
-<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/timer-pie-chart/omipgihnnkfeijiaacgfiieacjgaepii"><img src = "https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/timer-pie-chart/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a> </div>
+<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chrome.google.com/webstore/detail/timer-pie-chart/omipgihnnkfeijiaacgfiieacjgaepii"><img src = "https://developer.chrome.com/static/docs/webstore/branding/image/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/timer-pie-chart/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a> </div>
 
 ---
 
@@ -72,6 +72,6 @@ Displays the icon for search results on the Ecosia search results page using Duc
 
 <a href="https://github.com/lastlegume/Ecosia-Search-Icons" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
-<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chromewebstore.google.com/detail/ecosia-search-icons/locnlglgnjoiooffogmnibcipffajajf"><img src = "https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/ecosia-search-icons/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a> </div>
+<div style="text-align: right"> <a class = "extension-link" title = "Get the extension" href = "https://chromewebstore.google.com/detail/ecosia-search-icons/locnlglgnjoiooffogmnibcipffajajf"><img src = "https://developer.chrome.com/static/docs/webstore/branding/image/UV4C4ybeBTsZt43U4xis.png"></a>     <a class = "extension-link" title = "Get the extension" href = "https://addons.mozilla.org/en-US/firefox/addon/ecosia-search-icons/"><img src = "https://blog.mozilla.org/addons/files/2015/11/get-the-addon.png"></a> </div>
 
 ---
