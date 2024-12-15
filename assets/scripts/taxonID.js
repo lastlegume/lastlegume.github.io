@@ -178,10 +178,16 @@ function contains(arr, val) {
 }
 
 function process(event) {
-    if (checkTiming())
-        return;
-    if (event.key === "Enter")
-        check();
+    if (event.key === "Enter"){
+        if (answer.value.length==0)
+            newPicture();            
+        else if(checkTiming())
+            return;
+        else
+            check();
+    }
+
+
 }
 function checkTiming() {
     if(waitingForAPICall)
