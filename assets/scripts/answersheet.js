@@ -148,7 +148,7 @@ function convertText() {
                         if(frqtype.value==="default")
                             question += "\\hspace{.1em}\n\\begin{solutionbox}{" + ((autoCalcSASize.checked)?2+Math.floor((questionLength) ** .5):document.getElementById("SAsize").value) + "em}\n\n\\end{solutionbox}";
                         else
-                            question += `\\hspace{.1em}\n\\begin{${frqtype.value.substring(5)}}${frqtype==="forcesolutionbox"?"{":"["}${((autoCalcSASize.checked)?2+Math.floor((questionLength) ** .5):document.getElementById("SAsize").value)}em${(frqtype==="forcesolutionbox"?"}":"]")}\n\n\\end{${frqtype.value.substring(5)}}`;
+                            question += `\\hspace{.1em}\n\\begin{${frqtype.value.substring(5)}}${((frqtype==="forcesolutionbox")?"{":"[")}${((autoCalcSASize.checked)?2+Math.floor((questionLength) ** .5):document.getElementById("SAsize").value)}em${((frqtype==="forcesolutionbox")?"}":"]")}\n\n\\end{${frqtype.value.substring(5)}}`;
                     } else {
                         question += "\\fillin[ ]["+document.getElementById("FIBsize").value+"]";
                     }
