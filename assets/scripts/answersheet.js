@@ -22,7 +22,9 @@ let includeSection = true;
 let includeParts = false;
 let includeFullwidth = false;
 let includeEmptyQuestions = false;
+let expectAnswer = false;
 let showAnswerChoices = false;
+
 function convertText() {
     let input = inputArea.value.split("\n");
     //   console.log(input);
@@ -36,7 +38,8 @@ function convertText() {
     includeFullwidth = document.getElementById("includeFullwidth").checked;
     includeEmptyQuestions = document.getElementById("includeEmptyQuestions").checked;
     showAnswerChoices = document.getElementById("showAnswerChoices").checked;
-    FIBThreshold = document.getElementById("FIBThreshold").value;
+    expectAnswer = document.getElementById("expectAnswer").checked;
+    FIBThreshold = document.getElementById("FIBThreshold").value*1;
 
     const qregex = /\\(sub)*?(part|question)\[(\d*?)\s*?(\\half)*?\]/g;
     for (let i = 0; i < input.length; i++) {
@@ -114,13 +117,14 @@ function convertText() {
                         i = end;
                     }
 
-                } else {
+                } else if(expectAnswer){
+                    // deals with if question is long and has stuff like an enumerate between the start and the answer
                     if(consecutiveMCQ>0){
                         output+="\\end{multicols}\n";
                     }
                     consecutiveMCQ = 0;
                     let end = i + 1;
-                    for (let j = i + 1; j < input.length && input[j].trim().substring(0, marker.length) !== marker; j++) {
+                    for (let j = i + 1; j < input.length && input[j].trim().substring(0, marker.length) !== marker && !qregex.test(input[j]); j++) {
                         end = j;
                     }
                     end++;
@@ -133,6 +137,22 @@ function convertText() {
                         question += "\\fillin[" + input[i + 1].trim().substring(marker.length).trim() + "]["+document.getElementById("FIBsize").value+"]";
                     }
                     i = end;
+
+                } else{
+                    if(consecutiveMCQ>0){
+                        output+="\\end{multicols}\n";
+                    }
+                    consecutiveMCQ = 0;
+                    let questionLength = input[i].replaceAll(qregex, "").trim().length;
+                    if ((questionLength > FIBThreshold&&frqtype.value!=="forceFIB")||frqtype.value.includes("solution")) {
+                        if(frqtype.value==="default")
+                            question += "\\hspace{.1em}\n\\begin{solutionbox}{" + ((autoCalcSASize.checked)?2+Math.floor((questionLength) ** .5):document.getElementById("SAsize").value) + "em}\n\n\\end{solutionbox}";
+                        else
+                            question += `\\hspace{.1em}\n\\begin{${frqtype.value.substring(5)}}${frqtype==="forcesolutionbox"?"{":"["}${((autoCalcSASize.checked)?2+Math.floor((questionLength) ** .5):document.getElementById("SAsize").value)}em${(frqtype==="forcesolutionbox"?"}":"]")}\n\n\\end{${frqtype.value.substring(5)}}`;
+                    } else {
+                        question += "\\fillin[ ]["+document.getElementById("FIBsize").value+"]";
+                    }
+                    console.log(input[i]);
 
                 }
             }
@@ -165,12 +185,15 @@ function convertText() {
                 }
                 consecutiveMCQ = 0;
                 output += input[i] + "\n";
-            }else if((/^\\question[^[]/g.test(input[i].toLowerCase().trim())) && includeEmptyQuestions)  {
+            }else if((/^\\(sub)*?(part|question)/g.test(input[i].toLowerCase().trim())) )  { //&& includeEmptyQuestions
                 if(consecutiveMCQ>0){
                     output+="\\end{multicols}\n";
                 }
                 consecutiveMCQ = 0;
-                output += input[i] + "\n";
+                if(includeEmptyQuestions)
+                    output += input[i] + "\n";
+                else
+                    output += input[i].match(/^\\(sub)*?(part|question)/g)[0] + "\n";
             }
             
         }
@@ -188,7 +211,6 @@ function convertText() {
         output = output.replaceAll(".9\\textwidth", `\\the{\\linegoal}`);
         output = "%Don't forget to include the linegoal package (\\usepackage{linegoal}) in the preamble of the document!\n"+output;
     }
-    console.log(frqtype.value)
     outputArea.value = output;
     copyText();
 }
