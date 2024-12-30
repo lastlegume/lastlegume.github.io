@@ -12,7 +12,6 @@ let method = "";
 let preyGrowth = [];
 let predatorResponse = [];
 
-
 onmessage = function (m) {
     //    console.log(m.data);
     if (m.data[0] === "init")
@@ -95,13 +94,41 @@ function reset() {
 function f(N, P) {
     //variables is a list of [r, a, f, q, K, h]
     let answers = [0, 0];
+
     // dN/dt
-    answers[0] = (preyGrowth[0] ? (variables[0] * N) : preyGrowth[1] ? (variables[0] * N * (1 - N / variables[4])) : 0) - (predatorResponse[0] ? (variables[1] * P * N) : predatorResponse[1] ? (variables[1] * P * N / (1 + variables[1] * variables[5] * N)) : 0);
+    answers[0] = 0;
+    // prey growth
+    if (preyGrowth[0])
+        answers[0] += variables[0] * N;
+    else if (preyGrowth[1])
+        answers[0] += variables[0] * N * (1 - N / variables[4]);
+    else if (preyGrowth[2])
+        answers[0] += variables[0] * (1 - N / variables[4]);
+    else
+        answers[0] += 0;
+    // prey death
+    let preyDeaths = 0;
+    if (predatorResponse[0])
+        preyDeaths = (variables[1] * P * N);
+    else if (predatorResponse[1])
+        preyDeaths = (variables[1] * P * N / (1 + variables[1] * variables[5] * N));
+    else if (predatorResponse[2])
+        preyDeaths = 1 / variables[5] * P * N * N / ((1 / (variables[1] * variables[1] * variables[5] * variables[5])) + N * N);
+    answers[0] -= preyDeaths;
+    console.log(preyDeaths);
+
+    //answers[0] = (preyGrowth[0] ? (variables[0] * N) : (preyGrowth[1] ? (variables[0] * N * (1 - N / variables[4])) : (preyGrowth[2] ? (variables[0] * N * (1 - N / variables[4])) : 0))) - (predatorResponse[0] ? (variables[1] * P * N) : predatorResponse[1] ? (variables[1] * P * N / (1 + variables[1] * variables[5] * N)) : 0);
+
     // dP/dt
-    answers[1] = (predatorResponse[0] ? (variables[1] * variables[2] * P * N) : predatorResponse[1] ? (variables[1] * variables[2] * P * N / (1 + variables[1] * variables[5] * N)) : 0) - (variables[3] * P);
+    answers[1] = 0
+    answers[1] += variables[2] * preyDeaths;
+    answers[1] -= (variables[3] * P);
+
+    //(predatorResponse[0] ? (variables[1] * variables[2] * P * N) : predatorResponse[1] ? (variables[1] * variables[2] * P * N / (1 + variables[1] * variables[5] * N)) : 0) - (variables[3] * P);
     return answers;
 }
 
-function sendAll(m){
+function sendAll(m) {
     postMessage(["sent all", m, populations]);
 }
+

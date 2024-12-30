@@ -17,9 +17,9 @@ function graph(func, canvas, settings) {
     }
     else if (Object.keys(func).includes("list"))
         funcs.push(...(func.list).map((e, i)=>[e, false, layers[funcs.length+Math.min(layers.length-1, i)]]));
-    console.log(funcs);
+//    console.log(funcs);
     funcs.sort((a,b)=>a[2]-b[2]);
-    console.log(funcs);
+//    console.log(funcs);
     let coords = 0;
     if (settings.coords)
         coords = settings.coords;

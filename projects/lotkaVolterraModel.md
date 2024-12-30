@@ -14,7 +14,9 @@ tools: 10
   position: relative;
   left: calc(-50vw + 50%);
     }
-
+    .pad-right-20{
+        padding-right: 20px;
+    }
 
 </style>
 
@@ -23,12 +25,15 @@ tools: 10
 Still very much a work in progress. Addition of a plot to show the ZNGIs (zero net growth isoclines) is planned for the future.
 
 <br>
-<div class="graph panel" >
-    <canvas class="graph" id="timeGraph" height=400 width=610></canvas><br>
-    <canvas class="graph" id="slopeGraph" height=400 width=610></canvas>
+<div class="graph panel pad-right-20" >
+    <canvas class="graph" id="timeGraph" height=400 width=400></canvas><br>
+    <canvas class="graph" id="slopeGraph" height=400 width=400></canvas>
 </div>
 
 <div class="panel" style="min-width:300px;">
+    <h3 class="header">Current Equations</h3>
+    <p id="prey-eq"></p>
+    <p id="pred-eq"></p>
     <h3 class="header">Graph Settings</h3>
     <button class = "btn btn-submit" id="play">Play</button><button class = "btn btn-submit" id="step" title="Steps forward by one step size using the method specified below.">Step</button><br>
     <label>Method: <select id="method">
@@ -42,10 +47,12 @@ Still very much a work in progress. Addition of a plot to show the ZNGIs (zero n
     <label for="prey">Prey growth type: </label>
     <label><input class="prey-growth" type="radio" checked name="prey" value="Exponential">Exponential</label>
     <label><input class="prey-growth" type="radio" name="prey" value="Logistic">Logistic</label>
+    <label><input class="prey-growth" type="radio" name="prey" value="Logistic">Regrowth</label>
     <br>
     <label for="predator">Predator functional response: </label>
     <label><input class="predator-func-response" type="radio" checked name="predator" value="t1">Type I</label>
     <label><input class="predator-func-response" type="radio" name="predator" value="t2">Type II</label>
+    <label><input class="predator-func-response" type="radio" name="predator" value="t2">Type III</label>
     <br>
     <button class = "btn btn-submit x-small" id="reset">Reset</button><br>
     <button class = "btn btn-submit x-small" id="graph-all" title="Graphs everything that has been calculated since the initial conditions at the bottom of the page. You will have to scroll sideways to see everything.">Graph all</button>
@@ -53,58 +60,57 @@ Still very much a work in progress. Addition of a plot to show the ZNGIs (zero n
 
 
     <h3 class="header" id="expParams">Graph Parameters</h3>
-    <label><math>
+    <label class="var-lab" id="N-label"><math>
         <msub>
             <mi>N</mi>
             <mn>0</mn>
         </msub>
     </math>:
-    <input type="range" id="N0" min="1" max="50" step="1" value="5"></label><br>
+    <input type="range" id="N0" min="1" max="50" step="1" value="5">
 
 <p id="N0-value"><math>
         <msub>
             <mi>N</mi>
             <mn>0</mn>
         </msub>
-    </math> value: </p>
-    
-    <label><math>
+    </math> value: </p></label>
+    <label class="var-lab" id="P-label"><math>
             <msub>
                 <mi>P</mi>
                 <mn>0</mn>
             </msub>
         </math>:
-        <input type="range" id="P0" min="1" max="50" step="1" value="2"></label><br>
+        <input type="range" id="P0" min="1" max="50" step="1" value="2"><br>
     <p id="P0-value"><math>
             <msub>
                 <mi>P</mi>
                 <mn>0</mn>
             </msub>
-        </math> value: </p>
+        </math> value: </p></label>
 
-<label id="r-label">r: <input type="range" id="r" min=".1" max="2.5" step=".01" value="1.2"><br>
+<label class="var-lab" id="r-label">r: <input type="range" id="r" min=".1" max="2.5" step=".01" value="1.2"><br>
     <p id="r-value">r value: </p>
-</label><br>
+</label>
 
-<label id="a-label">a: <input type="range" id="a" min="0" max="1" step=".01" value=".5"><br>
+<label class="var-lab" id="a-label">a: <input type="range" id="a" min="0" max="1" step=".01" value=".5"><br>
     <p id="a-value">a value: </p>
-</label><br>
+</label>
 
-<label id="q-label">q: <input type="range" id="q" min="0" max="1" step=".01" value=".1"><br>
+<label class="var-lab" id="q-label">q: <input type="range" id="q" min="0" max="1" step=".01" value=".1"><br>
     <p id="q-value">q value: </p>
-</label><br>
+</label>
 
-<label id="f-label">f: <input type="range" id="f" min="0" max="1" step=".01" value=".1"><br>
+<label class="var-lab" id="f-label">f: <input type="range" id="f" min="0" max="1" step=".01" value=".1"><br>
     <p id="f-value">f value: </p>
-</label><br>
+</label>
 
-<label id="K-label">K: <input type="range" id="K" min="1" max="100" step="1" value="75"><br>
+<label class="var-lab" id="K-label">K: <input type="range" id="K" min="1" max="100" step="1" value="75"><br>
     <p id="K-value">K value: </p>
-</label><br>
+</label>
 
-<label id="h-label">h: <input type="range" id="h" min="0" max="1" step=".01" value="0"><br>
+<label class="var-lab" id="h-label">h: <input type="range" id="h" min="0.01" max="1" step=".01" value="0.1"><br>
     <p id="h-value">h value: </p>
-</label><br>
+</label>
 </div>
 
 <canvas class="graph hide stretch" id="allGraph" height=400 width=610></canvas><br>

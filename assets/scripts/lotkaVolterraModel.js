@@ -38,6 +38,8 @@ for (let i = 0; i < predatorResponse.length; i++) {
 stepScaleCheckbox.addEventListener('change', updateVals);
 
 //parameters
+const labs = document.getElementsByClassName("var-lab");
+
 const rSlider = document.getElementById("r");
 const rValue = document.getElementById("r-value");
 const N0Slider = document.getElementById("N0");
@@ -76,15 +78,14 @@ let variables = [rSlider.value, aSlider.value, fSlider.value, qSlider.value, KSl
 
 let slopes = [[], []];
 var eqs = ["", ""]
+let eqDisplays = [document.getElementById("prey-eq"), document.getElementById("pred-eq")];
 let running = false;
 let updated = true;
 let currentT = 0;
 let refreshCounter = 0;
 let colors = ["#00FFA0", "#FFFF00"];
 
-let maxPop = -1;
-let maxSlope = -1;
-let minSlope = 1;
+let yBounds = [[0,Math.max(...populations[0], ...populations[1])],[-1,1]];
 
 let stepSize = stepSizeInput.value * 1;
 let refreshRate = refreshRateInput.value * 1;
@@ -114,10 +115,18 @@ function updateVals() {
 
     variables = [rSlider.value, aSlider.value, fSlider.value, qSlider.value, KSlider.value, hSlider.value];
 
+    // eqs is not used for calculations
     eqs = ["", ""]
-    eqs[0] = `${preyGrowth[0].checked ? "r * N" : preyGrowth[1].checked ? "r * N * ( 1 - N / K )" : ""} - ${predatorResponse[0].checked ? "a * P * N" : predatorResponse[1].checked ? "a * P * N / ( 1 + a * h * N )" : ""}`;
-    eqs[1] = `${predatorResponse[0].checked ? "f * a * P * N" : predatorResponse[1].checked ? "f * a * P * N / ( 1 + a * h * N )" : ""} - q * P`
+    eqs[0] = `${(preyGrowth[0].checked) ? "r * N" : (preyGrowth[1].checked ? "r * N * ( 1 - N / K )" : (preyGrowth[2].checked ? "r * ( 1 - N / K )" : ""))} - ${(predatorResponse[0].checked) ? "a * P * N" : (predatorResponse[1].checked ? "a * P * N / ( 1 + a * h * N )" : (predatorResponse[2].checked ? "P * N ^ 2 / ( ( a * h ) ^ -2 + N ^ 2 ) / h" : ""))}`;
+    eqs[1] = `${(predatorResponse[0].checked) ? "f * a * P * N" : (predatorResponse[1].checked ? "f * a * P * N / ( 1 + a * h * N )" : (predatorResponse[2].checked ? "f * P * N ^ 2 / ( ( a * h ) ^ -2 + N ^ 2 ) / h" : ""))} - q * P`
 
+    for(e of labs){
+        if((eqs[0]+" "+eqs[1]).includes(e.id.substring(0,1)))
+            e.classList.remove("hide");
+        else
+            e.classList.add("hide");
+    }
+    updateEquationText();
 
     stepSize = stepSizeInput.value * 1;
     if (!stepScaleCheckbox.checked) {
@@ -131,10 +140,13 @@ function updateVals() {
         stepSizeInput.max = 10;
     }
     xlim = [0, xInc * (timeGraph.width - 40)];
+    
+    drawGraphs();
+}
+function drawGraphs(){
 
-
-    graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, Math.max(...populations[0], ...populations[1])], "col": colors });
-    graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, 100], "col": colors });
+    graph({ "list": populations }, timeGraph, { "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": yBounds[0], "col": colors, "layers": [1,2] });
+    graph({ "list": slopes }, slopeGraph, { "xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": yBounds[1], "col": colors });
 
 
 }
@@ -155,6 +167,7 @@ function step() {
 }
 function toggle() {
     running = !running;
+    drawGraphs();
     playButton.innerText = running ? "Stop" : "Start";
     if (running) {
         if (updated) {
@@ -178,13 +191,11 @@ function reset() {
     slopes = [[], []];
     currentT = 0;
     allGraph.classList.add("hide");
+    
+    drawGraphs();
+    // graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, Math.max(...populations[0], ...populations[1])], "col": colors });
+    // graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, 100], "col": colors });
 
-    graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, Math.max(...populations[0], ...populations[1])], "col": colors });
-    graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, 100], "col": colors });
-
-    maxPop = -1;
-    maxSlope = -1;
-    minSlope = 1;
 }
 
 function processMessage(message) {
@@ -213,9 +224,9 @@ function finishStep(m) {
         currentT--;
         xlim = xlim.map((e) => e + xInc);
     }
+    yBounds = [m[2], m[3]];
     if (refreshCounter % refreshRate == 0) {
-        graph({ "list": populations }, timeGraph, { "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": m[2], "col": colors, "layers": [1,2] });
-        graph({ "list": slopes }, slopeGraph, { "xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": m[3], "col": colors });
+        drawGraphs();    
     }
     refreshCounter++;
 }
@@ -257,4 +268,12 @@ function download(m) {
 
     a.click();
 
+}
+
+function updateEquationText(){
+    //eqs[0] = `${preyGrowth[0].checked ? "r * N" : preyGrowth[1].checked ? "r * N * ( 1 - N / K )" : ""} - ${predatorResponse[0].checked ? "a * P * N" : predatorResponse[1].checked ? "a * P * N / ( 1 + a * h * N )" : ""}`;
+    //eqs[1] = `${predatorResponse[0].checked ? "f * a * P * N" : predatorResponse[1].checked ? "f * a * P * N / ( 1 + a * h * N )" : ""} - q * P`
+
+    eqDisplays[0].innerHTML = "<math>";
+    eqDisplays[1].innerHTML = "<math>";
 }
