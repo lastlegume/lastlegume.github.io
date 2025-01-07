@@ -48,7 +48,7 @@ function simulateNHands(copies, basics, n, isCardBasic) {
             tempDeck = shuffle(deck);
             mulligans++;
         }
-        freqs[0][tempDeck.slice(0, 7).map((val) => (val === "B" || val === "C") ? 1 : 0).reduce((prev, cur) => prev + cur)]++;
+        freqs[0][tempDeck.slice(0, 7).map((val) => (val === "B" || (val === "C"&&isCardBasic)) ? 1 : 0).reduce((prev, cur) => prev + cur)]++;
         freqs[1][tempDeck.slice(0, 7).map((val) => (val === "C") ? 1 : 0).reduce((prev, cur) => prev + cur)]++;
         if (((n < 100000&&i>50) || i % 100 == 0)&&update)
             postMessage([i, ...freqs[prevSettings[3] === "binhand" ? 0 : 1]]);
