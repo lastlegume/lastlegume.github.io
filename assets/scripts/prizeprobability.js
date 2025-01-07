@@ -50,9 +50,9 @@ function frame(t) {
     highlightIdx[1] = Math.floor((mousePos[1][0] - coords[1].padding) / Math.floor((coords[1].w - coords[1].padding * 2) / ((prevSettings[3] !== "normal") ? 8 : 7)));
 
     if (runSummarySidebar[0] && highlightIdx[0] >= 0 && highlightIdx[0] < results[0].length)
-        drawProbabilityText(oneCopyHist, results[0][highlightIdx[0]], prevReps[0], highlightIdx[0])
+        drawProbabilityText(oneCopyHist, results[0][highlightIdx[0]], prevReps[0], highlightIdx[0], 0)
     if (runSummarySidebar[1] && highlightIdx[1] >= 0 && highlightIdx[1] < results[1].length)
-        drawProbabilityText(simHist, results[1][highlightIdx[1]], prevReps[1], highlightIdx[1])
+        drawProbabilityText(simHist, results[1][highlightIdx[1]], prevReps[1], highlightIdx[1], 1)
     hist(oneCopyHist, { "binQuantities": results[0] }, binNumbers[0], { "xRange": [0, 7], "title": "Number Prized With 1 Copy", "xlab": "Number Prized", "color": "#30A0FF", "coords": coords[0], "highlight": highlightIdx[0], "highlightCol": "#FFFF00", "mean": means[0] });
     hist(simHist, { "binQuantities": results[1] }, ((prevSettings[3] !== "normal") ? 8 : 7), { "xRange": [0, ((prevSettings[3] !== "normal") ? 8 : 7)], "title": ((prevSettings[3] === "binhand") ? "Basics " : "Number ") + ((prevSettings[3] !== "normal") ? "In Hand" : "Prized") + (width > 450 ? ` With ${prevSettings[1]} Copies and ${prevSettings[2]} Basics` : ""), "xlab": "Number " + ((prevSettings[3] !== "normal") ? "In Hand" : "Prized"), "color": "#30A0FF", "coords": coords[1], "highlight": highlightIdx[1], "highlightCol": "#FFFF00", "mean": means[1] });
 
@@ -230,7 +230,8 @@ function updateMouseCoords(e) {
 }
 
 
-function drawProbabilityText(canvas, trials, total, number) {
+function drawProbabilityText(canvas, trials, total, number, type) {
+    //if type is 0, say prized, if 1, say in hand
     let ctx = canvas.getContext('2d');
     ctx.clearRect(canvas.width - 220, 0, 220, canvas.height);
     ctx.fillStyle = "#FFFFFF";
@@ -248,7 +249,7 @@ function drawProbabilityText(canvas, trials, total, number) {
     ctx.fillText(`${total}`, canvas.width - 220, 140, 230);
     ctx.fillText(`had`, canvas.width - 220, 160, 230);
     ctx.fillText(`${number} copies`, canvas.width - 220, 180, 230);
-    ctx.fillText(`prized`, canvas.width - 220, 200, 230);
+    ctx.fillText((type==0)?`prized`:"in hand", canvas.width - 220, 200, 230);
 
 
 }
