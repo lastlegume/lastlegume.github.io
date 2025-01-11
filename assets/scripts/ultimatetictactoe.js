@@ -209,12 +209,17 @@ function runTurn(e) {
                 tempBoard[i] = tempBoard[i].slice(c * 3, c * 3 + 3);
             }
             overallBoard[(r * 3 + c)] = getWinner(tempBoard);
+            // if(tempBoard.map((e)=>e==0?0:1).reduce((p,c)=>p+c)==9&&((r*3+c)==currentBoard))
+            //     currentBoard=-1;
             // if(overallBoard[(r*3+c)]>0&&r*3+c==currentBoard)
             //     currentBoard=-1;
         }
     }
     if (overallBoard[currentBoard] > 0)
         currentBoard = -1;
+    // if(game[currentBoard].map((e)=>e==0?0:1).reduce((p,c)=>p+c)==9)
+    //     currentBoard = -1;
+
     let winner = getWinner([overallBoard.slice(0, 3), overallBoard.slice(3, 6), overallBoard.slice(6, 9)]);
     let spacesLeft = getUsableSpacesLeft();
     if (winner > 0) {
