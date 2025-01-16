@@ -38,7 +38,7 @@ let timeBetweenCheckPress = 500;
 let lastAPICall = Date.now() + 1000;
 let lastCheckPress = Date.now();
 let waitingForAPICall = false; 
-let url = "";
+let url = [];
 
 
 let apiCall = "https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research";
@@ -54,13 +54,23 @@ function check() {
     lastCheckPress = Date.now();
 
     if (fuzzyEquals(answer.value.toLowerCase().trim(), [...correctAnswer])) {
-        reply.innerHTML = "Correct! The specimen is <span style = \"color: forestgreen;\">" + correctAnswer.join(" or ") + "</span>.<br><a class = \"correct\" href=\""+url+"\">Observation link</a>";
+        let replyText = "Correct! The specimen is <span style = \"color: forestgreen;\">" + correctAnswer.join(" or ") + "</span>.<br>";
+        for(let k of url){
+            replyText+="| <a class = \"correct small\" href=\""+k+"\">Observation link</a> "
+        }
+        replyText+="|"
+        reply.innerHTML = replyText;
         reply.style.setProperty('background-color', 'darkseagreen');
         makeQuestion();
 
     }
     else if (showAnswerIfIncorrect.checked){
-        reply.innerHTML = "Incorrect. The specimen is <span style = \"color: lightsalmon;\">" + correctAnswer.join(" or ") + "</span>.<br><a class = \"incorrect\" href=\""+url+"\">Observation link</a>";
+        let replyText = "Incorrect. The specimen is <span style = \"color: lightsalmon;\">" + correctAnswer.join(" or ") + "</span>.<br>";
+        for(let k of url){
+            replyText+="| <a class = \"incorrect small\" href=\""+k+"\">Observation link</a> "
+        }
+        replyText+="|"
+        reply.innerHTML = replyText;
         reply.style.setProperty('background-color', 'crimson');
         response.usage[random] -= .75;
         makeQuestion();
@@ -78,6 +88,8 @@ async function makeQuestion() {
     let availableList = [];
     // list of available taxon ids
     let availableIds = [];
+    // list of observation urls
+    url = [];
 
     for (let i = 0; i < list.length; i++) {
         // gets the checkbox for the specific family/order and checks if it checked
@@ -147,7 +159,7 @@ async function makeQuestion() {
     question.textContent = "What taxon is this specimen a part of?";
 
     console.log(options);
-    url = options[random][1];
+    url.push(options[random][1]);
     work.src = options[random][0].replaceAll("square", "small");
 
     nextIndex = Math.floor(Math.random() * availableList.length);
@@ -383,6 +395,7 @@ function newPicture() {
     }
     random = weightedOptions[Math.floor(Math.random() * weightedOptions.length)]
     response.usage[random] += .1;
+    url.push(options[random][1]);
     work.src = options[random][0].replaceAll("square", "small");
 }
 function updateCheckboxes() {
