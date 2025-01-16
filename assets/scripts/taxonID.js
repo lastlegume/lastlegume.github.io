@@ -8,6 +8,7 @@ const work = document.getElementById("work");
 const question = document.getElementById("question");
 const answer = document.getElementById("answer");
 const hintBlank = document.getElementById("hint");
+const quality = document.getElementById("quality");
 
 var individualCheckboxes = document.getElementById("individualCheckboxes");
 
@@ -160,7 +161,7 @@ async function makeQuestion() {
 
     console.log(options);
     url.push(options[random][1]);
-    work.src = options[random][0].replaceAll("square", "medium");
+    work.src = options[random][0].replaceAll("square", quality.value);
 
     nextIndex = Math.floor(Math.random() * availableList.length);
     species = availableList[nextIndex][0];
@@ -396,7 +397,7 @@ function newPicture() {
     random = weightedOptions[Math.floor(Math.random() * weightedOptions.length)]
     response.usage[random] += .1;
     url.push(options[random][1]);
-    work.src = options[random][0].replaceAll("square", "small");
+    work.src = options[random][0].replaceAll("square", quality.value);
 }
 function updateCheckboxes() {
     let cbs = document.getElementsByClassName('indivCb');

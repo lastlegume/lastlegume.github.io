@@ -15,9 +15,11 @@ tools: 5
     overflow: hidden;
     font-size: smaller;
   }
-  h3{
+
+  h3 {
     margin-bottom: 3px;
   }
+
   .header {
     margin: 10px 0;
     font-size: 4em;
@@ -66,20 +68,24 @@ tools: 5
     padding-bottom: 3px;
 
   }
-  .incorrect{
+
+  .incorrect {
     color: lightsalmon;
   }
-  .correct{
+
+  .correct {
     color: forestgreen;
   }
-  #work{
+
+  #work {
     max-height: 300px;
     max-width: 300px;
   }
 </style>
 
 <div class="container">
-  <p>A tool to test you on any taxons that are found on iNaturalist. Default list is the 2025 Science Olympiad Entomology list. Idea from SciolyID.</p>
+  <p>A tool to test you on any taxons that are found on iNaturalist. Default list is the 2025 Science Olympiad
+    Entomology list. Idea from SciolyID.</p>
   <h1 class="header">Entomology ID</h1>
   <img id="work" alt="Image of the unknown species"><br>
   <div id="question"></div><input id="answer" type="text" autofocus> <button class="btn-submit btn"
@@ -96,18 +102,25 @@ tools: 5
   <h2 class="header">Settings</h2>
   <h3>Customize List</h3>
   <label><input type="checkbox" checked id="selectAll">Deselect All</label>
-  <div id = "individualCheckboxes"></div>
+  <div id="individualCheckboxes"></div>
   <h5>Other settings</h5>
-  <label><input type="checkbox" id="showAnswerIfIncorrect" checked> Show the correct answer if an incorrect response is given </label><br>
+  <label><input type="checkbox" id="showAnswerIfIncorrect" checked> Show the correct answer if an incorrect response is
+    given </label><br>
   <label><input type="checkbox" id="strict"> Strict spelling </label><br>
   <label><input type="checkbox" id="allowOrders"> Accept order name for families </label><br>
   <label><input type="checkbox" id="hintSci" checked> Give the scientific name as the hint </label><br>
+  <label>Image quality (lower qualities load faster): <select id="quality">
+      <option value = "large">Very High</option>
+      <option value = "medium" selected>High</option>
+      <option value = "small">Normal</option>
+    </select></label><br>
 
   <button class="btn small" id="clearStorage">Clear local storage</button><br>
   <h3>Species List</h3>
   <textarea id="speciesList" cols="100" rows="15"></textarea><br>
 
   <p>Note: this tool uses the browser's local storage to more quickly access images. </p>
-  <p>To create a list, enter in all of the names of the taxon you wish to be tested on. If you need to clarify taxa, paste the number iNaturalist taxon id after the taxa name with a space and % sign preceding it. </p>
+  <p>To create a list, enter in all of the names of the taxon you wish to be tested on. If you need to clarify taxa,
+    paste the number iNaturalist taxon id after the taxa name with a space and % sign preceding it. </p>
 
 </div>
