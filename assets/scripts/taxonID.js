@@ -160,7 +160,7 @@ async function makeQuestion() {
 
     console.log(options);
     url.push(options[random][1]);
-    work.src = options[random][0].replaceAll("square", "small");
+    work.src = options[random][0].replaceAll("square", "medium");
 
     nextIndex = Math.floor(Math.random() * availableList.length);
     species = availableList[nextIndex][0];
