@@ -9,6 +9,8 @@ const question = document.getElementById("question");
 const answer = document.getElementById("answer");
 const hintBlank = document.getElementById("hint");
 const quality = document.getElementById("quality");
+const answerList = document.getElementById("possible-answers");
+
 
 var individualCheckboxes = document.getElementById("individualCheckboxes");
 
@@ -91,12 +93,20 @@ async function makeQuestion() {
     let availableIds = [];
     // list of observation urls
     url = [];
-
+    answerList.innerHTML = "";
     for (let i = 0; i < list.length; i++) {
         // gets the checkbox for the specific family/order and checks if it checked
         if (document.getElementById(list[i][0]).checked) {
             availableList.push(list[i]);
             availableIds.push(taxonIdList[i]);
+            list[i].forEach(function(e){
+                let ansOpt = document.createElement("option");
+                ansOpt.value = e;
+                answerList.appendChild(ansOpt);});
+            // for(let j = 0;j<list[i].length;j++){
+
+            // }
+            // list[i].forEach((e)=>());
         }
     }
     //console.log(availableList);
