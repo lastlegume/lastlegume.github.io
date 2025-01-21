@@ -103,7 +103,7 @@ async function makeQuestion() {
             if(autocompleteAnswers.checked)
             list[i].forEach(function(e){
                 let ansOpt = document.createElement("option");
-                ansOpt.value = e;
+                ansOpt.value = e.trim();
                 answerList.appendChild(ansOpt);});
             // for(let j = 0;j<list[i].length;j++){
 
