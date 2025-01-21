@@ -29,6 +29,10 @@ An extension to convert Science Olympiad tests on Scilympiad into beautiful LaTe
 
 A [template](/blog/tex_template) and [accompanying tutorial](/blog/latex_tutorial) that explain the basics of writing SciOly tests in LaTeX (mostly basics of the exam class) and some specific choices I make in my tests. 
 
+### [Entomology ID Site](/taxon-id)
+
+Chooses random images of the desired species/taxa and asks for the answer. The site includes a variety of features, including autocomplete for taxa names and full customization within the list of available taxa. Currently uses the 2025 Science Olympiad Entomology List but can in theory use any taxa that is found on iNaturalist.
+
 ### [ExCiter](/extensions#exciter)
 
 An extension that removes citations from websites (specifically tested on wikipedia, USDA FEIS, and NCBI) for copy pasting or just cleaner reading. Also includes the option to choose sites to remove citations from, but since formats vary widely, there is no guarantee for success on untested sites.
