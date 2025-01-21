@@ -20,6 +20,7 @@ var allowOrders = document.getElementById("allowOrders");
 var hintSci = document.getElementById("hintSci");
 var selectAll = document.getElementById("selectAll");
 var showAnswerIfIncorrect = document.getElementById("showAnswerIfIncorrect");
+var autocompleteAnswers = document.getElementById("autocompleteAnswers");
 
 allowOrders.addEventListener('change', () => createList(allowOrders.checked));
 selectAll.addEventListener('change', () => adjustAll());
@@ -99,6 +100,7 @@ async function makeQuestion() {
         if (document.getElementById(list[i][0]).checked) {
             availableList.push(list[i]);
             availableIds.push(taxonIdList[i]);
+            if(autocompleteAnswers.checked)
             list[i].forEach(function(e){
                 let ansOpt = document.createElement("option");
                 ansOpt.value = e;
