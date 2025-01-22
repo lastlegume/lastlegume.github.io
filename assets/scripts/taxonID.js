@@ -21,6 +21,7 @@ var hintSci = document.getElementById("hintSci");
 var selectAll = document.getElementById("selectAll");
 var showAnswerIfIncorrect = document.getElementById("showAnswerIfIncorrect");
 var autocompleteAnswers = document.getElementById("autocompleteAnswers");
+var offline = document.getElementById("offlineMode");
 
 allowOrders.addEventListener('change', () => createList(allowOrders.checked));
 selectAll.addEventListener('change', () => adjustAll());
@@ -131,14 +132,42 @@ async function makeQuestion() {
         //if next index is no longer a valid species, then choose a new index
         if (speciesIdx == -1 || speciesIdx >= availableList.length || availableList[speciesIdx][0] !== species)
             speciesIdx = Math.floor(Math.random() * availableList.length);
+        if(offline.checked){
+            let validKeys = getValidKeys("t+++");
+            if(validKeys.length==0){
+                reply.innerHTML = "An image <span style=\"color: LemonChiffon;\">could not be chosen</span>. Please disable offline mode, connect to the internet, and try again.";
+                reply.style.setProperty('background-color', 'burlywood');
+                return;
+            }
+            response = JSON.parse(localStorage.getItem("t+++" + species));
+            if(!response){
+                random = validKeys[Math.floor(Math.random() * validKeys.length)];
+                species = localStorage.key(random).substring(4);
+                speciesIdx = list.map((arr) => arr[0]).indexOf(species);
+                let offlineCounter = 0;
+                let tempOfflineAvailable = availableList.map((e)=>e[0]);
+                while(offlineCounter<1000&&!tempOfflineAvailable.includes(species)){
+                    offlineCounter++;
+                    random = validKeys[Math.floor(Math.random() * validKeys.length)];
+                    species = localStorage.key(random).substring(4);
+                    speciesIdx = list.map((arr) => arr[0]).indexOf(species);
+                }
+                if(offlineCounter>999){
+                    reply.innerHTML = "An image from the desired list <span style=\"color: LemonChiffon;\">could not be chosen</span>. Please disable offline mode, connect to the internet, and try again.";
+                    reply.style.setProperty('background-color', 'burlywood');
+                }
+            }
+        }
         correctAnswer = availableList[speciesIdx];
-        if (species === availableList[speciesIdx][0] && nextResponse!=null) {
-            species = availableList[speciesIdx][0];
+        //tests if the species is within the list of available species
+        if (availableList.map((e)=>e[0]).includes(species) && nextResponse!=null) {
+            //species = availableList[speciesIdx][0];
             response = nextResponse;
         } else {
             species = availableList[speciesIdx][0];
             response = JSON.parse(localStorage.getItem("t+++" + species));
-            if (!response || (Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.length > 0 && response.usage.reduce((prev, cur) => prev + cur) > 50) {
+            //checks if response exists or if it is outdated/overused and we are not using offline mode
+            if (!response || !offline.checked&&((Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.length > 0 && response.usage.reduce((prev, cur) => prev + cur) > 50)) {
                 work.alt = "Choosing an image...";
                 await new Promise(r => setTimeout(r, 1500))
                 lastAPICall = Date.now();
@@ -155,7 +184,7 @@ async function makeQuestion() {
         response = JSON.parse(localData)
         localData = null;
     }
-    console.log(species);
+    //console.log(species);
 
     let options = response.response;
     let weightedOptions = [];
@@ -171,14 +200,14 @@ async function makeQuestion() {
     hintIdx = 1;
     question.textContent = "What taxon is this specimen a part of?";
 
-    console.log(options);
+    //console.log(options);
     url.push(options[random][1]);
     work.src = options[random][0].replaceAll("square", quality.value);
 
     nextIndex = Math.floor(Math.random() * availableList.length);
     species = availableList[nextIndex][0];
     nextResponse = JSON.parse(localStorage.getItem("t+++" + species));
-    if (!nextResponse || (Math.floor(Date.now() / 86400000) - nextResponse.date > 5) || nextResponse.usage.reduce((prev, cur) => prev + cur) > 50) {
+    if (!nextResponse || !offline.checked&&((Math.floor(Date.now() / 86400000) - nextResponse.date > 5) || nextResponse.usage.reduce((prev, cur) => prev + cur) > 50)) {
         //    await new Promise(r => setTimeout(r, 1000))
         lastAPICall = Date.now();
         waitingForAPICall = true;
@@ -382,7 +411,7 @@ async function createList(includeOrders) {
     console.log(list);
     let validKeys = getValidKeys("t+++");
     if (validKeys.length > 0) {//needs to be rewritten // appears to be resolved
-        random = Math.floor(Math.random() * validKeys.length);
+        random = validKeys[Math.floor(Math.random() * validKeys.length)];
         localData = localStorage.getItem(localStorage.key(random))
         species = localStorage.key(random).substring(4);
         speciesIdx = list.map((arr) => arr[0]).indexOf(species);
