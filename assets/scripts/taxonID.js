@@ -47,7 +47,7 @@ let waitingForAPICall = false;
 let url = [];
 
 
-let apiCall = "https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research";
+let apiCall = ["https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research","https://api.inaturalist.org/v1/observations?taxon_id=$$TAXON_ID$$&has[]=photos&quality_grade=research"];
 answer.addEventListener("keydown", (e) => process(e));
 var list = [];
 let taxonIdList = [];
@@ -469,10 +469,9 @@ function getValidKeys(str) {
 async function requestData(species, id) {
     let tresponse = "";
     if (id)
-        tresponse = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", id).replaceAll("q", "taxon_id"), { method: "GET" });
+        tresponse = await fetch(apiCall[1].replaceAll("$$TAXON_ID$$", id), { method: "GET" });
     else
-        tresponse = await fetch(apiCall.replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
-
+        tresponse = await fetch(apiCall[0].replaceAll("$$TAXON_NAME$$", species), { method: "GET" });
     tresponse = (await tresponse.json()).results;
     if (tresponse.length == 0) {
         if (id)
