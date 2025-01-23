@@ -3,6 +3,7 @@ checkButton.addEventListener('click', () => check());
 document.getElementById("clearStorage").addEventListener('click', () => clearStorage());
 document.getElementById("hintButton").addEventListener('click', () => hint());
 document.getElementById("picButton").addEventListener('click', () => newPicture());
+document.getElementById("badImageButton").addEventListener('click', () => badImage());
 
 const work = document.getElementById("work");
 const question = document.getElementById("question");
@@ -486,4 +487,9 @@ async function requestData(species, id) {
 
 function isIconicTaxa(taxa){
     return taxa==="Plantae" || taxa==="Animalia" || taxa==="Mollusca" || taxa==="Reptilia" || taxa==="Aves" || taxa==="Amphibia" || taxa==="Actinopterygii" || taxa==="Mammalia" || taxa==="Insecta" || taxa==="Arachnida" || taxa==="Fungi" || taxa==="Protozoa" || taxa==="Chromista" 
+}
+
+function badImage(){
+    response.usage[random] += 1;
+    newPicture();
 }
