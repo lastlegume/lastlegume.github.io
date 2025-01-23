@@ -490,6 +490,6 @@ function isIconicTaxa(taxa){
 }
 
 function badImage(){
-    response.usage[random] += 1;
+    response.usage[random] += 4;
     newPicture();
 }
