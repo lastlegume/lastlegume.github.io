@@ -115,7 +115,6 @@ function f(N, P) {
     else if (predatorResponse[2])
         preyDeaths = 1 / variables[5] * P * N * N / ((1 / (variables[1] * variables[1] * variables[5] * variables[5])) + N * N);
     answers[0] -= preyDeaths;
-    console.log(preyDeaths);
 
     //answers[0] = (preyGrowth[0] ? (variables[0] * N) : (preyGrowth[1] ? (variables[0] * N * (1 - N / variables[4])) : (preyGrowth[2] ? (variables[0] * N * (1 - N / variables[4])) : 0))) - (predatorResponse[0] ? (variables[1] * P * N) : predatorResponse[1] ? (variables[1] * P * N / (1 + variables[1] * variables[5] * N)) : 0);
 

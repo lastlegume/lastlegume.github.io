@@ -85,7 +85,7 @@ let currentT = 0;
 let refreshCounter = 0;
 let colors = ["#00FFA0", "#FFFF00"];
 
-let yBounds = [[0,Math.max(...populations[0], ...populations[1])],[-1,1]];
+let yBounds = [[0, Math.max(...populations[0], ...populations[1])], [-1, 1]];
 
 let stepSize = stepSizeInput.value * 1;
 let refreshRate = refreshRateInput.value * 1;
@@ -120,8 +120,8 @@ function updateVals() {
     eqs[0] = `${(preyGrowth[0].checked) ? "r * N" : (preyGrowth[1].checked ? "r * N * ( 1 - N / K )" : (preyGrowth[2].checked ? "r * ( 1 - N / K )" : ""))} - ${(predatorResponse[0].checked) ? "a * P * N" : (predatorResponse[1].checked ? "a * P * N / ( 1 + a * h * N )" : (predatorResponse[2].checked ? "P * N ^ 2 / ( ( a * h ) ^ -2 + N ^ 2 ) / h" : ""))}`;
     eqs[1] = `${(predatorResponse[0].checked) ? "f * a * P * N" : (predatorResponse[1].checked ? "f * a * P * N / ( 1 + a * h * N )" : (predatorResponse[2].checked ? "f * P * N ^ 2 / ( ( a * h ) ^ -2 + N ^ 2 ) / h" : ""))} - q * P`
 
-    for(e of labs){
-        if((eqs[0]+" "+eqs[1]).includes(e.id.substring(0,1)))
+    for (e of labs) {
+        if ((eqs[0] + " " + eqs[1]).includes(e.id.substring(0, 1)))
             e.classList.remove("hide");
         else
             e.classList.add("hide");
@@ -140,12 +140,12 @@ function updateVals() {
         stepSizeInput.max = 10;
     }
     xlim = [0, xInc * (timeGraph.width - 40)];
-    
+
     drawGraphs();
 }
-function drawGraphs(){
+function drawGraphs() {
 
-    graph({ "list": populations }, timeGraph, { "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": yBounds[0], "col": colors, "layers": [1,2] });
+    graph({ "list": populations }, timeGraph, { "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": yBounds[0], "col": colors, "layers": [1, 2] });
     graph({ "list": slopes }, slopeGraph, { "xlab": "Time", "ylab": "Growth Rate", "xlim": xlim, "ylim": yBounds[1], "col": colors });
 
 
@@ -191,7 +191,7 @@ function reset() {
     slopes = [[], []];
     currentT = 0;
     allGraph.classList.add("hide");
-    
+
     drawGraphs();
     // graph({ "list": populations }, timeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, Math.max(...populations[0], ...populations[1])], "col": colors });
     // graph({ "list": slopes }, slopeGraph, { "xInc": .005, "xlab": "Time", "ylab": "Population", "xlim": xlim, "ylim": [0, 100], "col": colors });
@@ -226,7 +226,7 @@ function finishStep(m) {
     }
     yBounds = [m[2], m[3]];
     if (refreshCounter % refreshRate == 0) {
-        drawGraphs();    
+        drawGraphs();
     }
     refreshCounter++;
 }
@@ -257,7 +257,7 @@ function download(m) {
     }
     let csv = `Time,Prey,Predator\n`;
     for (let i = 0; i < m[0][0].length; i++) {
-        csv+=`${time[i]},${m[0][0][i]},${m[0][1][i]}\n`;
+        csv += `${time[i]},${m[0][0][i]},${m[0][1][i]}\n`;
     }
     var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     var url = URL.createObjectURL(blob);
@@ -270,10 +270,42 @@ function download(m) {
 
 }
 
-function updateEquationText(){
+function updateEquationText() {
     //eqs[0] = `${preyGrowth[0].checked ? "r * N" : preyGrowth[1].checked ? "r * N * ( 1 - N / K )" : ""} - ${predatorResponse[0].checked ? "a * P * N" : predatorResponse[1].checked ? "a * P * N / ( 1 + a * h * N )" : ""}`;
     //eqs[1] = `${predatorResponse[0].checked ? "f * a * P * N" : predatorResponse[1].checked ? "f * a * P * N / ( 1 + a * h * N )" : ""} - q * P`
+    let dNdt = "";
+    let dPdt = "";
+    // set up
+    dNdt = "<math><mfrac><mrow><mi>d</mi><mi>N</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo>";
+    dPdt = "<math><mfrac><mrow><mi>d</mi><mi>P</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo>";
 
-    eqDisplays[0].innerHTML = "<math>";
-    eqDisplays[1].innerHTML = "<math>";
+    //prey growth
+
+    if (preyGrowth[0].checked)
+        dNdt += "<mi>r</mi><mi>N</mi>";
+    else if (preyGrowth[1].checked)
+        dNdt += '<mi>r</mi><mi>N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mn>1</mn><mo>-</mo><mfrac><mi>N</mi><mi>K</mi></mfrac></mrow><mo stretchy="true" form="postfix">)</mo></mrow>';
+    else if (preyGrowth[2].checked)
+        dNdt += '<mi>r</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mn>1</mn><mo>-</mo><mfrac><mi>N</mi><mi>K</mi></mfrac></mrow><mo stretchy="true" form="postfix">)</mo></mrow>';
+
+
+    dNdt += "<mo>-</mo>";
+    // prey death
+    if (predatorResponse[0].checked) {
+        dNdt += '<mi>a</mi><mi>N</mi><mi>P</mi>';
+        dPdt += '<mi>f</mi><mi>a</mi><mi>N</mi><mi>P</mi>';
+    }
+    else if (predatorResponse[1].checked) {
+        dNdt += '<mfrac><mrow><mi>a</mi><mi>N</mi><mi>P</mi></mrow><mrow><mn>1</mn><mo>+</mo><mi>a</mi><mi>h</mi><mi>N</mi></mrow></mfrac>';
+        dPdt += '<mfrac><mrow><mi>f</mi><mi>a</mi><mi>N</mi><mi>P</mi></mrow><mrow><mn>1</mn><mo>+</mo><mi>a</mi><mi>h</mi><mi>N</mi></mrow></mfrac>';
+    }
+    else if (predatorResponse[2].checked) {
+        dNdt += '<mfrac><mrow><msup><mi>h</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><msup><mi>N</mi><mn>2</mn></msup><mi>P</mi></mrow><mrow><mo>(</mo><mi>a</mi><mi>h</mi><msup><mo>)</mo><mrow><mo>-</mo><mn>2</mn></mrow></msup><mo>+</mo><msup><mi>N</mi><mn>2</mn></msup></mrow></mfrac>';
+        dPdt += '<mfrac><mrow><mi>f</mi><msup><mi>h</mi><mrow><mo>-</mo><mn>1</mn></mrow></msup><msup><mi>N</mi><mn>2</mn></msup><mi>P</mi></mrow><mrow><mo>(</mo><mi>a</mi><mi>h</mi><msup><mo>)</mo><mrow><mo>-</mo><mn>2</mn></mrow></msup><mo>+</mo><msup><mi>N</mi><mn>2</mn></msup></mrow></mfrac>';
+    }
+    dNdt += "</math>"
+    dPdt += "<mo>-</mo><mi>q</mi><mi>P</mi></math>"
+
+    eqDisplays[0].innerHTML = dNdt;
+    eqDisplays[1].innerHTML = dPdt;
 }
