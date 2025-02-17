@@ -104,7 +104,7 @@ Still very much a work in progress. Addition of a plot to show the ZNGIs (zero n
     <p id="f-value">f value: </p>
 </label>
 
-<label class="var-lab" id="K-label">K: <input type="range" id="K" min="1" max="100" step="1" value="75"><br>
+<label class="var-lab" id="K-label">K: <input type="range" id="K" min="1" max="100" step="1" value="10"><br>
     <p id="K-value">K value: </p>
 </label>
 

@@ -101,9 +101,9 @@ function f(N, P) {
     if (preyGrowth[0])
         answers[0] += variables[0] * N;
     else if (preyGrowth[1])
-        answers[0] += variables[0] * N * (1 - N / variables[4]);
+        answers[0] += variables[0] * N * (1 - (N / variables[4]));
     else if (preyGrowth[2])
-        answers[0] += variables[0] * (1 - N / variables[4]);
+        answers[0] += variables[0] * (1 - (N / variables[4]));
     else
         answers[0] += 0;
     // prey death
@@ -111,7 +111,7 @@ function f(N, P) {
     if (predatorResponse[0])
         preyDeaths = (variables[1] * P * N);
     else if (predatorResponse[1])
-        preyDeaths = (variables[1] * P * N / (1 + variables[1] * variables[5] * N));
+        preyDeaths = ((variables[1] * P * N) / (1 + variables[1] * variables[5] * N));
     else if (predatorResponse[2])
         preyDeaths = 1 / variables[5] * P * N * N / ((1 / (variables[1] * variables[1] * variables[5] * variables[5])) + N * N);
     answers[0] -= preyDeaths;
