@@ -81,14 +81,47 @@ tools: 5
     max-height: 300px;
     min-height: 300px;
   }
+  #statsPanel{
+    width: max-content;
+    background-color: rgb(56, 56, 56);
+    height:max-content;
+    float: right;
+    font-size: small;
+  }
+  #statsPanel p{
+    margin-bottom: 0px;   
+    margin-top: 0px;
+
+  }
+  #imagePanel{
+    min-width: 300px;
+    text-align: center;
+  }
+
 </style>
 
 <div class="container">
   <p>A tool to test you on any taxons that are found on iNaturalist. Default list is the 2025 Science Olympiad
     Entomology list. Idea from SciolyID.</p>
   <h1 class="header">Entomology ID</h1>
+  <div class= "panel" id="imagePanel">
   <img id="work" alt="Image of the unknown species"><br>
-  <div id="question"></div><input id="answer" type="text" list="possible-answers" autofocus> <button class="btn-submit btn"
+</div>
+
+  
+<div class= "panel" id="statsPanel">
+<h3>Statistics</h3>
+<p id = "streak">Current streak: </p>
+<p id = "accuracy">Accuracy: </p>
+<p id = "fastest">Fastest solve: </p>
+<!-- <h4>Commonly missed</h4>
+<p id = "commonlyMissed"></p>
+<h4>Commonly correct</h4>
+<p id = "commonlyCorrect"></p> -->
+
+</div><br>
+
+<div id="question"></div><input id="answer" type="text" list="possible-answers" autofocus> <button class="btn-submit btn"
     id="checkIdentifier">Check</button>
   <button class="btn-submit btn small" id="picButton" title="Click to choose a new image of the same specimen">New Picture</button>
   <button class="btn-submit btn small" id="hintButton" title="Click to see the letters of the answer">Hint</button>
@@ -97,8 +130,6 @@ tools: 5
   <span id="hint"></span>
 
   <p id="reply"></p>
-
-
 <datalist id="possible-answers"></datalist>
 
 

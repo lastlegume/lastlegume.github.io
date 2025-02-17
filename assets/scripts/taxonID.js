@@ -11,11 +11,11 @@ const answer = document.getElementById("answer");
 const hintBlank = document.getElementById("hint");
 const quality = document.getElementById("quality");
 const answerList = document.getElementById("possible-answers");
-
+var reply = document.getElementById("reply");
 
 var individualCheckboxes = document.getElementById("individualCheckboxes");
 
-var reply = document.getElementById("reply");
+//settings
 var strict = document.getElementById("strict");
 var allowOrders = document.getElementById("allowOrders");
 var hintSci = document.getElementById("hintSci");
@@ -23,6 +23,14 @@ var selectAll = document.getElementById("selectAll");
 var showAnswerIfIncorrect = document.getElementById("showAnswerIfIncorrect");
 var autocompleteAnswers = document.getElementById("autocompleteAnswers");
 var offline = document.getElementById("offlineMode");
+
+//statistics
+var streakDisplay = document.getElementById("streak");
+var accuracyDisplay = document.getElementById("accuracy");
+var fastestDisplay = document.getElementById("fastest");
+var comMissedDisplay = document.getElementById("commonlyMissed");
+var comCorrectDisplay = document.getElementById("commonlyCorrect");
+
 
 allowOrders.addEventListener('change', () => createList(allowOrders.checked));
 selectAll.addEventListener('change', () => adjustAll());
@@ -43,11 +51,15 @@ let timeBetweenCalls = 1500;
 let timeBetweenCheckPress = 500;
 let lastAPICall = Date.now() + 1000;
 let lastCheckPress = Date.now();
-let waitingForAPICall = false; 
+let waitingForAPICall = false;
 let url = [];
+let numCorrect = 0;
+let totalNum = 0;
+let curStreak = 0;
+let qStartTime = Date.now();
+let fastestCorrect = 10000000000;
 
-
-let apiCall = ["https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research","https://api.inaturalist.org/v1/observations?taxon_id=$$TAXON_ID$$&has[]=photos&quality_grade=research"];
+let apiCall = ["https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research", "https://api.inaturalist.org/v1/observations?taxon_id=$$TAXON_ID$$&has[]=photos&quality_grade=research"];
 answer.addEventListener("keydown", (e) => process(e));
 var list = [];
 let taxonIdList = [];
@@ -58,33 +70,43 @@ function check() {
     if (checkTiming())
         return;
     lastCheckPress = Date.now();
+    totalNum++;
 
     if (fuzzyEquals(answer.value.toLowerCase().trim(), [...correctAnswer])) {
         let replyText = "Correct! The specimen is <span style = \"color: forestgreen;\">" + correctAnswer.join(" or ") + "</span>.<br>";
-        for(let k of url){
-            replyText+="| <a class = \"correct small\" href=\""+k+"\">Observation link</a> "
+        for (let k of url) {
+            replyText += "| <a class = \"correct small\" href=\"" + k + "\">Observation link</a> "
         }
-        replyText+="|"
+        replyText += "|"
         reply.innerHTML = replyText;
         reply.style.setProperty('background-color', 'darkseagreen');
+        numCorrect++;
+        curStreak++;
+        let qSolveTime = Date.now() - qStartTime;
+        if (qSolveTime < fastestCorrect) {
+            fastestCorrect = qSolveTime;
+        }
         makeQuestion();
 
     }
-    else if (showAnswerIfIncorrect.checked){
+    else if (showAnswerIfIncorrect.checked) {
         let replyText = "Incorrect. The specimen is <span style = \"color: lightsalmon;\">" + correctAnswer.join(" or ") + "</span>.<br>";
-        for(let k of url){
-            replyText+="| <a class = \"incorrect small\" href=\""+k+"\">Observation link</a> "
+        for (let k of url) {
+            replyText += "| <a class = \"incorrect small\" href=\"" + k + "\">Observation link</a> "
         }
-        replyText+="|"
+        replyText += "|"
         reply.innerHTML = replyText;
         reply.style.setProperty('background-color', 'crimson');
         response.usage[random] -= .75;
+        curStreak = 0;
         makeQuestion();
+        
 
-    }else{
+    } else {
         reply.innerHTML = "Incorrect. Try again.";
         reply.style.setProperty('background-color', 'crimson');
     }
+    updateStats();
     lastCheckPress = Date.now();
 }
 //makes the next question and starts querying for the question after
@@ -102,11 +124,12 @@ async function makeQuestion() {
         if (document.getElementById(list[i][0]).checked) {
             availableList.push(list[i]);
             availableIds.push(taxonIdList[i]);
-            if(autocompleteAnswers.checked)
-            list[i].forEach(function(e){
-                let ansOpt = document.createElement("option");
-                ansOpt.value = e.trim();
-                answerList.appendChild(ansOpt);});
+            if (autocompleteAnswers.checked)
+                list[i].forEach(function (e) {
+                    let ansOpt = document.createElement("option");
+                    ansOpt.value = e.trim();
+                    answerList.appendChild(ansOpt);
+                });
             // for(let j = 0;j<list[i].length;j++){
 
             // }
@@ -133,27 +156,27 @@ async function makeQuestion() {
         //if next index is no longer a valid species, then choose a new index
         if (speciesIdx == -1 || speciesIdx >= availableList.length || availableList[speciesIdx][0] !== species)
             speciesIdx = Math.floor(Math.random() * availableList.length);
-        if(offline.checked){
+        if (offline.checked) {
             let validKeys = getValidKeys("t+++");
-            if(validKeys.length==0){
+            if (validKeys.length == 0) {
                 reply.innerHTML = "An image <span style=\"color: LemonChiffon;\">could not be chosen</span>. Please disable offline mode, connect to the internet, and try again.";
                 reply.style.setProperty('background-color', 'burlywood');
                 return;
             }
             response = JSON.parse(localStorage.getItem("t+++" + species));
-            if(!response){
+            if (!response) {
                 random = validKeys[Math.floor(Math.random() * validKeys.length)];
                 species = localStorage.key(random).substring(4);
                 speciesIdx = list.map((arr) => arr[0]).indexOf(species);
                 let offlineCounter = 0;
-                let tempOfflineAvailable = availableList.map((e)=>e[0]);
-                while(offlineCounter<1000&&!tempOfflineAvailable.includes(species)){
+                let tempOfflineAvailable = availableList.map((e) => e[0]);
+                while (offlineCounter < 1000 && !tempOfflineAvailable.includes(species)) {
                     offlineCounter++;
                     random = validKeys[Math.floor(Math.random() * validKeys.length)];
                     species = localStorage.key(random).substring(4);
                     speciesIdx = list.map((arr) => arr[0]).indexOf(species);
                 }
-                if(offlineCounter>999){
+                if (offlineCounter > 999) {
                     reply.innerHTML = "An image from the desired list <span style=\"color: LemonChiffon;\">could not be chosen</span>. Please disable offline mode, connect to the internet, and try again.";
                     reply.style.setProperty('background-color', 'burlywood');
                 }
@@ -161,14 +184,14 @@ async function makeQuestion() {
         }
         correctAnswer = availableList[speciesIdx];
         //tests if the species is within the list of available species
-        if (availableList.map((e)=>e[0]).includes(species) && nextResponse!=null) {
+        if (availableList.map((e) => e[0]).includes(species) && nextResponse != null) {
             //species = availableList[speciesIdx][0];
             response = nextResponse;
         } else {
             species = availableList[speciesIdx][0];
             response = JSON.parse(localStorage.getItem("t+++" + species));
             //checks if response exists or if it is outdated/overused and we are not using offline mode
-            if (!response || !offline.checked&&((Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.length > 0 && response.usage.reduce((prev, cur) => prev + cur) > 50)) {
+            if (!response || !offline.checked && ((Math.floor(Date.now() / 86400000) - response.date > 5) || response.usage.length > 0 && response.usage.reduce((prev, cur) => prev + cur) > 50)) {
                 work.alt = "Choosing an image...";
                 await new Promise(r => setTimeout(r, 1500))
                 lastAPICall = Date.now();
@@ -204,11 +227,12 @@ async function makeQuestion() {
     //console.log(options);
     url.push(options[random][1]);
     work.src = options[random][0].replaceAll("square", quality.value);
+    qStartTime = Date.now();
 
     nextIndex = Math.floor(Math.random() * availableList.length);
     species = availableList[nextIndex][0];
     nextResponse = JSON.parse(localStorage.getItem("t+++" + species));
-    if (!nextResponse || !offline.checked&&((Math.floor(Date.now() / 86400000) - nextResponse.date > 5) || nextResponse.usage.reduce((prev, cur) => prev + cur) > 50)) {
+    if (!nextResponse || !offline.checked && ((Math.floor(Date.now() / 86400000) - nextResponse.date > 5) || nextResponse.usage.reduce((prev, cur) => prev + cur) > 50)) {
         //    await new Promise(r => setTimeout(r, 1000))
         lastAPICall = Date.now();
         waitingForAPICall = true;
@@ -233,10 +257,10 @@ function contains(arr, val) {
 }
 
 function process(event) {
-    if (event.key === "Enter"){
-        if (answer.value.length==0)
-            newPicture();            
-        else if(checkTiming())
+    if (event.key === "Enter") {
+        if (answer.value.length == 0)
+            newPicture();
+        else if (checkTiming())
             return;
         else
             check();
@@ -245,7 +269,7 @@ function process(event) {
 
 }
 function checkTiming() {
-    if(waitingForAPICall)
+    if (waitingForAPICall)
         lastCheckPress = Date.now();
     if (Date.now() - lastAPICall < timeBetweenCalls) {
         reply.innerHTML = `Please wait <span style="color: LemonChiffon;">${((timeBetweenCalls - (Date.now() - lastAPICall)) / 1000).toPrecision(3)}</span> seconds before checking again`;
@@ -484,11 +508,36 @@ async function requestData(species, id) {
 
 }
 
-function isIconicTaxa(taxa){
-    return taxa==="Plantae" || taxa==="Animalia" || taxa==="Mollusca" || taxa==="Reptilia" || taxa==="Aves" || taxa==="Amphibia" || taxa==="Actinopterygii" || taxa==="Mammalia" || taxa==="Insecta" || taxa==="Arachnida" || taxa==="Fungi" || taxa==="Protozoa" || taxa==="Chromista" 
+function isIconicTaxa(taxa) {
+    return taxa === "Plantae" || taxa === "Animalia" || taxa === "Mollusca" || taxa === "Reptilia" || taxa === "Aves" || taxa === "Amphibia" || taxa === "Actinopterygii" || taxa === "Mammalia" || taxa === "Insecta" || taxa === "Arachnida" || taxa === "Fungi" || taxa === "Protozoa" || taxa === "Chromista"
 }
 
-function badImage(){
+function badImage() {
     response.usage[random] += 4;
     newPicture();
+}
+
+function updateStats() {
+    streakDisplay.innerText = "Current streak: "+curStreak;
+    accuracyDisplay.innerText = "Accuracy: "+(numCorrect/totalNum*100).toFixed(2)+"% ("+`${numCorrect}/${totalNum})` ;
+    if(fastestCorrect!=10000000000)
+        fastestDisplay.innerText="Fastest solve: "+toReadableTime(fastestCorrect);
+}
+
+function toReadableTime(t) {
+    let tString = "" + t % 1000 + "ms";
+    t = Math.floor(t / 1000);
+    if (t > 0) {
+        tString = t + "s, " + tString;
+        t = Math.floor(t / 60);
+        if (t > 0)
+            tString = t%60 + "m, " + tString;
+        t = Math.floor(t / 60);
+        if (t > 0)
+            tString = t%60 + "hr, " + tString;
+        t = Math.floor(t / 24);
+        if (t > 0)
+            tString = t%24 + "d, " + tString;
+    }
+    return tString;
 }
