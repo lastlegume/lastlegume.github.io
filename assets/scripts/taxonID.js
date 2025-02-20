@@ -28,6 +28,7 @@ var offline = document.getElementById("offlineMode");
 var streakDisplay = document.getElementById("streak");
 var accuracyDisplay = document.getElementById("accuracy");
 var fastestDisplay = document.getElementById("fastest");
+var lastTimeDisplay = document.getElementById("lastTime");
 var comMissedDisplay = document.getElementById("commonlyMissed");
 var comCorrectDisplay = document.getElementById("commonlyCorrect");
 
@@ -58,7 +59,7 @@ let totalNum = 0;
 let curStreak = 0;
 let qStartTime = Date.now();
 let fastestCorrect = 10000000000;
-
+let lastTime = 10000000000;
 let apiCall = ["https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research", "https://api.inaturalist.org/v1/observations?taxon_id=$$TAXON_ID$$&has[]=photos&quality_grade=research"];
 answer.addEventListener("keydown", (e) => process(e));
 var list = [];
@@ -83,6 +84,7 @@ function check() {
         numCorrect++;
         curStreak++;
         let qSolveTime = Date.now() - qStartTime;
+        lastTime = qSolveTime;
         if (qSolveTime < fastestCorrect) {
             fastestCorrect = qSolveTime;
         }
@@ -520,6 +522,8 @@ function badImage() {
 function updateStats() {
     streakDisplay.innerText = "Current streak: "+curStreak;
     accuracyDisplay.innerText = "Accuracy: "+(numCorrect/totalNum*100).toFixed(2)+"% ("+`${numCorrect}/${totalNum})` ;
+    if(lastTime!=10000000000)
+        lastTimeDisplay.innerText="Last solve: "+toReadableTime(lastTime);
     if(fastestCorrect!=10000000000)
         fastestDisplay.innerText="Fastest solve: "+toReadableTime(fastestCorrect);
 }
