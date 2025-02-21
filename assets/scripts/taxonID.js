@@ -24,6 +24,7 @@ var showAnswerIfIncorrect = document.getElementById("showAnswerIfIncorrect");
 var autocompleteAnswers = document.getElementById("autocompleteAnswers");
 var offline = document.getElementById("offlineMode");
 var biasWrongs = document.getElementById("biasWrongs");
+var repeatMisses = document.getElementById("repeatMisses");
 
 
 //statistics
@@ -60,6 +61,8 @@ let numCorrect = 0;
 let totalNum = 0;
 let curStreak = 0;
 let qStartTime = Date.now();
+work.addEventListener('load', (e)=>qStartTime = Date.now());
+
 let fastestCorrect = 10000000000;
 let lastTime = 10000000000;
 let apiCall = ["https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research", "https://api.inaturalist.org/v1/observations?taxon_id=$$TAXON_ID$$&has[]=photos&quality_grade=research"];
@@ -67,6 +70,7 @@ answer.addEventListener("keydown", (e) => process(e));
 var list = [];
 let taxonIdList = [];
 let missed = [];
+let missedWoReview = [];
 let correct = [];
 
 createList(allowOrders.checked);
@@ -107,6 +111,7 @@ function check() {
         response.usage[random] -= .75;
         curStreak = 0;
         addToCounter(correctAnswer[0], missed);
+        addToCounter(correctAnswer[0], missedWoReview);
 
         makeQuestion();
 
@@ -129,6 +134,7 @@ async function makeQuestion() {
     // list of observation urls
     url = [];
     answerList.innerHTML = "";
+    // let extraList = [];
     for (let i = 0; i < list.length; i++) {
         // gets the checkbox for the specific family/order and checks if it checked
         if (document.getElementById(list[i][0]).checked) {
@@ -141,6 +147,7 @@ async function makeQuestion() {
                     ansOpt.value = e.trim();
                     answerList.appendChild(ansOpt);
                 });
+            //failed biasWrongs implementation - needs species selection to be rewritten to work
             // if (biasWrongs.checked) {
             //     let listObject = missed.filter((e) => list[i].includes(e.species));
             //     let wrongReps = 0;
@@ -149,7 +156,7 @@ async function makeQuestion() {
             //     listObject = correct.filter((e) => list[i].includes(e.species));
             //     if (listObject.length > 0)
             //         wrongReps -= listObject[0].count;
-            //     availableList.push(...Array(Math.max(0, (wrongReps) * 4)).fill(list[i])); //might be too heavy of a weight
+            //     extraList.push(...Array(Math.max(0, (wrongReps) * 4)).fill(list[i])); //might be too heavy of a weight
 
             // }
             // for(let j = 0;j<list[i].length;j++){
@@ -160,7 +167,7 @@ async function makeQuestion() {
     }
     //console.log(availableList);
     //console.log(availableIds);
-
+    //availableList.push(...extraList);
     //failsafe in case they check nothing
     if (availableList.length == 0) {
         availableList.push(list[0]);
@@ -231,7 +238,7 @@ async function makeQuestion() {
         localData = null;
     }
     //console.log(species);
-
+    // choose image of species
     let options = response.response;
     let weightedOptions = [];
     for (let i = 0; i < options.length; i++) {
@@ -250,8 +257,38 @@ async function makeQuestion() {
     url.push(options[random][1]);
     work.src = options[random][0].replaceAll("square", quality.value);
     qStartTime = Date.now();
+    //
+    let totalWrong = 0;
+    if (repeatMisses.checked&&missedWoReview.length>0) {
+        totalWrong = missedWoReview.map((e) => e.count).reduce((p, c) => p + c);
+    }
+    //randomly chooses whether to choose a missed species or new one
+    if (Math.random() >= 0.49 - 2 ** (-1 - 0.3 * totalWrong))
+        nextIndex = Math.floor(Math.random() * availableList.length);
+    else {
+        let availableMissedList = [];
+        let availableSpecies = availableList.map((ele) => ele[0]);
+        missedWoReview.forEach(function (e) {
+            if (availableSpecies.includes(e.species))
+                availableMissedList.push(...Array(e.count).fill(e));
+        });
+        if(availableMissedList.length==0)
+            nextIndex = Math.floor(Math.random() * availableList.length);
+        else{
+            let tNIdx = Math.floor(Math.random()* availableMissedList.length);
+            
+            for(let i = missedWoReview.length-1;i>=0;i--){
+                if(missedWoReview[i].species===availableMissedList[tNIdx].species){
+                    missedWoReview[i].count--;
+                    if(missedWoReview[i].count==0)
+                        missedWoReview.splice(i,1);
+                }
+            }
+            nextIndex = list.map((e)=>e[0]).indexOf(availableMissedList[tNIdx].species);
+            console.log(`Chose ${nextIndex} (${list[nextIndex][0]}) because it was previously missed.` );
+        }
+    }
 
-    nextIndex = Math.floor(Math.random() * availableList.length);
     species = availableList[nextIndex][0];
     nextResponse = JSON.parse(localStorage.getItem("t+++" + species));
     if (!nextResponse || !offline.checked && ((Math.floor(Date.now() / 86400000) - nextResponse.date > 5) || nextResponse.usage.reduce((prev, cur) => prev + cur) > 50)) {
@@ -547,11 +584,11 @@ function updateStats() {
     if (fastestCorrect != 10000000000)
         fastestDisplay.innerText = "Fastest solve: " + toReadableTime(fastestCorrect);
     comMissedDisplay.innerText = "";
-    let fiveList = missed.sort((a, b) => a.count - b.count).slice(0, 5);
+    let fiveList = missed.sort((a, b) => b.count - a.count).slice(0, 5);
     if (fiveList.length > 0)
         fiveList.forEach((e) => comMissedDisplay.innerText += `${e.species}: ${e.count}\n`);
     comCorrectDisplay.innerText = "";
-    fiveList = correct.sort((a, b) => a.count - b.count).slice(0, 5);
+    fiveList = correct.sort((a, b) => b.count - a.count).slice(0, 5);
     if (fiveList.length > 0)
         fiveList.forEach((e) => comCorrectDisplay.innerText += `${e.species}: ${e.count}\n`);
 
