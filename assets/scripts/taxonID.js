@@ -23,6 +23,8 @@ var selectAll = document.getElementById("selectAll");
 var showAnswerIfIncorrect = document.getElementById("showAnswerIfIncorrect");
 var autocompleteAnswers = document.getElementById("autocompleteAnswers");
 var offline = document.getElementById("offlineMode");
+var biasWrongs = document.getElementById("biasWrongs");
+
 
 //statistics
 var streakDisplay = document.getElementById("streak");
@@ -64,6 +66,8 @@ let apiCall = ["https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has
 answer.addEventListener("keydown", (e) => process(e));
 var list = [];
 let taxonIdList = [];
+let missed = [];
+let correct = [];
 
 createList(allowOrders.checked);
 
@@ -88,6 +92,7 @@ function check() {
         if (qSolveTime < fastestCorrect) {
             fastestCorrect = qSolveTime;
         }
+        addToCounter(correctAnswer[0], correct);
         makeQuestion();
 
     }
@@ -96,17 +101,20 @@ function check() {
         for (let k of url) {
             replyText += "| <a class = \"incorrect small\" href=\"" + k + "\">Observation link</a> "
         }
-        replyText += "|"
+        replyText += "|";
         reply.innerHTML = replyText;
         reply.style.setProperty('background-color', 'crimson');
         response.usage[random] -= .75;
         curStreak = 0;
+        addToCounter(correctAnswer[0], missed);
+
         makeQuestion();
-        
+
 
     } else {
         reply.innerHTML = "Incorrect. Try again.";
         reply.style.setProperty('background-color', 'crimson');
+        curStreak = 0;
     }
     updateStats();
     lastCheckPress = Date.now();
@@ -125,6 +133,7 @@ async function makeQuestion() {
         // gets the checkbox for the specific family/order and checks if it checked
         if (document.getElementById(list[i][0]).checked) {
             availableList.push(list[i]);
+
             availableIds.push(taxonIdList[i]);
             if (autocompleteAnswers.checked)
                 list[i].forEach(function (e) {
@@ -132,6 +141,17 @@ async function makeQuestion() {
                     ansOpt.value = e.trim();
                     answerList.appendChild(ansOpt);
                 });
+            // if (biasWrongs.checked) {
+            //     let listObject = missed.filter((e) => list[i].includes(e.species));
+            //     let wrongReps = 0;
+            //     if (listObject.length > 0)
+            //         wrongReps += listObject[0].count;
+            //     listObject = correct.filter((e) => list[i].includes(e.species));
+            //     if (listObject.length > 0)
+            //         wrongReps -= listObject[0].count;
+            //     availableList.push(...Array(Math.max(0, (wrongReps) * 4)).fill(list[i])); //might be too heavy of a weight
+
+            // }
             // for(let j = 0;j<list[i].length;j++){
 
             // }
@@ -520,12 +540,21 @@ function badImage() {
 }
 
 function updateStats() {
-    streakDisplay.innerText = "Current streak: "+curStreak;
-    accuracyDisplay.innerText = "Accuracy: "+(numCorrect/totalNum*100).toFixed(2)+"% ("+`${numCorrect}/${totalNum})` ;
-    if(lastTime!=10000000000)
-        lastTimeDisplay.innerText="Last solve: "+toReadableTime(lastTime);
-    if(fastestCorrect!=10000000000)
-        fastestDisplay.innerText="Fastest solve: "+toReadableTime(fastestCorrect);
+    streakDisplay.innerText = "Current streak: " + curStreak;
+    accuracyDisplay.innerText = "Accuracy: " + (numCorrect / totalNum * 100).toFixed(2) + "% (" + `${numCorrect}/${totalNum})`;
+    if (lastTime != 10000000000)
+        lastTimeDisplay.innerText = "Last solve: " + toReadableTime(lastTime);
+    if (fastestCorrect != 10000000000)
+        fastestDisplay.innerText = "Fastest solve: " + toReadableTime(fastestCorrect);
+    comMissedDisplay.innerText = "";
+    let fiveList = missed.sort((a, b) => a.count - b.count).slice(0, 5);
+    if (fiveList.length > 0)
+        fiveList.forEach((e) => comMissedDisplay.innerText += `${e.species}: ${e.count}\n`);
+    comCorrectDisplay.innerText = "";
+    fiveList = correct.sort((a, b) => a.count - b.count).slice(0, 5);
+    if (fiveList.length > 0)
+        fiveList.forEach((e) => comCorrectDisplay.innerText += `${e.species}: ${e.count}\n`);
+
 }
 
 function toReadableTime(t) {
@@ -535,13 +564,21 @@ function toReadableTime(t) {
         tString = t + "s, " + tString;
         t = Math.floor(t / 60);
         if (t > 0)
-            tString = t%60 + "m, " + tString;
+            tString = t % 60 + "m, " + tString;
         t = Math.floor(t / 60);
         if (t > 0)
-            tString = t%60 + "hr, " + tString;
+            tString = t % 60 + "hr, " + tString;
         t = Math.floor(t / 24);
         if (t > 0)
-            tString = t%24 + "d, " + tString;
+            tString = t % 24 + "d, " + tString;
     }
     return tString;
+}
+
+function addToCounter(idx, list) {
+    let lkeys = list.map((e) => e.species);
+    if (lkeys.includes(idx))
+        list[lkeys.indexOf(idx)].count++;
+    else
+        list.push({ "species": idx, "count": 1 });
 }
