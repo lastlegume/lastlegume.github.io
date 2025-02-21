@@ -598,16 +598,16 @@ function toReadableTime(t) {
     let tString = "" + t % 1000 + "ms";
     t = Math.floor(t / 1000);
     if (t > 0) {
-        tString = t + "s, " + tString;
+        tString = t % 60 + "s, " + tString;
         t = Math.floor(t / 60);
         if (t > 0)
             tString = t % 60 + "m, " + tString;
         t = Math.floor(t / 60);
         if (t > 0)
-            tString = t % 60 + "hr, " + tString;
+            tString = t % 24 + "hr, " + tString;
         t = Math.floor(t / 24);
         if (t > 0)
-            tString = t % 24 + "d, " + tString;
+            tString = t + "d, " + tString;
     }
     return tString;
 }
