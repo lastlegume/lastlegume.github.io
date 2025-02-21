@@ -284,7 +284,7 @@ async function makeQuestion() {
                         missedWoReview.splice(i,1);
                 }
             }
-            nextIndex = list.map((e)=>e[0]).indexOf(availableMissedList[tNIdx].species);
+            nextIndex = availableList.map((e)=>e[0]).indexOf(availableMissedList[tNIdx].species);
             console.log(`Chose ${nextIndex} (${list[nextIndex][0]}) because it was previously missed.` );
         }
     }
