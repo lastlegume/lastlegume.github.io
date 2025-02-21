@@ -61,8 +61,6 @@ let numCorrect = 0;
 let totalNum = 0;
 let curStreak = 0;
 let qStartTime = Date.now();
-work.addEventListener('load', (e)=>qStartTime = Date.now());
-
 let fastestCorrect = 10000000000;
 let lastTime = 10000000000;
 let apiCall = ["https://api.inaturalist.org/v1/observations?q=$$TAXON_NAME$$&has[]=photos&quality_grade=research", "https://api.inaturalist.org/v1/observations?taxon_id=$$TAXON_ID$$&has[]=photos&quality_grade=research"];
@@ -126,6 +124,8 @@ function check() {
 }
 //makes the next question and starts querying for the question after
 async function makeQuestion() {
+    work.addEventListener('load', function(){qStartTime = Date.now();}, {once: true});
+
     hintBlank.innerText = "";
     //availableList is the list of all checked families/orders
     let availableList = [];
