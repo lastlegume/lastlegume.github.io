@@ -7,7 +7,9 @@ header: true
 
 I am just some person who likes [Scratch](https://scratch.mit.edu/) and [LaTeX](https://www.latex-project.org/). I write extensions for both [Firefox](https://addons.mozilla.org/en-US/firefox/user/17603989/) and [Chrome](https://chrome.google.com/webstore/search/lastlegume), [tools](/scioly-tools) for [Science Olympiad (Scioly)](https://www.soinc.org/) Tournaments, and am an infrequent game jam participant on itch.io. 
 
-Personal website of Krish Shah. If you have any feedback for me, please <a href="mailto:lastlegume@gmail.com">email me</a> or leave a review on the relevant extension. I read everything that I receive and welcome any advice.      
+Personal website of [Krish Shah](https://scioly.org/wiki/index.php/User:Krish2007). If you have any feedback for me, please <a href="mailto:lastlegume@gmail.com">email me</a> or leave a review on the relevant extension. I read everything that I receive and welcome any advice.
+
+
 
 
 
