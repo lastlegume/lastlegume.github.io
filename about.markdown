@@ -9,10 +9,6 @@ I am just some person who likes [Scratch](https://scratch.mit.edu/) and [LaTeX](
 
 Personal website of [Krish Shah](https://scioly.org/wiki/index.php/User:Krish2007). If you have any feedback for me, please <a href="mailto:lastlegume@gmail.com">email me</a> or leave a review on the relevant extension. I read everything that I receive and welcome any advice.
 
-
-
-
-
 <style type="text/css" media="screen">
 .inat-widget { font-family: Georgia, serif; padding: 10px; line-height: 1;}
 .inat-widget-header {margin-bottom: 10px;}
