@@ -11,7 +11,11 @@ I started using Signal recently, so naturally, I started looking into how best t
 
 There is also some customization; you can choose the maximum size of the compressed GIFs (for technical reasons, you can't choose the max size of the APNG, but the APNG is usually much smaller than the GIF) and the amount it shrinks with each compression cycle. Also, you can choose to save the compressed square GIF files if needed.
 
+I don't have any way to sign the exe file, so Windows will give some warning about protecting your device and say that it's not allowing the file to be opened for security reasons, but you can still run it by clicking "More Info" and "Run Anyway." You can see the exact source code below.
+
 <a href="https://github.com/lastlegume/gifToSquareAPNG" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a><br><br>
+
+If you're (rightfully) worried about running an unsigned exe file, simply clone the repository, navigate to the directory the repository is in on the command line (in windows, this can be done by going to the folder in file explorer, right clicking, and choosing "Open in terminal"), and run ```npm install``` and then ```npm run start```. You will need to have [node.js](https://nodejs.org/en/download) installed to do this though. 
 
 While writing this post, I went back to my [source](https://pokemonlinestickers.tumblr.com/) and discovered that this whole process was fruitless given that you can [just download LINE stickers in the format signal needs](https://ldjb.jp/full-resolution-line-sticker-images), but it was a good learning experience, and many animated LINE stickers are not square and could be too large for Signal, so the application still has some use.  
 
