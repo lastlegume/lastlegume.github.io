@@ -29,7 +29,7 @@ Key | Meaning
 #N# | Place number (1, 2, 3, etc.)
 #P# | Place (1st, 2nd, 3rd, 4th, etc.)
 #TN# | Team Number 
-#NAME# | Team Name
+#NAME# | Team Name (School + Suffix)
 #SCHOOL# | Name of the school
 #SUFFIX# | The suffix of the team (A/B/C/Blue/Varsity/etc.)
 #STATE# | The state that the team is from
