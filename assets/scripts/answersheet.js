@@ -39,37 +39,44 @@ function convertText() {
     includeEmptyQuestions = document.getElementById("includeEmptyQuestions").checked;
     showAnswerChoices = document.getElementById("showAnswerChoices").checked;
     expectAnswer = document.getElementById("expectAnswer").checked;
-    FIBThreshold = document.getElementById("FIBThreshold").value*1;
+    FIBThreshold = document.getElementById("FIBThreshold").value * 1;
 
     const qregex = /\\(sub)*?(part|question)\[(\d*?)\s*?(\\half)*?\]/g;
     for (let i = 0; i < input.length; i++) {
         if (qregex.test(input[i])) {
             let question = "";
             question += input[i].match(qregex) + " ";
+            for (let j = i + 1; j < input.length; j++) {
+                if (input[j] === "") {
+                    input.splice(j, 1);
+                    j--;
+                } else
+                    break;
+            }
             if (i < input.length - 1) {
                 // short answer/fib
                 input[i + 1] = input[i + 1].trim();
                 if (input[i + 1].trim().substring(0, marker.length) === marker) {
-                    if(consecutiveMCQ>0){
-                        output+="\\end{multicols}\n";
+                    if (consecutiveMCQ > 0) {
+                        output += "\\end{multicols}\n";
                     }
                     consecutiveMCQ = 0;
 
-                    if ((input[i + 1].trim().length > FIBThreshold&&frqtype.value!=="forceFIB")||frqtype.value.includes("solution")) {
-                        if(frqtype.value==="default")
-                            question += "\\hspace{.1em}\n\\begin{solutionbox}{" + ((autoCalcSASize.checked)?2+Math.floor((input[i + 1].length) ** .5):document.getElementById("SAsize").value) + "em}\n" + input[i + 1].trim().substring(marker.length).trim() + "\n\\end{solutionbox}";
+                    if ((input[i + 1].trim().length > FIBThreshold && frqtype.value !== "forceFIB") || frqtype.value.includes("solution")) {
+                        if (frqtype.value === "default")
+                            question += "\\hspace{.1em}\n\\begin{solutionbox}{" + ((autoCalcSASize.checked) ? 2 + Math.floor((input[i + 1].length) ** .5) : document.getElementById("SAsize").value) + "em}\n" + input[i + 1].trim().substring(marker.length).trim() + "\n\\end{solutionbox}";
                         else
-                            question += `\\hspace{.1em}\n\\begin{${frqtype.value.substring(5)}}${((frqtype==="forcesolutionbox")?"{":"[")}${(autoCalcSASize.checked)?2+Math.floor((input[i + 1].length) ** .5):document.getElementById("SAsize").value}em${((frqtype==="forcesolutionbox")?"}":"]")}\n${input[i + 1].trim().substring(marker.length).trim()}\n\\end{${frqtype.value.substring(5)}}`;
+                            question += `\\hspace{.1em}\n\\begin{${frqtype.value.substring(5)}}${((frqtype === "forcesolutionbox") ? "{" : "[")}${(autoCalcSASize.checked) ? 2 + Math.floor((input[i + 1].length) ** .5) : document.getElementById("SAsize").value}em${((frqtype === "forcesolutionbox") ? "}" : "]")}\n${input[i + 1].trim().substring(marker.length).trim()}\n\\end{${frqtype.value.substring(5)}}`;
                     } else {
-                        question += "\\fillin[" + input[i + 1].trim().substring(marker.length).trim() + "]["+document.getElementById("FIBsize").value+"]";
+                        question += "\\fillin[" + input[i + 1].trim().substring(marker.length).trim() + "][" + document.getElementById("FIBsize").value + "]";
                     }
                     i++;
                     // MCQ
                 } else if (input[i + 1].includes("\\begin{") && (input[i + 1].includes("choices") || input[i + 1].includes("checkboxes"))) {
-                    if(mcq.value==="multiblanks")
+                    if (mcq.value === "multiblanks")
                         consecutiveMCQ++;
-                    if(consecutiveMCQ==1){
-                        output+="\\begin{multicols}{$#multicolnumber#$}\n";
+                    if (consecutiveMCQ == 1) {
+                        output += "\\begin{multicols}{$#multicolnumber#$}\n";
                     }
                     let environment = input[i + 1].matchAll(/\\begin{(.*?)}/gi);
                     environment = [...environment][0][1];
@@ -83,7 +90,7 @@ function convertText() {
                                 end = j;
                             }
                         }
-                        i = end+1;
+                        i = end + 1;
 
                         maxNumAnswers = Math.max(maxNumAnswers, correctIndeces.length);
                         question += `\\fillin[${correctIndeces.map(function (x) { return String.fromCharCode(65 + x) }).join("")}][$#mcqblanklength#$]`;
@@ -101,26 +108,26 @@ function convertText() {
                         for (let j = i + 1; j < input.length && !input[j].includes("\\end{" + environment + "}"); j++) {
                             if (input[j].includes("choice") && !input[j].includes("\\begin{") && !input[j].includes("\\end{")) {
                                 let o = "";
-                                if(!showAnswerChoices){
+                                if (!showAnswerChoices) {
                                     o = input[j].matchAll(/\\(correct)?choice/gi);
                                     o = [...o][0][0];
-                                }else
+                                } else
                                     o = input[j];
-                                
+
 
                                 question += o + "\n";
                             } else
-                            question += input[j] + "\n";
+                                question += input[j] + "\n";
                             end = j;
                         }
                         question += input[end + 1];
                         i = end;
                     }
 
-                } else if(expectAnswer){
+                } else if (expectAnswer) {
                     // deals with if question is long and has stuff like an enumerate between the start and the answer
-                    if(consecutiveMCQ>0){
-                        output+="\\end{multicols}\n";
+                    if (consecutiveMCQ > 0) {
+                        output += "\\end{multicols}\n";
                     }
                     consecutiveMCQ = 0;
                     let end = i + 1;
@@ -128,88 +135,88 @@ function convertText() {
                         end = j;
                     }
                     end++;
-                    if ((input[i + 1].length > FIBThreshold&&frqtype.value!=="forceFIB")||frqtype.value.includes("solution")) {
-                        if(frqtype.value==="default")
-                            question += "\\hspace{.1em}\n\\begin{solutionbox}{" + (autoCalcSASize.checked)?2+Math.floor((input[i + 1].length) ** .5):document.getElementById("SAsize").value + "em}\n" + input[i + 1].trim().substring(marker.length).trim() + "\n\\end{solutionbox}";
+                    if ((input[i + 1].length > FIBThreshold && frqtype.value !== "forceFIB") || frqtype.value.includes("solution")) {
+                        if (frqtype.value === "default")
+                            question += "\\hspace{.1em}\n\\begin{solutionbox}{" + (autoCalcSASize.checked) ? 2 + Math.floor((input[i + 1].length) ** .5) : document.getElementById("SAsize").value + "em}\n" + input[i + 1].trim().substring(marker.length).trim() + "\n\\end{solutionbox}";
                         else
-                            question += `\\hspace{.1em}\n\\begin{${frqtype.value.substring(5)}}${frqtype==="forcesolutionbox"?"{":"["}${(autoCalcSASize.checked)?2+Math.floor((input[i + 1].length) ** .5):document.getElementById("SAsize").value}em${frqtype==="forcesolutionbox"?"}":"]"}\n${input[i + 1].trim().substring(marker.length).trim()}\n\\end{${frqtype.value.substring(5)}}`;
+                            question += `\\hspace{.1em}\n\\begin{${frqtype.value.substring(5)}}${frqtype === "forcesolutionbox" ? "{" : "["}${(autoCalcSASize.checked) ? 2 + Math.floor((input[i + 1].length) ** .5) : document.getElementById("SAsize").value}em${frqtype === "forcesolutionbox" ? "}" : "]"}\n${input[i + 1].trim().substring(marker.length).trim()}\n\\end{${frqtype.value.substring(5)}}`;
                     } else {
-                        question += "\\fillin[" + input[i + 1].trim().substring(marker.length).trim() + "]["+document.getElementById("FIBsize").value+"]";
+                        question += "\\fillin[" + input[i + 1].trim().substring(marker.length).trim() + "][" + document.getElementById("FIBsize").value + "]";
                     }
                     i = end;
 
-                } else{
-                    if(consecutiveMCQ>0){
-                        output+="\\end{multicols}\n";
+                } else {
+                    if (consecutiveMCQ > 0) {
+                        output += "\\end{multicols}\n";
                     }
                     consecutiveMCQ = 0;
                     let questionLength = input[i].replaceAll(qregex, "").trim().length;
-                    if ((questionLength > FIBThreshold&&frqtype.value!=="forceFIB")||frqtype.value.includes("solution")) {
-                        if(frqtype.value==="default")
-                            question += "\\hspace{.1em}\n\\begin{solutionbox}{" + ((autoCalcSASize.checked)?2+Math.floor((questionLength) ** .5):document.getElementById("SAsize").value) + "em}\n\n\\end{solutionbox}";
+                    if ((questionLength > FIBThreshold && frqtype.value !== "forceFIB") || frqtype.value.includes("solution")) {
+                        if (frqtype.value === "default")
+                            question += "\\hspace{.1em}\n\\begin{solutionbox}{" + ((autoCalcSASize.checked) ? 2 + Math.floor((questionLength) ** .5) : document.getElementById("SAsize").value) + "em}\n\n\\end{solutionbox}";
                         else
-                            question += `\\hspace{.1em}\n\\begin{${frqtype.value.substring(5)}}${((frqtype==="forcesolutionbox")?"{":"[")}${((autoCalcSASize.checked)?2+Math.floor((questionLength) ** .5):document.getElementById("SAsize").value)}em${((frqtype==="forcesolutionbox")?"}":"]")}\n\n\\end{${frqtype.value.substring(5)}}`;
+                            question += `\\hspace{.1em}\n\\begin{${frqtype.value.substring(5)}}${((frqtype === "forcesolutionbox") ? "{" : "[")}${((autoCalcSASize.checked) ? 2 + Math.floor((questionLength) ** .5) : document.getElementById("SAsize").value)}em${((frqtype === "forcesolutionbox") ? "}" : "]")}\n\n\\end{${frqtype.value.substring(5)}}`;
                     } else {
-                        question += "\\fillin[ ]["+document.getElementById("FIBsize").value+"]";
+                        question += "\\fillin[ ][" + document.getElementById("FIBsize").value + "]";
                     }
                     console.log(input[i]);
 
                 }
             }
-            output+=question;
+            output += question;
             output += "\n";
             //lines that are not questions
         } else {
-            
+
             if (includeAll || input[i].toLowerCase().includes("\\addtocounter")) {
-                if(consecutiveMCQ>0){
-                    output+="\\end{multicols}\n";
+                if (consecutiveMCQ > 0) {
+                    output += "\\end{multicols}\n";
                 }
                 consecutiveMCQ = 0;
                 output += input[i] + "\n";
-            }   else if ((/\\(sub)*?section/g.test(input[i].toLowerCase())) && includeSection) {
-                if(consecutiveMCQ>0){
-                    output+="\\end{multicols}\n";
+            } else if ((/\\(sub)*?section/g.test(input[i].toLowerCase())) && includeSection) {
+                if (consecutiveMCQ > 0) {
+                    output += "\\end{multicols}\n";
                 }
                 consecutiveMCQ = 0;
                 output += input[i] + "\n";
-            }   else if ((/\\(begin|end){(sub)*?parts}/g.test(input[i].toLowerCase())) && includeParts) {
-                if(consecutiveMCQ>0){
-                    output+="\\end{multicols}\n";
+            } else if ((/\\(begin|end){(sub)*?parts}/g.test(input[i].toLowerCase())) && includeParts) {
+                if (consecutiveMCQ > 0) {
+                    output += "\\end{multicols}\n";
                 }
                 consecutiveMCQ = 0;
                 output += input[i] + "\n";
-            }   else if ((/^\\(fullwidth{|textbf{|noindent )/g.test(input[i].toLowerCase().trim())) && includeFullwidth) {
-                if(consecutiveMCQ>0){
-                    output+="\\end{multicols}\n";
+            } else if ((/^\\(fullwidth{|textbf{|noindent )/g.test(input[i].toLowerCase().trim())) && includeFullwidth) {
+                if (consecutiveMCQ > 0) {
+                    output += "\\end{multicols}\n";
                 }
                 consecutiveMCQ = 0;
                 output += input[i] + "\n";
-            }else if((/^\\(sub)*?(part|question)/g.test(input[i].toLowerCase().trim())) )  { //&& includeEmptyQuestions
-                if(consecutiveMCQ>0){
-                    output+="\\end{multicols}\n";
+            } else if ((/^\\(sub)*?(part|question)/g.test(input[i].toLowerCase().trim()))) { //&& includeEmptyQuestions
+                if (consecutiveMCQ > 0) {
+                    output += "\\end{multicols}\n";
                 }
                 consecutiveMCQ = 0;
-                if(includeEmptyQuestions)
+                if (includeEmptyQuestions)
                     output += input[i] + "\n";
                 else
                     output += input[i].match(/^\\(sub)*?(part|question)/g)[0] + "\n";
             }
-            
+
         }
-        
+
     }
-    if(mcq.value==="longblanks")
+    if (mcq.value === "longblanks")
         output = output.replaceAll("$#mcqblanklength#$", ".85\\textwidth");
-    else if(mcq.value==="shortblanks"||mcq.value==="multiblanks"){
-        output = output.replaceAll("$#mcqblanklength#$", `${maxNumAnswers*2+1}em`);
-        if(mcq.value==="multiblanks"){
-            output = output.replaceAll("$#multicolnumber#$", `${5-Math.ceil(maxNumAnswers/3)}`);
+    else if (mcq.value === "shortblanks" || mcq.value === "multiblanks") {
+        output = output.replaceAll("$#mcqblanklength#$", `${maxNumAnswers * 2 + 1}em`);
+        if (mcq.value === "multiblanks") {
+            output = output.replaceAll("$#multicolnumber#$", `${5 - Math.ceil(maxNumAnswers / 3)}`);
         }
     }
-    if(linegoal.checked){
+    if (linegoal.checked) {
         output = output.replaceAll(".9\\textwidth", `\\the{\\linegoal}`);
-        output = "%Don't forget to include the linegoal package (\\usepackage{linegoal}) in the preamble of the document!\n"+output;
+        output = "%Don't forget to include the linegoal package (\\usepackage{linegoal}) in the preamble of the document!\n" + output;
     }
     outputArea.value = output;
     copyText();
@@ -218,12 +225,12 @@ function convertText() {
 function copyText() {
     navigator.clipboard.writeText(outputArea.value);
     alert("Output copied to clipboard");
-} 
-function updateBoxes(){
-    document.getElementById("showAnswerChoicesLabel").style.display = (mcq.value.includes("blanks"))?"none":"inline";  
-    document.getElementById("FIBThresholdLabel").style.display = (frqtype.value!=="default")?"none":"inline";  
-    document.getElementById("FIBsizeLabel").style.display = (frqtype.value==="default"||frqtype.value.includes("FIB"))?"inline":"none";  
-    document.getElementById("autoCalcSASizeLabel").style.display = (frqtype.value.includes("FIB"))?"none":"inline";  
-    document.getElementById("SAsizeLabel").style.display = (autoCalcSASize.checked||frqtype.value.includes("FIB"))?"none":"inline";  
-    document.getElementById("FIBsize").value = (linegoal.checked)?"\\the{\\linegoal}":".85\\textwidth";
+}
+function updateBoxes() {
+    document.getElementById("showAnswerChoicesLabel").style.display = (mcq.value.includes("blanks")) ? "none" : "inline";
+    document.getElementById("FIBThresholdLabel").style.display = (frqtype.value !== "default") ? "none" : "inline";
+    document.getElementById("FIBsizeLabel").style.display = (frqtype.value === "default" || frqtype.value.includes("FIB")) ? "inline" : "none";
+    document.getElementById("autoCalcSASizeLabel").style.display = (frqtype.value.includes("FIB")) ? "none" : "inline";
+    document.getElementById("SAsizeLabel").style.display = (autoCalcSASize.checked || frqtype.value.includes("FIB")) ? "none" : "inline";
+    document.getElementById("FIBsize").value = (linegoal.checked) ? "\\the{\\linegoal}" : ".85\\textwidth";
 }
