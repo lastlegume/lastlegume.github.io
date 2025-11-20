@@ -245,6 +245,8 @@ I hope you found this useful, or at the very least somewhat interesting. I know 
 
 Edit: In the interest of convenience, I've reproduced the section I recommend copying into the preamble here. So if you want to use this, just copy the code below into the preamble and start writing!
 
+Note: this reproduced code omits the `\newpage` in `\q` to make it more easily fit into other tests. It's easy to add back in if desired though
+
 ```latex
 
 \newcounter{sectionCounter}
