@@ -236,6 +236,66 @@ The example given above would thus be rewritten as
 }
 ```
 
-which is quite a bit more intuitive. As a reminder, this is in [the linked Overleaf project](https://www.overleaf.com/read/vhpbkbzbbdgt#be8181) and can be copied if desired. I would recommend against copying this file though and would instead recommend that you copy only the part in the preamble that tells you to copy it (it's about 60 lines, starting on line 25 as of writing this). As you can see, it's very simple to use, having only a few minor differences from the typical exam class that mostly amount to using slightly differently named commands and environments. You can also rename these to anything you can very easily, and I would recommend this, as my names are mostly meant as a proof of concept.
+which is quite a bit more intuitive. As a reminder, this is in [the linked Overleaf project](https://www.overleaf.com/read/vhpbkbzbbdgt#be8181) and can be copied if desired. I would recommend against copying this file though and would instead recommend that you copy only the part in the preamble that tells you to copy it (it's about 60 lines, starting on line 25 as of writing this, and also reproduced below). As you can see, it's very simple to use, having only a few minor differences from the typical exam class that mostly amount to using slightly differently named commands and environments. You can also rename these to anything you can very easily, and I would recommend this, as my names are mostly meant as a proof of concept.
 
 I hope you found this useful, or at the very least somewhat interesting. I know that I will definitely be trying this on future exams, and I hope it ends up being useful to you as well!
+
+
+
+
+Edit: In the interest of convenience, I've reproduced the section I recommend copying into the preamble here. So if you want to use this, just copy the code below into the preamble and start writing!
+
+```latex
+
+\newcounter{sectionCounter}
+\newcounter{questionNumber}
+
+\renewcommand{\thepartno}{\arabic{questionNumber}}
+\renewcommand{\partlabel}{\thepartno.}
+
+\renewcommand{\thesubpart}{\alph{subpart}}
+\renewcommand{\subpartlabel}{(\thesubpart)}
+
+\renewcommand{\thesubsubpart}{\roman{subsubpart}}
+\renewcommand{\subsubpartlabel}{\thesubsubpart.}
+
+% Change \qsection to whatever name you want
+\newcommand{\qsection}[2]{
+    \newpage
+    \stepcounter{sectionCounter} 
+    \fullwidth{\section*{Section \arabic{sectionCounter}: #1}}
+    
+    \titledquestion{#1}
+    \vspace{-1em}
+    \uplevel{
+        \begin{parts}
+        #2
+        \end{parts}
+    }
+}
+
+\qformat{}
+%Change \q to whatever name you want
+\newcommand{\q}{
+    \stepcounter{questionNumber}
+    \part
+}
+%Change \p to whatever name you want
+\newcommand{\p}{
+    \subpart
+}
+%Change \subp to whatever name you want
+\newcommand{\subp}{
+    \subsubpart
+}
+
+\newenvironment{qparts}
+    {\begin{subparts}}
+    {\end{subparts}}
+
+\newenvironment{qsubparts}
+    {\begin{subsubparts}}
+    {\end{subsubparts}}
+    
+```
+
