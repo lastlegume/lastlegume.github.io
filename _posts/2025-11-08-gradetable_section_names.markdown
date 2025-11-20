@@ -261,7 +261,6 @@ Edit: In the interest of convenience, I've reproduced the section I recommend co
 
 % Change \qsection to whatever name you want
 \newcommand{\qsection}[2]{
-    \newpage
     \stepcounter{sectionCounter} 
     \fullwidth{\section*{Section \arabic{sectionCounter}: #1}}
     
@@ -296,6 +295,6 @@ Edit: In the interest of convenience, I've reproduced the section I recommend co
 \newenvironment{qsubparts}
     {\begin{subsubparts}}
     {\end{subsubparts}}
-    
+
 ```
 
