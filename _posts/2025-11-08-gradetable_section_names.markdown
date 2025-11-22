@@ -121,9 +121,15 @@ In this method, we use my first idea, which is to fake section titles with title
 
 \renewcommand{\thesubsubpart}{\roman{subsubpart}}
 \renewcommand{\subsubpartlabel}{\thesubsubpart.}
+
+%Fixes part spacing
+\renewcommand{\partshook}{
+    \setlength{\leftmargin}{0pt}
+    \setlength{\labelwidth}{-\labelsep}
+}
 ```
 
-Like before, we create a new counter the section number. However, unlike before, I also redefine parts, subparts, and subsubparts to look like the type one above them (e.g. parts look like questions, subparts look like parts, subsubparts look like subparts). The reason for this will be apparent very soon.
+Like before, we create a new counter the section number. However, unlike before, I also redefine parts, subparts, and subsubparts to look like the type one above them (e.g. parts look like questions, subparts look like parts, subsubparts look like subparts). The reason for this will be apparent very soon. However, we also need to redefine the parts hook to reduce the margin for parts so that we can pass off parts as questions as the redefinitions above suggest. You could also achieve a similar effect with the uplevel environment, as my first version of this post did, but this will run into issues for multipage long sections because uplevel environments are not able to have page breaks within them.
 
 
 ```latex
@@ -134,17 +140,15 @@ Like before, we create a new counter the section number. However, unlike before,
 
     \titledquestion{#1}
     \vspace{-1em}
-    \uplevel{
-        \begin{parts}
+    \begin{parts}
         #2
-        \end{parts}
-    }
+    \end{parts}
 }
 
 \qformat{}
 ```
 
-Then, we define a new command `\qsection` (although there are many better names for this) which, like before, starts a new page and creates a section header with the counter and the name of the section. However, it then creates a title question with the name of the section as the title and begins a parts environment within an uplevel. Uplevel removes one level of indentation, so it's like moving the parts labels to where question labels normally go and so on. Some of you might see where this is going. Next, we insert the questions, which are again an argument, into the parts, and close everything and end the command. This simple command does almost everything, but we do one more thing, which is defining the format of the questions ( `\qformat` ) to be blank. This does have a side effect of not letting you use questions, but with this system, you shouldn't ever anyways.
+Then, we define a new command `\qsection` (although there are many better names for this) which, like before, starts a new page and creates a section header with the counter and the name of the section. However, it then creates a title question with the name of the section as the title and begins a parts environment. Next, we insert the questions, which are again an argument, into the parts, and close everything and end the command. This simple command does almost everything, but we do one more thing, which is defining the format of the questions ( `\qformat` ) to be blank. This does have a side effect of not letting you use questions, but with this system, you shouldn't ever anyways.
 
 From here, simply using the built in gradetable command works! If you use the argument `questions`, then it will create a gradetable with the section names as titles instead of question numbers. For example, `\multicolumnpointtable{3}[questions]`.
 
@@ -261,6 +265,13 @@ Note: this reproduced code omits the `\newpage` in `\q` to make it more easily f
 \renewcommand{\thesubsubpart}{\roman{subsubpart}}
 \renewcommand{\subsubpartlabel}{\thesubsubpart.}
 
+%Fixes part spacing
+\renewcommand{\partshook}{
+    \setlength{\leftmargin}{0pt}
+    \setlength{\labelwidth}{-\labelsep}
+}
+
+
 % Change \qsection to whatever name you want
 \newcommand{\qsection}[2]{
     \stepcounter{sectionCounter} 
@@ -268,11 +279,9 @@ Note: this reproduced code omits the `\newpage` in `\q` to make it more easily f
     
     \titledquestion{#1}
     \vspace{-1em}
-    \uplevel{
-        \begin{parts}
+    \begin{parts}
         #2
-        \end{parts}
-    }
+    \end{parts}
 }
 
 \qformat{}
@@ -300,3 +309,8 @@ Note: this reproduced code omits the `\newpage` in `\q` to make it more easily f
 
 ```
 
+Changelog:
+
+November 19: added the quick copy code.
+
+November 21: fixed a bug in the code due to uplevel and switched to using `\partshook` to change indentation. Uplevel is limited to only a single page and cannot have a page break inside of it.
