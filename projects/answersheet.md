@@ -59,7 +59,7 @@ Any line that isn't a question or its answer (images, lists, section headers) is
     </select> <span class = "descriptor" hover-text = "Changes whether free response questions have blanks or boxes/lines/spaces to write answers in. Each environment is described in the documentation or my tutorial on the subject.">?</span><br></label>
    
 <label id="FIBThresholdLabel"><input type="number" id="FIBThreshold" value = 25 min = 0> Max character count for a FIB <span class = "descriptor" hover-text = "How many characters an answer can be before being considered a short answer question and not a fill in the blank">?</span><br></label>
-<label id = "FIBsizeLabel"><input type="text" id="FIBsize" value = ".85\\textwidth"> Length of fillin lines <span class = "descriptor" hover-text = "A fixed length for how long the blanks for fill in the blank questions should be. .85\\textwidth is roughly an entire line.">?</span><br></label>
+<label id = "FIBsizeLabel"><input type="text" id="FIBsize" value = "\\linewidth"> Length of fillin lines <span class = "descriptor" hover-text = "A fixed length for how long the blanks for fill in the blank questions should be. \\linewidth is roughly an entire line.">?</span><br></label>
 <label id="autoCalcSASizeLabel"><input type="checkbox" id="autoCalcSASize" checked> Calculate SA solution sizes based on answer length <span class = "descriptor" hover-text = "Use the length of the answers to decide how large the solution writing space should be">?</span><br></label>
 <label id = "SAsizeLabel"><input type="text" id="SAsize" value = "3cm"> Size of short answer solutions <span class = "descriptor" hover-text = "A fixed length that all solutions/solutionboxes will be">?</span><br></label>
 
