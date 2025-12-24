@@ -47,7 +47,7 @@ function convertText() {
             let question = "";
             question += input[i].match(qregex) + " ";
             for (let j = i + 1; j < input.length; j++) {
-                if (input[j] === "") {
+                if (input[j].trim() === "") {
                     input.splice(j, 1);
                     j--;
                 } else
