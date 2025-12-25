@@ -207,7 +207,7 @@ function convertText() {
 
     }
     if (mcq.value === "longblanks")
-        output = output.replaceAll("$#mcqblanklength#$", ".85\\textwidth");
+        output = output.replaceAll("$#mcqblanklength#$", ".88\\linewidth");
     else if (mcq.value === "shortblanks" || mcq.value === "multiblanks") {
         output = output.replaceAll("$#mcqblanklength#$", `${maxNumAnswers * 2 + 1}em`);
         if (mcq.value === "multiblanks") {
@@ -215,7 +215,7 @@ function convertText() {
         }
     }
     if (linegoal.checked) {
-        output = output.replaceAll(".9\\textwidth", `\\the{\\linegoal}`);
+        output = output.replaceAll(".88\\linewidth", `\\the{\\linegoal}`);
         output = "%Don't forget to include the linegoal package (\\usepackage{linegoal}) in the preamble of the document!\n" + output;
     }
     outputArea.value = output;
@@ -232,5 +232,5 @@ function updateBoxes() {
     document.getElementById("FIBsizeLabel").style.display = (frqtype.value === "default" || frqtype.value.includes("FIB")) ? "inline" : "none";
     document.getElementById("autoCalcSASizeLabel").style.display = (frqtype.value.includes("FIB")) ? "none" : "inline";
     document.getElementById("SAsizeLabel").style.display = (autoCalcSASize.checked || frqtype.value.includes("FIB")) ? "none" : "inline";
-    document.getElementById("FIBsize").value = (linegoal.checked) ? "\\the{\\linegoal}" : ".85\\textwidth";
+    document.getElementById("FIBsize").value = (linegoal.checked) ? "\\the{\\linegoal}" : ".88\\linewidth";
 }
