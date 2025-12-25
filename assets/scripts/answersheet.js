@@ -200,7 +200,7 @@ function convertText() {
                 if (includeEmptyQuestions)
                     output += input[i] + "\n";
                 else
-                    output += input[i].toLowerCase().match(/^\\(sub)*?(part|question)/g) + "\n";
+                    output += input[i].toLowerCase().trim().match(/^\\(sub)*?(part|question)/g) + "\n";
             }
 
         }
