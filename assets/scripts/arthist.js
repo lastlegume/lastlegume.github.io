@@ -122,13 +122,13 @@ function check() {
             nameOfWork += (subtype == 0 ? "" : " (covenant added)");
         } else if (specialCase == 17) {
             nameOfWork += (subtype == 0 ? " (founded)" : " (rebuilt)");
-        }else if (specialCase == 18) {
+        } else if (specialCase == 18) {
             nameOfWork += (subtype == 0 ? " (built)" : " (rebuilt)");
-        }else if (specialCase == 19) {
+        } else if (specialCase == 19) {
             nameOfWork += (subtype == 0 ? " (sculpture)" : " (architecture)");
-        }else if (specialCase == 20) {
+        } else if (specialCase == 20) {
             nameOfWork += (subtype == 0 ? " (original)" : " (current)");
-        }else if (specialCase == 21) {
+        } else if (specialCase == 21) {
             nameOfWork += (subtype == 0 ? " (artist)" : " (photographer)");
         }
 
@@ -201,7 +201,7 @@ function makeQuestion() {
                 if (idxOf == -1)
                     units.push(i + 1);
                 else
-                    units.push(...Array(weightbyunit.checked?weights[identifiers[idxOf][unitIdx]-1]:1).fill(idxOf));
+                    units.push(...Array(weightbyunit.checked ? weights[identifiers[idxOf][unitIdx] - 1] : 1).fill(idxOf));
             }
         }
     } else if (usingSpecificUnits) {
@@ -245,12 +245,12 @@ function makeQuestion() {
         if (usingSpecificUnits) {
             for (let i = 0; i < 251; i++) {
                 if (contains(units, identifiers[i][sunitIdx].trim()))
-                    tempUnitsList.push(...Array(weightbyunit.checked?weights[identifiers[i][unitIdx]-1]:1).fill(i));
+                    tempUnitsList.push(...Array(weightbyunit.checked ? weights[identifiers[i][unitIdx] - 1] : 1).fill(i));
             }
         } else {
             for (let i = 0; i < 251; i++) {
                 if (contains(units, identifiers[i][unitIdx]))
-                    tempUnitsList.push(...Array(weightbyunit.checked?weights[identifiers[i][unitIdx]-1]:1).fill(i));
+                    tempUnitsList.push(...Array(weightbyunit.checked ? weights[identifiers[i][unitIdx] - 1] : 1).fill(i));
             }
         }
         units = tempUnitsList;
@@ -266,7 +266,7 @@ function makeQuestion() {
         n++;
     }
     question.textContent = identifiers[0][identifier] + "?";
-    if(workIndex>251)
+    if (workIndex > 251)
         console.info(workIndex);
     //console.log(identifiers[workIndex][identifier] + " n: " + n);
     //} 
@@ -534,34 +534,7 @@ function fuzzyEquals(ones, twos) {
     return false;
 
 }
-function fuzzy(guess, answer) {
-    guess = guess.toLowerCase().trim();
-    answer = answer.toLowerCase().trim();
-    // checks if the strings are equals beforehand to skip the iteration if unnecessary
-    if (guess === answer)
-        return true;
-    // variable that holds the number of correct characters
-    let score = 0;
-    //number of characters back or forwards a substring is allowed to be before being counted as nonexistent.
-    var leniency = Math.ceil(answer.length ** .5);
 
-    var fuzziness = 1 - answer.length ** -.45;
-    //maximum possible score
-    var neededFuzzyAmount = ((answer.length) * (answer.length + 1) * (answer.length + 2)) / 6 - answer.length;
-    for (let i = guess.length; i >= 2; i--) {
-        for (let s = 0; s <= (guess.length - i); s++) {
-            for (let a = Math.max(0, s - leniency); a <= Math.min(s + leniency, answer.length - i); a++) {
-                if (guess.substring(s, s + i) === answer.substring(a, a + i)) {
-                    score += i;
-                }
-            }
-            if (score > neededFuzzyAmount ** fuzziness)
-                return true;
-        }
-    }
-    //   console.log(score + " vs needed " + neededFuzzyAmount ** fuzziness)
-    return score > neededFuzzyAmount ** fuzziness;
-}
 
 function isSpecialCase() {
     // const specialNameCases = [21, 35, 31, 45, 48, 50, 51, 55, 64, 65];
@@ -690,14 +663,26 @@ function importSettings() {
 }
 function encode(settings) {
     let str = "";
+    let out = "";
     for (let i = 0; i < settings.length; i++) {
         str += settings[i].checked ? "1" : "0";
+        if (i % 4 == 3) {
+            out += parseInt(str, 2).toString(16);
+            str = "";
+        }
     }
 
-    return str;
+    return out;
 }
 function decode(settings, str) {
     let allWorksChanged = false;
+    console.log(str);
+    let out = "";
+    for (let i = 0; i < str.length; i++) {
+        out += parseInt(str.at(i), 16).toString(2).padStart(4, "0");
+    }
+    str = out;
+    console.log(str);
     for (let i = 0; i < settings.length; i++) {
         if (settings[i].id === "allWorks") {
             allWorksChanged = settings[i].checked != (str.at(i) === "1");
