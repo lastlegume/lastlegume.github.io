@@ -31,36 +31,36 @@
       </a>
       <h2>{{ site.description | default: site.github.project_tagline }}</h2>
       {% for page in site.pages %}
-          {% if page.header %}
-          <h3 class="dropdownTrigger"><a class="extension-link" href="{{ page.url }}"> {{page.title}}</a></h3>
-          {% endif %}
-          {% endfor %}
+      {% if page.header %}
+      <h3 class="dropdownTrigger"><a class="extension-link" href="{{ page.url }}"> {{page.title}}</a></h3>
+      {% endif %}
+      {% endfor %}
       <div class="dropdown">
         <h3 class="dropdownTrigger">Tools</h3>
         <div class="dropdownMenu">
           <ul>
-          {% for i in (1..site.pages.size) %}
-          {% for page in site.pages %}
-          {% if page.tools == i %}
-          <li class="dropdownLI"><a class="extension-link" href="{{ page.url }}"> {{page.title}}</a></li>
-          {% endif %}
-          {% endfor %}
-          {% endfor %}
-        </ul>
+            {% for i in (1..site.pages.size) %}
+            {% for page in site.pages %}
+            {% if page.tools == i %}
+            <li class="dropdownLI"><a class="extension-link" href="{{ page.url }}"> {{page.title}}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+          </ul>
         </div>
       </div>
       <div class="dropdown">
         <h3 class="dropdownTrigger">Games</h3>
         <div class="dropdownMenu">
           <ul>
-          {% for i in (1..site.pages.size) %}
-          {% for page in site.pages %}
-          {% if page.games == i %}
-          <li class="dropdownLI"><a class="extension-link" href="{{ page.url }}"> {{page.title}}</a></li>
-          {% endif %}
-          {% endfor %}
-          {% endfor %}
-        </ul>
+            {% for i in (1..site.pages.size) %}
+            {% for page in site.pages %}
+            {% if page.games == i %}
+            <li class="dropdownLI"><a class="extension-link" href="{{ page.url }}"> {{page.title}}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+          </ul>
         </div>
       </div>
     </div>
@@ -76,8 +76,10 @@
 
   <footer>
     <hr>
-    Made by lastlegume using Jekyll and the hacker theme. Site powered by Github Pages. Traffic logged and analyzed using <a href="https://clicky.com">Clicky</a>. For more information, check their <a href = "http://clicky.com/terms/privacy">privacy policy</a>.  
-    
+    Made by lastlegume (without AI!) using Jekyll and the hacker theme. Site powered by Github Pages. Traffic logged and
+    analyzed using <a href="https://clicky.com">Clicky</a>. For more information, check their <a
+      href="http://clicky.com/terms/privacy">privacy policy</a>.
+
     <section id="downloads">
       <a href="{{ site.github.repository_url }}" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
     </section>
