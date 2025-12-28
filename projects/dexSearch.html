@@ -15,6 +15,9 @@ tools: 11
         width: 60%;
         font-size: larger;
     }
+    .filterDiv{
+        column-count: 6;
+    }
 </style>
 
 <script defer src="/assets/scripts/csvReader.js"></script>
@@ -26,6 +29,19 @@ tools: 11
     most of the data is English, though there is a limited number of entries in different languages.</p>
 <div id="barDiv">
     <input id="searchBar" placeholder="Start search!" type="search">
+</div>
+
+<div>
+    <p>
+        <h2>Game</h2>
+        <div id="gameFilters" class="filterDiv"></div>
+    </p>
+
+    <p>
+        <h2>Language</h2>
+        <div id="languageFilters" class="filterDiv"></div>
+    </p>
+
 </div>
 
 <div id="out" class="center">
