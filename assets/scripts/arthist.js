@@ -180,9 +180,6 @@ function readCSV() {
 
     }
     makeQuestion();
-
-    //  console.log(identifiers);
-
 }
 function makeQuestion() {
     answer.value = "";
