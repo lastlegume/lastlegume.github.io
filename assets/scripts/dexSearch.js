@@ -18,7 +18,8 @@ fetch("/assets/dex-search/dex.csv").then((response) => {
         dex = readCSV(str);
         searchBar.disabled = false;
         searchBar.placeholder = "Start search!";
-        fillTable(dex)
+        searchBar.focus();
+        fillTable(dex);
 
     });
 });
