@@ -1,0 +1,45 @@
+---
+layout: default
+title: Pokédex Entries Search
+permalink: /dex-search
+tools: 11
+---
+
+
+<style type="text/css" media="screen">
+    #barDiv {
+        text-align: center;
+    }
+
+    #searchBar {
+        width: 60%;
+        font-size: larger;
+    }
+</style>
+
+<script defer src="/assets/scripts/csvReader.js"></script>
+<script defer src="/assets/scripts/dexSearch.js"></script>
+
+<h1>Search Pokédex entries</h1>
+<p>This site allows quick and easy searching of all (English) Pokédex entries. All data is from the <a
+        href="https://pokeapi.co/">PokéAPI</a>, and thus
+    most of the data is English, though there is a limited number of entries in different languages.</p>
+<div id="barDiv">
+    <input id="searchBar" placeholder="Start search!" type="search">
+</div>
+
+<div id="out" class="center">
+    <table id="resultsTable">
+        <thead>
+            <th>Pokémon</th>
+            <th>Game</th>
+            <th>Language</th>
+            <th>Entry</th>
+        </thead>
+        <tbody id="resultsBody">
+
+        </tbody>
+
+    </table>
+
+</div>
