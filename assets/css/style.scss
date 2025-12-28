@@ -212,3 +212,30 @@ h5 {
 .hide{
     display: none;
 }
+
+input {
+    background-color: black;
+    color: white;
+    padding: 3px;
+    border: #B5E853 solid 1px;
+    border-radius: 5px;
+    transition-duration: .3s;
+}
+
+textarea, select{
+    background-color: black;
+    color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    padding: 3px;
+    border: #B5E853 solid 1px;
+    transition-duration: .3s;
+    border-radius: 5px;
+}
+textarea{
+    font-size:small;
+}
+input:hover{
+    background-color: rgb(78, 78, 78);
+    transition-duration: .3s;
+}
+
