@@ -20,6 +20,7 @@ fetch("/assets/dex-search/dex.csv").then((response) => {
         str = txt;
         dex = readCSV(str);
         createFilters(dex);
+        filter();
 
         toggleDisabledBar();
 
