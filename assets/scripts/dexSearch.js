@@ -30,6 +30,7 @@ fetch("/assets/dex-search/dex.csv").then((response) => {
 
 
 function fillTable(csv) {
+    // adds rows to the table
     resultsBody.innerHTML = "";
 
     let row;
