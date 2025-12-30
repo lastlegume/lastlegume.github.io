@@ -36,10 +36,10 @@ const sunitDivs = document.getElementsByClassName("sunit-div");
 // for identifier settings
 const idBoxes = document.getElementsByClassName("identifier-checkbox");
 for (let i = 0; i < unitBoxes.length; i++) {
-    unitBoxes[i].addEventListener('change', () => update());
+    unitBoxes[i].addEventListener('change', update);
 }
 for (let i = 0; i < sunitBoxes.length; i++) {
-    sunitBoxes[i].addEventListener('change', () => updateSpecific());
+    sunitBoxes[i].addEventListener('change', update);
 }
 document.getElementById("exportSettings").addEventListener('click', () => exportSettings())
 document.getElementById("importSettings").addEventListener('click', () => importSettings())
@@ -265,35 +265,14 @@ function makeQuestion() {
     question.textContent = identifiers[0][identifier] + "?";
     if (workIndex > 251)
         console.info(workIndex);
-    //console.log(identifiers[workIndex][identifier] + " n: " + n);
-    //} 
-    // else if (usingSpecificUnits) {
-    //     while ((!(!allWorks.checked && contains(units, identifiers[workIndex][sunitIdx] * 1)) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
-    //         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
-    //         n++;
-    //     }
-    // } else {
-    //     //if the stuff in the parenthesis with OR is true, we need to continue searching
-    //     while ((!(!allWorks.checked && contains(units, identifiers[workIndex][unitIdx] * 1)) || identifiers[workIndex][1] === "" || identifiers[workIndex][identifier] === "" || workIndex > 250 || workIndex == previousWork) && n < 10000) {
-    //         workIndex = Math.floor(Math.random() * (identifiers.length - 1)) + 1;
-    //         n++;
-    //     }
-    // }
-    //console.log(units);
 
     if (identifiers[workIndex][identifier] === "" || !identifiers[workIndex][identifier])
         workIndex = units[0];
-    // if (!allWorks.checked) {
-    //     if (!usingSpecificUnits && !contains(units, identifiers[workIndex][unitIdx] * 1))
-    //         workIndex = 1;
-    //     else if (usingSpecificUnits && !contains(units, identifiers[workIndex][sunitIdx] * 1))
-    //         workIndex = 1;
-    // }
 
     console.log("work: " + workIndex + ", identifier: " + identifier + ", subtype: " + subtype);
     // console.log(identifiers[workIndex]);
     // console.log(identifiers[workIndex][1]==="");
-    //  console.log(identifiers[workIndex][unitIDlistIndex]);
+    // console.log(identifiers[workIndex][unitIDlistIndex]);
     // console.log((contains(units, identifiers[workIndex][unitIDlistIndex]*1)));
     subtype = 0;
     let path = identifiers[workIndex][0].split("/");
@@ -499,27 +478,19 @@ function showAllWorks() {
 
     }
 }
-function update() {
+function update(e) {
+    let changed = e.target.parentElement.parentElement
     var workDivs = document.getElementsByClassName("workDivs");
     for (let i = 0; i < workDivs.length; i++) {
-        if (workDivs[i].parentElement.classList[0] === "unit-div") {
+        if (workDivs[i].parentElement==changed) {
             var idxOfWorkOfDiv = indexOfIdentifier(workDivs[i].innerText.trim(), "Title");
             if (idxOfWorkOfDiv <= 250)
-                workDivs[i].children[0].children[0].checked = unitBoxes[identifiers[idxOfWorkOfDiv][unitIdx] - 1].checked;
+                workDivs[i].children[0].children[0].checked = e.target.checked;
         }
 
     }
 }
-function updateSpecific() {
-    var workDivs = document.getElementsByClassName("workDivs");
-    for (let i = 0; i < workDivs.length; i++) {
-        if (workDivs[i].parentElement.classList[0] === "sunit-div") {
-            var idxOfWorkOfDiv = indexOfIdentifier(workDivs[i].innerText.trim(), "Title");
-            if (idxOfWorkOfDiv <= 250)
-                workDivs[i].children[0].children[0].checked = sunitBoxes[identifiers[idxOfWorkOfDiv][sunitIdx] - 1].checked;
-        }
-    }
-}
+
 function fuzzyEquals(ones, twos) {
     twos.push.apply(extraAnswers);
     for (let i = 0; i < ones.length; i++) {
