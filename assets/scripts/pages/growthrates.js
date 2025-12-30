@@ -70,7 +70,7 @@ function updateLogisticGraph() {
 function resizeGraphs(){
     let width = document.getElementById("main_content").getBoundingClientRect().width;
     let height = window.innerHeight;
-    let adjWidth = width - 220;
+    let adjWidth = width - 300;
     expGraph.width = adjWidth<150?width:adjWidth;
     expGraph.height = Math.max(height * .75, 80);
     
