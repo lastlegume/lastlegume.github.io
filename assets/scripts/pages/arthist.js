@@ -53,6 +53,7 @@ var unitIdx = 0;
 var sunitIdx = 0;
 const selectAllText = document.getElementById("selectAllText");
 
+answer.focus();
 
 var extraAnswers = [];
 
