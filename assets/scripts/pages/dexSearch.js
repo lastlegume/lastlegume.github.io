@@ -16,6 +16,10 @@ toggleDisabledBar();
 
 searchBar.addEventListener('input', search);
 numResults.addEventListener('change', search);
+let toggleButtons = document.getElementsByClassName("toggleFilters");
+for(let i = 0;i<toggleButtons.length;i++){
+    toggleButtons[i].addEventListener('click', toggle);
+}
 
 fetch("/assets/dex-search/dex.csv").then((response) => {
     response.text().then((txt) => {
@@ -144,4 +148,18 @@ function toggleDisabledBar(){
         searchBar.disabled = true;
         searchBar.placeholder = "loading...";
     }
+}
+
+function toggle(e){
+    let target = e.target;
+    console.log(target);
+    // console.log(target.nextSibling);
+    let select = !target.innerText.includes("Deselect");
+    target.innerText = select?"Deselect all":"Select all";
+    let children = target.parentNode.nextSibling.nextSibling.children;
+    console.log(children);
+    for(let i = 0;i<children.length;i++){
+        children[i].children[0].checked = select;
+    }
+
 }
