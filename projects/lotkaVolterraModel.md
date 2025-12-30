@@ -6,8 +6,8 @@ tools: 10
 ---
 
 
-<script defer src="/assets/scripts/graph.js"></script>
-<script defer src="/assets/scripts/lotkaVolterraModel.js"></script>
+<script defer src="/assets/scripts/modules/graph.js"></script>
+<script defer src="/assets/scripts/pages/lotkaVolterraModel.js"></script>
 
 <style type="text/css" media="screen">
     .stretch {

@@ -31,7 +31,7 @@ tools: 6
 
 
 </style>
-<script src="/assets/scripts/deckProbabilities.js" defer></script>
+<script src="/assets/scripts/pages/deckProbabilities.js" defer></script>
 
 # Pokémon TCG Deck Probabilities
 

@@ -5,7 +5,7 @@ permalink: /answer-sheet
 tools: 2
 ---
 
-<script defer src = "/assets/scripts/answersheet.js"></script>
+<script defer src = "/assets/scripts/pages/answersheet.js"></script>
 <style type="text/css" media="screen">
     .half {
         text-align: center;

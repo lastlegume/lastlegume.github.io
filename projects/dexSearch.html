@@ -15,13 +15,21 @@ tools: 11
         width: 60%;
         font-size: larger;
     }
-    .filterDiv{
+
+    .filterDiv {
         column-count: 6;
+    }
+
+    details {
+        margin-top: 20px;
+        border: #78c336 solid 1px;
+        padding: 2px 12px;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
 </style>
 
-<script defer src="/assets/scripts/csvReader.js"></script>
-<script defer src="/assets/scripts/dexSearch.js"></script>
+<script defer src="/assets/scripts/modules/csvReader.js"></script>
+<script defer src="/assets/scripts/pages/dexSearch.js"></script>
 
 <h1>Search Pokédex entries</h1>
 <p>This site allows quick and easy searching of all (English) Pokédex entries. All data is from the <a
@@ -31,18 +39,22 @@ tools: 11
     <input id="searchBar" placeholder="Start search!" type="search">
 </div>
 
-<div>
+<details class="">
+    <summary>Settings</summary>
+    <h2>General <button>Deselect all</button></h2>
+    <p><label><input id="numResults" type="number" max="100000" min=25 value="100" step="25"> Number of results</label>
+    </p>
     <p>
-        <h2>Game</h2>
-        <div id="gameFilters" class="filterDiv"></div>
+    <h2>Game</h2>
+    <div id="gameFilters" class="filterDiv"></div>
     </p>
 
     <p>
-        <h2>Language</h2>
-        <div id="languageFilters" class="filterDiv"></div>
+    <h2>Language</h2>
+    <div id="languageFilters" class="filterDiv"></div>
     </p>
 
-</div>
+</details>
 
 <div id="out" class="center">
     <table id="resultsTable">

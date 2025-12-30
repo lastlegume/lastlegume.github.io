@@ -4,6 +4,7 @@ const resultsTable = document.getElementById("resultsTable");
 const resultsBody = document.getElementById("resultsBody");
 const gameFilters = document.getElementById("gameFilters");
 const languageFilters = document.getElementById("languageFilters");
+const numResults = document.getElementById("numResults");
 
 // global variables
 let dex = [];
@@ -14,6 +15,7 @@ let filtered = [];
 toggleDisabledBar();
 
 searchBar.addEventListener('input', search);
+numResults.addEventListener('change', search);
 
 fetch("/assets/dex-search/dex.csv").then((response) => {
     response.text().then((txt) => {
@@ -32,6 +34,13 @@ fetch("/assets/dex-search/dex.csv").then((response) => {
 function fillTable(csv) {
     // adds rows to the table
     resultsBody.innerHTML = "";
+    try{
+        numberOfResults = parseInt(numResults.value);
+        numberOfResults = Math.max(1, numberOfResults);
+    }catch{
+        numberOfResults = 100;
+    }
+    
 
     let row;
     for (let r = 0; r < Math.min(csv.length, numberOfResults); r++) {
@@ -39,7 +48,7 @@ function fillTable(csv) {
         for (let c = 0; c < csv[r].length; c++) {
             let td = document.createElement("td");
             td.innerText = csv[r][c].replaceAll('"', '');
-            td.classList.add("x-small");
+            // td.classList.add("x-small");
             row.appendChild(td);
         }
         resultsBody.appendChild(row);
