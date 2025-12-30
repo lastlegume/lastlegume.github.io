@@ -45,7 +45,7 @@ This post is somewhat technical, so if you're only interested in the implementat
 
 The first idea I had was to use grading ranges with a custom command for sections. I used stations for all of my commands here, but stations and sections are functionally identical anyways so the names don't really matter. Importantly, `section` is already defined as a counter, so you can't name any of your commands or counters `section` because of the article class, which has already defined `\section` and the counter `section`. From here on, I'll just refer to sections as stations for this method since it's simpler.
 
-This solution uses [arrayjobx](http://mirrors.ctan.org/macros/generic/arrayjobx/arrayjob.pdf) and [multido](http://mirrors.ctan.org/macros/generic/multido/multido-doc.pdf), so you need to add those to the preamble to make this work. Additionally, note that all of the code written here will be in the preamble.
+This solution uses [arrayjobx](http://mirrors.ctan.org/macros/generic/arrayjobx/arrayjob.pdf) and [multido](http://mirrors.ctan.org/macros/generic/multido/multido-doc.pdf), so you need to add those to the preamble to make this work. Additionally, note that all code written here will be in the preamble.
 
 ```latex
 \usepackage{arrayjobx}
@@ -314,3 +314,5 @@ Changelog:
 November 19: added the quick copy code.
 
 November 21: fixed a bug in the code due to uplevel and switched to using `\partshook` to change indentation. Uplevel is limited to only a single page and cannot have a page break inside of it.
+
+Special thanks to [this Stack Overflow post](https://stackoverflow.com/questions/8160514/is-there-css-for-typesetting-the-latex-logo-in-html) for the CSS for the <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> logo.
