@@ -30,22 +30,22 @@
         <h1>{{ site.title | default: site.github.repository_name }}</h1>
       </a>
       <h2>{{ site.description | default: site.github.project_tagline }}</h2>
-      {% for page in site.pages %}
-      {% if page.header %}
+      {%- for page in site.pages -%}
+      {%- if page.header %}
       <h3 class="dropdownTrigger"><a class="extension-link" href="{{ page.url }}"> {{page.title}}</a></h3>
-      {% endif %}
-      {% endfor %}
+      {%- endif -%}
+      {%- endfor -%}
       <div class="dropdown">
         <h3 class="dropdownTrigger">Tools</h3>
         <div class="dropdownMenu">
           <ul>
-            {% for i in (1..site.pages.size) %}
-            {% for page in site.pages %}
-            {% if page.tools == i %}
+            {%- for i in (1..site.pages.size) -%}
+            {%- for page in site.pages -%}
+            {%- if page.tools == i %}
             <li class="dropdownLI"><a class="extension-link" href="{{ page.url }}"> {{page.title}}</a></li>
-            {% endif %}
-            {% endfor %}
-            {% endfor %}
+            {%- endif -%}
+            {%- endfor -%}
+            {%- endfor -%}
           </ul>
         </div>
       </div>
@@ -53,13 +53,13 @@
         <h3 class="dropdownTrigger">Games</h3>
         <div class="dropdownMenu">
           <ul>
-            {% for i in (1..site.pages.size) %}
-            {% for page in site.pages %}
-            {% if page.games == i %}
+            {%- for i in (1..site.pages.size) -%}
+            {%- for page in site.pages -%}
+            {%- if page.games == i %}
             <li class="dropdownLI"><a class="extension-link" href="{{ page.url }}"> {{page.title}}</a></li>
-            {% endif %}
-            {% endfor %}
-            {% endfor %}
+            {%- endif -%}
+            {%- endfor -%}
+            {%- endfor -%}
           </ul>
         </div>
       </div>
