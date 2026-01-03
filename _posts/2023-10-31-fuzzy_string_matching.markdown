@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  A Simple Algorithm for Fuzzy Text Matching
+title:  A Simple, Inefficient Algorithm for Fuzzy Text Matching
 date:   2023-10-31 12:00:00 -0500
 category: cs
 author: lastlegume
@@ -8,6 +8,8 @@ tags: cs javascript
 ---
 
 <script defer src="/assets/scripts/pages/fuzzyPost.js"></script>
+
+Note: As of January 2026, fuzzy string matching on this site is done by calculating edit distance (more specifically Levenshtein distance). The method presented here is much worse and was simply my first thought when approaching the problem several years ago, so it has many flaws. 
 
 Exactly as the title states: a simple, javascript based code segment for matching two strings while allowing for some inaccuracy. Because of the method of matching, this segment is O(N^3), so it should not be used if time is an issue. The code is shown below and an interactive example are below:
 
