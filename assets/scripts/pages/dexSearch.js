@@ -62,14 +62,36 @@ function fillTable(csv) {
 
 function search(){
     toggleDisabledBar();
-    let query = searchBar.value;
+    let queryText = searchBar.value.toLowerCase();
+    let query = queryText.split(" ");
     console.log(query);
     let results = [];
+    // bag of words search
+    // for each entry
     for(let i = 0;i<filtered.length;i++){
-        if(filtered[i][0].includes(query) || filtered[i][3].includes(query))
-            results.push(filtered[i]);
+        let score = 0;
+        //check how many times each query term appears in the entry (with the name included)
+        for(let q of query){
+            let doc = [filtered[i][0], ...(filtered[i][3].split(" "))];
+            for(let j = 0;j<doc.length;j++){
+                let lDist = 0;
+                if(doc[j].length>=q.length)
+                    lDist = levenshteinDistance(q, doc[j].substring(0,q.length));
+                else
+                    lDist = levenshteinDistance(q, doc[j]);
+                if(lDist<4){
+                    score+=7-lDist*2;
+                }
+            }
+        }
+        //add this to results
+        console.log(score);
+        if(score>3)
+            results.push([filtered[i], score]);
     }
-    fillTable(results);
+    let sorted = results.sort((a,b)=>b[1]-a[1]);
+    console.log(sorted);
+    fillTable(sorted.map((e)=>e[0]));
     toggleDisabledBar();
 }
 
