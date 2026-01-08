@@ -64,7 +64,6 @@ function search(){
     toggleDisabledBar();
     let queryText = searchBar.value.toLowerCase();
     let query = queryText.split(" ");
-    console.log(query);
     let results = [];
     // bag of words search
     // for each entry
@@ -105,7 +104,6 @@ function search(){
     }
     //first sort by how many queries found, then by score
     let sorted = results.sort((a,b)=>b[1]-a[1]).sort((a,b)=>b[2]-a[2]);
-    console.log(sorted);
     fillTable(sorted.map((e)=>e[0]));
     toggleDisabledBar();
 }
