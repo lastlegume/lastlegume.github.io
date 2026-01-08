@@ -14,7 +14,7 @@ let filtered = [];
 
 toggleDisabledBar();
 
-searchBar.addEventListener('input', search);
+searchBar.addEventListener('change', search);
 numResults.addEventListener('change', search);
 let toggleButtons = document.getElementsByClassName("toggleFilters");
 for(let i = 0;i<toggleButtons.length;i++){
@@ -69,24 +69,37 @@ function search(){
     // bag of words search
     // for each entry
     for(let i = 0;i<filtered.length;i++){
-        let score = 0;
+        let score = 1;
+        //number of different words from the query found in the entry
+        let numQueriesFound = 0;
+        //bonus if the exact phrase is found
+        if(filtered[i][3].toLowerCase().includes(queryText))
+            score+=100;
         //check how many times each query term appears in the entry (with the name included)
         for(let q of query){
-            let doc = [filtered[i][0], ...(filtered[i][3].split(" "))];
+            //score for just this one query
+            let qScore = 1;
+            let doc = [filtered[i][0].toLowerCase(), ...(filtered[i][3].toLowerCase().split(" "))];
             for(let j = 0;j<doc.length;j++){
                 let lDist = 0;
-                if(doc[j].length>=q.length)
+                if(doc[j]===q)
+                    //gives boost to exact matches
+                    lDist=-3;
+                else if(doc[j].length>=q.length)
                     lDist = levenshteinDistance(q, doc[j].substring(0,q.length));
                 else
                     lDist = levenshteinDistance(q, doc[j]);
                 if(lDist<4){
-                    score+=7-lDist*2;
+                    qScore+=16-lDist*5;
                 }
             }
+            score*=qScore;
+            if(qScore>1)
+                numQueriesFound++;
         }
         //add this to results
-        console.log(score);
-        if(score>3)
+        score*=10**numQueriesFound
+        if(score>30)
             results.push([filtered[i], score]);
     }
     let sorted = results.sort((a,b)=>b[1]-a[1]);
