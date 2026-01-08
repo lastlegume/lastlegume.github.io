@@ -79,6 +79,8 @@ function search(){
         for(let q of query){
             //score for just this one query
             let qScore = 1;
+            //max edit distance between strings to be considered equal (exclusive)
+            let likenessThreshold = Math.max(Math.min(6,q.length/2-3),2);
             let doc = [filtered[i][0].toLowerCase(), ...(filtered[i][3].toLowerCase().split(" "))];
             for(let j = 0;j<doc.length;j++){
                 let lDist = 0;
@@ -89,8 +91,8 @@ function search(){
                     lDist = levenshteinDistance(q, doc[j].substring(0,q.length));
                 else
                     lDist = levenshteinDistance(q, doc[j]);
-                if(lDist<4){
-                    qScore+=16-lDist*5;
+                if(lDist<likenessThreshold){
+                    qScore+=31-lDist*(30/likenessThreshold);
                 }
             }
             score*=qScore;
@@ -98,11 +100,11 @@ function search(){
                 numQueriesFound++;
         }
         //add this to results
-        score*=10**numQueriesFound
         if(score>30)
-            results.push([filtered[i], score]);
+            results.push([filtered[i], numQueriesFound, score]);
     }
-    let sorted = results.sort((a,b)=>b[1]-a[1]);
+    //first sort by how many queries found, then by score
+    let sorted = results.sort((a,b)=>b[1]-a[1]).sort((a,b)=>b[2]-a[2]);
     console.log(sorted);
     fillTable(sorted.map((e)=>e[0]));
     toggleDisabledBar();
