@@ -79,7 +79,7 @@ function search(){
             //score for just this one query
             let qScore = 1;
             //max edit distance between strings to be considered equal (exclusive)
-            let likenessThreshold = Math.max(Math.min(6,q.length/2-3),2);
+            let likenessThreshold = Math.max(Math.min(6,q.length/2),2);
             let doc = [filtered[i][0].toLowerCase(), ...(filtered[i][3].toLowerCase().split(" "))];
             for(let j = 0;j<doc.length;j++){
                 let lDist = 0;
