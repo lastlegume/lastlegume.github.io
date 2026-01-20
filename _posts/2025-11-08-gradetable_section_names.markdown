@@ -184,7 +184,7 @@ This allows you to set a default point value, but has the downside of forcing ev
 
 Overall, this solution is much better than the other one, and works reasonably well. In fact, it would be difficult to tell that these were secretly parts if you were just looking at the final pdf, so I measure that as a success. The only real limitation with this method is the fact that you cannot use normal questions anywhere anymore. Additionally, if you want questions to be outside of a section, then they won't be titled and will instead appear with a number. But both of these seem useless to me - why would you need normal questions anymore when you have the `\q` command to do the same thing, and why would you want questions that aren't a part of a section? 
 
-Additionally, this also breaks the "Go to PDF location in code" feature of many <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> editors (double-clicking in Overleaf, CTRL/CMD + Click in LaTeX Workshop, etc.). I didn't think much of this at first, but as I wrote, it got more and more annoying, so I've written a follow-up on how to fix this and restore that functionality. Thankfully, it's very simple :).
+Additionally, this also breaks the "Go to PDF location in code" feature of many <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> editors (double-clicking in Overleaf, CTRL/CMD + Click in LaTeX Workshop, etc.). I didn't think much of this at first, but as I wrote, it got more and more annoying, so I've written [a follow-up on how to fix this](/blog/gradetable_fix_click) and restore that functionality. Thankfully, it's very simple :).
 
 So overall, these are real drawbacks to consider. I'm glad to say everything else that I've noticed like the question numbering and use of parts has a reasonably easy fix/workaround.
 
@@ -282,7 +282,7 @@ Note: this reproduced code omits the `\newpage` in `\q` to make it more easily f
     \fullwidth{\section*{Section \arabic{sectionCounter}: #1}}
     
     \titledquestion{#1}
-    \vspace{-1em}
+    \vspace{-2em}
     \begin{parts}
         #2
     \end{parts}
@@ -319,7 +319,7 @@ November 19: added the quick copy code.
 
 November 21: fixed a bug in the code due to uplevel and switched to using `\partshook` to change indentation. Uplevel is limited to only a single page and cannot have a page break inside of it.
 
-January 20: Added a mention to the fact that the better method also breaks the "go to pdf location in code" feature of many editors, as everything is now just an argument for a macro. 
+January 20: Added a mention to the fact that the better method also breaks the "Go to PDF location in code" feature of many editors, as everything is now just an argument for a command. 
 
 
 Special thanks to [this Stack Overflow post](https://stackoverflow.com/questions/8160514/is-there-css-for-typesetting-the-latex-logo-in-html) for the CSS for the <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> logo.
