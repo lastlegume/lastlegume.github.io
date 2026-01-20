@@ -11,7 +11,7 @@ header: true
     }
 </style>
 
-# All of the tools I've made for Science Olympiad
+# All of the tools and resources I've made for Science Olympiad
 
 ### [Tournament Scoring Spreadsheet](/blog/scoring_spreadsheet)
 
@@ -27,7 +27,12 @@ An extension to convert Science Olympiad tests on Scilympiad into beautiful LaTe
 
 ### [LaTeX Tutorial and Template](/blog/latex_tutorial)
 
-A [template](/blog/tex_template) and [accompanying tutorial](/blog/latex_tutorial) that explain the basics of writing SciOly tests in LaTeX (mostly basics of the exam class) and some specific choices I make in my tests. 
+A [template](/blog/tex_template) and [accompanying tutorial](/blog/latex_tutorial) that explain the basics of writing SciOly tests in LaTeX (mostly basics of 
+the exam class) and some specific choices I make in my tests. 
+
+### [Past Exams](/past-exams)
+
+A collection of all the exams I've written, mostly with others. They are quite variable in quality, and they use the tools I've developed as I've been making them.
 
 ### [Entomology ID Site](/taxon-id)
 
