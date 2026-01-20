@@ -148,11 +148,11 @@ Like before, we create a new counter the section number. However, unlike before,
 \qformat{}
 ```
 
-Then, we define a new command `\qsection` (although there are many better names for this) which, like before, starts a new page and creates a section header with the counter and the name of the section. However, it then creates a title question with the name of the section as the title and begins a parts environment. Next, we insert the questions, which are again an argument, into the parts, and close everything and end the command. This simple command does almost everything, but we do one more thing, which is defining the format of the questions ( `\qformat` ) to be blank. This does have a side effect of not letting you use questions, but with this system, you shouldn't ever anyways.
+Then, we define a new command `\qsection` (although there are many better names for this) which, like before, starts a new page and creates a section header with the counter and the name of the section. However, it then creates a title question with the name of the section as the title and begins a parts environment. Next, we insert the questions, which are again an argument, into the parts, and close everything and end the command. This simple command does almost everything, but we do one more thing, which is defining the format of the questions ( `\qformat` ) to be blank. This does have a side effect of not letting you use questions, but with this system, you shouldn't ever anyway.
 
-From here, simply using the built in gradetable command works! If you use the argument `questions`, then it will create a gradetable with the section names as titles instead of question numbers. For example, `\multicolumnpointtable{3}[questions]`.
+From here, simply using the built-in gradetable command works! If you use the argument `questions`, then it will create a gradetable with the section names as titles instead of question numbers. For example, `\multicolumnpointtable{3}[questions]`.
 
-This has the obvious, and pretty annoying, drawback that you have to use `\part` when you want to add a new question, `\subpart` to add a new part, and so on. Additionally, the numbering for "questions" will reset after each station since they are secretly just parts of a fake titledquestion. I'm not sure that this second part is even a bad thing though, as somethimes you would want the questions to restart at each new section (for example, for a exam with multiple stations). However, I have a workaround for both of these with a single fix - simply define a new wrapper command for (sub)parts that adds to a new counter, and number parts based on this counter. For example, 
+This has the obvious, and pretty annoying, drawback that you have to use `\part` when you want to add a new question, `\subpart` to add a new part, and so on. Additionally, the numbering for "questions" will reset after each station since they are secretly just parts of a fake `titledquestion`. I'm not sure that this second part is even a bad thing though, as sometimes you would want the questions to restart at each new section (for example, for an exam with multiple stations). However, I have a workaround for both of these with a single fix - simply define a new wrapper command for (sub)parts that adds to a new counter, and number parts based on this counter. For example, 
 
 ```latex
 \newcounter{questionNumber}
@@ -166,7 +166,7 @@ This has the obvious, and pretty annoying, drawback that you have to use `\part`
 
 This is a very minimal example, but it gets the point across. We make a new counter which stores the current question number, and then set the part number to be the number of that counter. Under the hood, the exam class stores what it thinks the part number should be in a counter (which is what we used in the previous section), but we can just create our own counter and tell the exam class to use that instead. This way, the question number will not reset after each section. Then, we create a new command called `\q` (again, really bad name, but some other class has already taken `\question` from us, so options are limited). `\q` just increments the question counter and creates a part. 
 
-Note how we don't take a parameter for the point value of the question. My first attempt did, but I realized that if you write the brackets after `\q` as you would with a `\question` (e.g. `\q[1]`), it'll work anyways because all that it's doing behind the scenes is expanding the command, and after expansion, as long as `\part` is the last thing in the command, the bracketed points will end up right after `\part` anyways. 
+Note how we don't take a parameter for the point value of the question. My first attempt did, but I realized that if you write the brackets after `\q` as you would with a `\question` (e.g. `\q[1]`), it'll work regardless because all that it's doing behind the scenes is expanding the command, and after expansion, as long as `\part` is the last thing in the command, the bracketed points will end up right after `\part` anyway. 
 
 Alternatively, you could add an argument to `\q` and instead define it as `\newcommand{\q}[1][<default point value>]` and add a reference to `#1` by changing it to `\part[#1]`. Here's an implementation of how you might do that. 
 
@@ -182,7 +182,11 @@ Alternatively, you could add an argument to `\q` and instead define it as `\newc
 
 This allows you to set a default point value, but has the downside of forcing everything to have a point value, which may not be ideal for a question with parts where you want to give the parts point values. 
 
-Overall, this solution is much better than the other one, and works reasonably well. In fact, it would be difficult to tell that these were secretly parts if you were just looking at the final pdf, so I measure that as a success. The only real limitation with this method is the fact that you cannot use normal questions anywhere anymore. Additionally, if you want questions to be outside of a section, then they won't be titled and will instead appear with a number. But both of these seem useless to me - why would you need normal questions anymore when you have the `\q` command to do the same thing, and why would you want questions that aren't a part of a section? Regardless, these are real drawbacks to consider. I'm glad to say everything else that I've noticed like the question numbering and use of parts has a reasonably easy fix/workaround.
+Overall, this solution is much better than the other one, and works reasonably well. In fact, it would be difficult to tell that these were secretly parts if you were just looking at the final pdf, so I measure that as a success. The only real limitation with this method is the fact that you cannot use normal questions anywhere anymore. Additionally, if you want questions to be outside of a section, then they won't be titled and will instead appear with a number. But both of these seem useless to me - why would you need normal questions anymore when you have the `\q` command to do the same thing, and why would you want questions that aren't a part of a section? 
+
+Additionally, this also breaks the "Go to PDF location in code" feature of many <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> editors (double-clicking in Overleaf, CTRL/CMD + Click in LaTeX Workshop, etc.). I didn't think much of this at first, but as I wrote, it got more and more annoying, so I've written a follow-up on how to fix this and restore that functionality. Thankfully, it's very simple :).
+
+So overall, these are real drawbacks to consider. I'm glad to say everything else that I've noticed like the question numbering and use of parts has a reasonably easy fix/workaround.
 
 Now, we'll discuss how to use it, although it should already be apparent from the description of how it works.
 
@@ -314,5 +318,8 @@ Changelog:
 November 19: added the quick copy code.
 
 November 21: fixed a bug in the code due to uplevel and switched to using `\partshook` to change indentation. Uplevel is limited to only a single page and cannot have a page break inside of it.
+
+January 20: Added a mention to the fact that the better method also breaks the "go to pdf location in code" feature of many editors, as everything is now just an argument for a macro. 
+
 
 Special thanks to [this Stack Overflow post](https://stackoverflow.com/questions/8160514/is-there-css-for-typesetting-the-latex-logo-in-html) for the CSS for the <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> logo.
