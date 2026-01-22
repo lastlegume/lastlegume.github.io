@@ -99,7 +99,7 @@ Overall, this command takes in the name of the station and all of the questions 
 }
 ```
 
-Now, we define a new command that loops over the array to produce a table. This code is from an example in the documentation for arrayjobx with some variables changed and generates a table with all of the station names in one column and all of the station point values in the other. So this seems like exactly what we want, besides the fact that this only works with a single column and is vertical (both of which could probably be changed), right?
+Now, we define a new command that loops over the array to produce a table. This code is from an example in the documentation for arrayjobx with some variables changed and generates a table with all the station names in one column and all the station point values in the other. So this seems like exactly what we want, besides the fact that this only works with a single column and is vertical (both of which could probably be changed), right?
 
 This seems fine on first glance, but it has a huge flaw that makes it impossible to recommend which is that **`\stationgradetable` must go after all questions were written** (i.e. on the last page). This goes against a big part of the motivation for this section/station grade table and is thus a fatal flaw. I include this in the post, however, because I think it is the cleanest approach if one wanted to modify the .cls file for the exam class. The exam class already needs 2 runs to generate the gradetable, so if you could implement this in the class file to store the point values in the first run then draw the table on the second run, this would work well and most likely be ideal solution. I haven't checked the .cls file for the exam class too closely, but I would guess (and vaguely remember reading something about this) that the class itself does something similar with the normal gradetable, summing points in the first run and then drawing it on a subsequent run (which can take up to 4 runs for a gradetable based on pages).
 
@@ -192,30 +192,35 @@ Now, we'll discuss how to use it, although it should already be apparent from th
 
 <h2 id="better"> Using the better method in a test </h2>
 
-Here's [a link to an Overleaf project with the better method](https://www.overleaf.com/read/vhpbkbzbbdgt#be8181). It's built upon my [my template](https://www.overleaf.com/latex/templates/science-olympiad-test-template/bmwwkvsbhkhj) since I wanted a template for this example, but otherwise it's quite simple. Everything mentioned here is reproduced in code, and writing questions remains simple. Let's take the first section as an example.
+Here's [a link to an Overleaf project with the better method](https://www.overleaf.com/read/vhpbkbzbbdgt#be8181). It's built upon [my template](https://www.overleaf.com/latex/templates/science-olympiad-test-template/bmwwkvsbhkhj) since I wanted a template for this example, but otherwise it's quite simple. Everything mentioned here is reproduced in code, and writing questions remains simple. Let's take the first section as an example.
 
 ```latex
 \qsection{History}{
-    \q[2] What language is this?
+    \q[2] When was the structure of DNA determined?
     \begin{subparts}
-        \subpart[4] Who created this language??
+        \subpart[4] Who were the people involved?
         \begin{subsubparts}
-            \subsubpart[1] How do you know?
+            \subsubpart[1] What journal was their paper published in?
         \end{subsubparts}
+    \end{qparts}
+    \q[2] What is Mendel famous for?
+    \begin{subparts}
+        \subpart[2] What plant did he work with?
+        \subpart[2] What was the prevailing theory about the topic he worked on that he disproved?
     \end{subparts}
-    \q[2] Where was it made?
-    \q[2] Why?
+    \q[2] Describe the blender (Hershey-Chase) experiment.
 }
 ```
 
 There are only a few differences between this and a normal exam class file. First, sections are started with `\qsection{name}{` (note the open brace). Then, we place all of our questions, which use the custom command `\q`, inside of this open brace as the second argument for `\qsection` and close the brace after writing all of our questions. You could redefine the subparts environment name and subpart command pretty easily, and here's s how you could redefine the subparts/subsubparts to another more sensical name (you can't use `\part` because the exam class defines that). As before, all of this goes in the preamble. I apologize in advance for the terrible naming convention.
 
 ```latex
-\newcommand{\p}{
+%Change \qpart to whatever name you want
+\newcommand{\qpart}{
     \subpart
 }
-
-\newcommand{\subp}{
+%Change \qsubpart to whatever name you want
+\newcommand{\qsubpart}{
     \subsubpart
 }
 
@@ -226,21 +231,26 @@ There are only a few differences between this and a normal exam class file. Firs
 \newenvironment{qsubparts}
     {\begin{subsubparts}}
     {\end{subsubparts}}
+
 ```
 
 The example given above would thus be rewritten as
 
 ```latex
 \qsection{History}{
-    \q[2] What language is this?
+    \q[2] When was the structure of DNA determined?
     \begin{qparts}
-        \p[4] Who created this language??
+        \qpart[4] Who were the people involved?
         \begin{qsubparts}
-            \subp[1] How do you know?
+            \qsubpart[1] What journal was their paper published in?
         \end{qsubparts}
     \end{qparts}
-    \q[2] Where was it made?
-    \q[2] Why?
+    \q[2] What is Mendel famous for?
+    \begin{qparts}
+        \qpart[2] What plant did he work with?
+        \qpart[2] What was the prevailing theory about the topic he worked on that he disproved?
+    \end{qparts}
+    \q[2] Describe the blender (Hershey-Chase) experiment.
 }
 ```
 
@@ -294,12 +304,12 @@ Note: this reproduced code omits the `\newpage` in `\q` to make it more easily f
     \stepcounter{questionNumber}
     \part
 }
-%Change \p to whatever name you want
-\newcommand{\p}{
+%Change \qpart to whatever name you want
+\newcommand{\qpart}{
     \subpart
 }
-%Change \subp to whatever name you want
-\newcommand{\subp}{
+%Change \qsubpart to whatever name you want
+\newcommand{\qsubpart}{
     \subsubpart
 }
 
