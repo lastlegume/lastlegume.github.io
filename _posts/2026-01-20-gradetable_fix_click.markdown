@@ -63,7 +63,7 @@ In the preamble:
 }
 
 % Change \qsection to whatever name you want
-\newcommand{\qsection}[1]{
+\newcommand{\qsectiontitle}[1]{
     \newpage
     \stepcounter{sectionCounter} 
     \fullwidth{\section*{Section \arabic{sectionCounter}: #1}}
@@ -78,12 +78,12 @@ In the preamble:
     \stepcounter{questionNumber}
     \part
 }
-%Change \p to whatever name you want
-\newcommand{\p}{
+%Change \qpart to whatever name you want
+\newcommand{\qpart}{
     \subpart
 }
-%Change \subp to whatever name you want
-\newcommand{\subp}{
+%Change \qsubpart to whatever name you want
+\newcommand{\qsubpart}{
     \subsubpart
 }
 
@@ -95,19 +95,20 @@ In the preamble:
     {\begin{subsubparts}}
     {\end{subsubparts}}
 
-\newenvironment{questionsection}
+\newenvironment{qsection}
     {\begin{parts}}
     {\end{parts}}
+
 
 ```
 
 Sections (outside the preamble, inside the `questions` environment):
 
 ```latex
-\qsection{Title}
-\begin{questionsection}
+\qsectiontitle{Title}
+\begin{qsection}
     % Insert questions here...
-\end{questionsection}
+\end{qsection}
 ```
 
 Like last time, special thanks to [this Stack Overflow post](https://stackoverflow.com/questions/8160514/is-there-css-for-typesetting-the-latex-logo-in-html) for the CSS for the <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> logo.
