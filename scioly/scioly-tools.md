@@ -40,4 +40,4 @@ Chooses random images of the desired species/taxa and asks for the answer. The s
 
 ## [ExCiter](/extensions#exciter)
 
-An extension that removes citations from websites (specifically tested on wikipedia, USDA FEIS, and NCBI) for copy pasting or just cleaner reading. Also includes the option to choose sites to remove citations from, but since formats vary widely, there is no guarantee for success on untested sites.
+An extension that removes citations from websites (specifically tested on wikipedia, USDA FEIS, and NCBI) for copy-pasting or just cleaner reading. Also includes the option to choose sites to remove citations from, but since formats vary widely, there is no guarantee for success on untested sites.
