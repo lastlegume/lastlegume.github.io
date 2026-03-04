@@ -22,7 +22,7 @@ permalink: /past-exams
 
 <!-- to do: should this have a header? should the headers be reorganized? -->
 
-A collection of all the exams I've written, mostly with others. They are quite variable in quality, and they use [the tools I've developed](/scioly-tools). I would consider my tests before the 2023 significantly worse than later tests, so bear that in mind.
+A collection of all the exams I've written, mostly with others. They are quite variable in quality, and they use [the tools I've developed](/scioly-tools). 
 
 <!-- settings -->
 ### Settings
@@ -43,3 +43,8 @@ A collection of all the exams I've written, mostly with others. They are quite v
   
 </tbody>
 </table>
+
+### Some notes
+
+- I've contributed questions to various other tests from the Seven Lakes Invitational, so I included only the four tests where I was the writing lead for the event.
+- I would consider my tests before the 2023 significantly worse than later tests, so bear that in mind.
