@@ -27,6 +27,14 @@ A collection of all the exams I've written, mostly with others. They are quite v
 <!-- settings -->
 ### Settings
 
+<div class="center">
+<select id="event" multiple>
+</select>
+<select id="tournament" multiple>
+</select>
+<select id="season" multiple>
+</select>
+</div>
 
 ### Exams
 
