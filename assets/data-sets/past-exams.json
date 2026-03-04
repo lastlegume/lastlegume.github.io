@@ -1,10 +1,56 @@
 {
-    "GullSO": {
+    "tournaments":
+    [{
+        "tournament": "MIT",
+        "event": "Water Quality",
+        "season": "2025-2026",
+        "links": ["Exam", "Key", "Image Sheet", "Answer Sheet"],
+        "cowriters": "Katie Wilson",
+        "notes": "Probably the best exam I've been involved with"
+    },
+    {
+        "tournament": "CMU",
+        "event": "Water Quality",
+        "season": "2025-2026",
+        "links": ["Exam", "Key", "Image Sheet"],
+        "notes": ""
+    },
+    {
+        "tournament": "SOAPS",
+        "event": "Designer Genes",
+        "season": "2025-2026",
+        "links": ["Exam", "Key", "MCQ Key", "Answer Sheet"],
+        "notes": ""
+    },
+    {
         "tournament": "GullSO",
         "event": "Circuit Lab",
         "season": "2025-2026",
-        "links": [],
-        "link-names": [],
-        "notes": "Cowritten with Tomi Chen"
-    }
+        "links": ["Exam", "Key", "MCQ Key", "Answer Sheet", "Lab Handout"],
+        "cowriters": "Tomi Chen",
+        "notes": ""
+    },
+    {
+        "tournament": "CurdSO",
+        "event": "Entomology",
+        "season": "2024-2025",
+        "links": ["Exam", "Key"],
+        "cowriters": "Ren Chai, Eddie Tang",
+        "notes": "On Scilympiad. The test is an interesting gimmick but not particularly useful for practice."
+    },
+    {
+        "tournament": "Mason",
+        "event": "Ecology",
+        "season": "2024-2025",
+        "links": ["Exam", "Key"],
+        "cowriters": "Kyle Yan",
+        "notes": "On Scilympiad"
+    },
+    {
+        "tournament": "CWRU",
+        "event": "Forestry",
+        "season": "2023-2024",
+        "links": ["Stations", "Key", "Answer Sheet"]
+    }]
+    
 }
