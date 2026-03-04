@@ -23,17 +23,21 @@ header: true
 
 <!-- to do: should this have a header? should the headers be reorganized? -->
 
-A collection of all the exams I've written, mostly with others. They are quite variable in quality, and they use [the tools I've developed](/scioly-tools). 
+A collection of all the exams I've written, mostly with others. They are quite variable in quality, and they use [the tools I've developed](/scioly-tools). Use CTRL/CMD + click to select multiple options.
 
 <!-- settings -->
 ### Settings
 
 <div class="center">
+
 <select id="event" multiple>
+<option value="all" selected>All events</option>
 </select>
 <select id="tournament" multiple>
+<option value="all" selected>All seasons</option>
 </select>
 <select id="season" multiple>
+<option value="all" selected>All tournaments</option>
 </select>
 </div>
 
