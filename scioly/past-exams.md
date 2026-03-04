@@ -4,12 +4,25 @@ title: Past Exams
 permalink: /past-exams
 ---
 
+<style>
+    .notes {
+        font-size: smaller;
+    }
+    /* .tournament {
+        color: slategray;
+    } */
+    th{
+      color: #B5E853;
+    }
+</style>
+<script defer src="/assets/scripts/pages/pastExams.js"></script>
+
 
 # Past Exams
 
 <!-- to do: should this have a header? should the headers be reorganized? -->
 
-A collection of all the exams I've written, mostly with others. They are quite variable in quality, and they use [the tools I've developed](/scioly-tools). Currently unfinished
+A collection of all the exams I've written, mostly with others. They are quite variable in quality, and they use [the tools I've developed](/scioly-tools). I would consider my tests before the 2023 significantly worse than later tests, so bear that in mind.
 
 <!-- settings -->
 ### Settings
