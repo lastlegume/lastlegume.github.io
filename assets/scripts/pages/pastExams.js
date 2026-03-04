@@ -36,14 +36,14 @@ function compareRows(a,b){
 function addCellToTable(name, entry, row) {
     let cell = document.createElement("td");
     if(name==="links"){
-        let folder = entry["tournament"].toLowerCase()+"/"
+        let folder = toPathName(entry["tournament"])+(entry["season"].substring(entry["season"].length-2))+"_"+toFirstLetters(entry["event"])+"/"
         let links = entry["links"];
         let len = links.length
         for(let i = 0;i<len;i++){
             if(i>0)
                 cell.appendChild(document.createTextNode(" | "));
             let link = document.createElement('a');
-            link.href = path+folder+toPathName(links[i]);
+            link.href = path+folder+toPathName(links[i])+".pdf";
             link.innerText = links[i];
             cell.appendChild(link);
         }
@@ -76,5 +76,9 @@ function addCellToTable(name, entry, row) {
 }
 
 function toPathName(name){
-    return (name.toLowerCase().replaceAll(" ", "_"))+".pdf";
+    return (name.toLowerCase().replaceAll(" ", "_"));
+}
+
+function toFirstLetters(name){
+    return name.toLowerCase().split(" ").map((s)=>s.substring(0,1)).join("");
 }
