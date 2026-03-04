@@ -69,22 +69,6 @@
         "notes": "On Scilympiad"
     },
     {
-        "tournament": "SEC",
-        "event": "Forestry",
-        "season": "2023-2024",
-        "links": ["Exam", "Key"],
-        "cowriters": "Shrey Chaudhary",
-        "notes": "On Scilympiad"
-    },
-    {
-        "tournament": "SEC",
-        "event": "Microbe Mission",
-        "season": "2023-2024",
-        "links": ["Exam", "Key"],
-        "cowriters": "Nidhi Krishna",
-        "notes": "On Scilympiad"
-    },
-    {
         "tournament": "SLHS",
         "event": "Ecology",
         "season": "2024-2025",
@@ -123,6 +107,22 @@
         "links": ["Exam", "Key"],
         "cowriters": "",
         "notes": "My very first exam, and definitely one of my worst."
+    },
+    {
+        "tournament": "SEC",
+        "event": "Forestry",
+        "season": "2023-2024",
+        "links": ["Exam", "Key"],
+        "cowriters": "Shrey Chaudhary",
+        "notes": "On Scilympiad"
+    },
+    {
+        "tournament": "SEC",
+        "event": "Microbe Mission",
+        "season": "2023-2024",
+        "links": ["Exam", "Key"],
+        "cowriters": "Nidhi Krishna",
+        "notes": "On Scilympiad"
     }]
     
 }
