@@ -51,6 +51,78 @@
         "event": "Forestry",
         "season": "2023-2024",
         "links": ["Stations", "Key", "Answer Sheet"]
+    },
+    {
+        "tournament": "Davidson Academy",
+        "event": "Bio-Process Lab",
+        "season": "2022-2023",
+        "links": ["Exam", "Key"],
+        "cowriters": "Vishal Surya, Carolina Kusumanegara",
+        "notes": "On Scilympiad"
+    },
+    {
+        "tournament": "Lexington",
+        "event": "Bio-Process Lab",
+        "season": "2021-2022",
+        "links": ["Exam", "Key"],
+        "cowriters": "Vishal Surya",
+        "notes": "On Scilympiad"
+    },
+    {
+        "tournament": "SEC",
+        "event": "Forestry",
+        "season": "2023-2024",
+        "links": ["Exam", "Key"],
+        "cowriters": "Shrey Chaudhary",
+        "notes": "On Scilympiad"
+    },
+    {
+        "tournament": "SEC",
+        "event": "Microbe Mission",
+        "season": "2023-2024",
+        "links": ["Exam", "Key"],
+        "cowriters": "Nidhi Krishna",
+        "notes": "On Scilympiad"
+    },
+    {
+        "tournament": "SLHS",
+        "event": "Ecology",
+        "season": "2024-2025",
+        "links": ["Exam", "Key", "FRQ Key", "Answer Sheet"],
+        "cowriters": "Various team members from SLHS Scioly",
+        "notes": ""
+    },
+    {
+        "tournament": "SLHS",
+        "event": "Ecology",
+        "season": "2023-2024",
+        "links": ["MCQ Packet", "FRQ Packet", "MCQ Key", "FRQ Key"],
+        "cowriters": "Various team members from SLHS Scioly",
+        "notes": ""
+    },
+    {
+        "tournament": "SLHS",
+        "event": "Forestry",
+        "season": "2022-2023",
+        "links": ["Stations", "Key", "Answer Sheet"],
+        "cowriters": "Various team members from SLHS Scioly",
+        "notes": ""
+    },
+    {
+        "tournament": "SLHS",
+        "event": "Green Generation",
+        "season": "2021-2022",
+        "links": ["Exam", "Key"],
+        "cowriters": "Various team members from SLHS Scioly",
+        "notes": ""
+    },
+    {
+        "tournament": "SV Scrimmage",
+        "event": "Green Generation",
+        "season": "2021-2022",
+        "links": ["Exam", "Key"],
+        "cowriters": "",
+        "notes": "My very first exam, and definitely one of my worst."
     }]
     
 }
