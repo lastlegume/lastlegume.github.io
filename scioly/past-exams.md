@@ -2,6 +2,7 @@
 layout: default
 title: Past Exams
 permalink: /past-exams
+header: true
 ---
 
 <style>
