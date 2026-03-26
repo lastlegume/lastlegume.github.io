@@ -201,6 +201,8 @@ function convertText() {
                     output += input[i] + "\n";
                 else
                     output += input[i].toLowerCase().trim().match(/^\\(sub)*?(part|question)/g) + "\n";
+            } else if ((/\\(if|else|fi)/g.test(input[i].toLowerCase()))) {
+                output += input[i] + "\n";
             }
 
         }
