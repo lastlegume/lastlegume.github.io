@@ -72,6 +72,10 @@ In the preamble:
     \vspace{-2em}
 }
 
+% Changes the word question to section in the grade/pointtable
+\vqword{Section}
+\hqword{Section}
+
 \qformat{}
 %Change \q to whatever name you want
 \newcommand{\q}{
@@ -112,3 +116,11 @@ Sections (outside the preamble, inside the `questions` environment):
 ```
 
 Like last time, special thanks to [this Stack Overflow post](https://stackoverflow.com/questions/8160514/is-there-css-for-typesetting-the-latex-logo-in-html) for the CSS for the <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> logo.
+
+Edit 03/26/2026: Added the following to the code to change the word question to section in the gradetables. This doesn't work if you are using the table has bonus points or is combined because those are separate macros found on page 100 of the exam class documentation.
+
+```latex
+% Changes the word question to section in the grade/pointtable
+\vqword{Section}
+\hqword{Section}
+```
