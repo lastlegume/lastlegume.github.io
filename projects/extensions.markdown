@@ -56,9 +56,11 @@ This extension isn't perfect and will need modifications such as pagebreaks to b
 
 ---
 
-### Timer Pie Chart
+### Timer Pie Chart (depreciated)
 
-Creates a pie chart underneath the default timer in google that updates once per second. Interpolates in color from green (100%) to yellow (50%) to red (0%). 
+Note: this extension is now depreciated, as Google has since implemented a new timer widget with a circular interface similar to a pie chart, so the primary use of this extension no longer applies.
+
+Creates a pie chart underneath the default timer in Google that updates once per second. Interpolates in color from green (100%) to yellow (50%) to red (0%). 
 
 <a href="https://github.com/lastlegume/TimerPieChart" class="btn btn-github" style = "float:left;"><span class="icon"></span>View on GitHub</a>
 
@@ -66,7 +68,9 @@ Creates a pie chart underneath the default timer in google that updates once per
 
 ---
 
-### Ecosia Search Icons
+### Ecosia Search Icons (depreciated)
+
+Note: this extension is depreciated because Ecosia implemented the feature themselves shortly after the release of this extension.
 
 Displays the icon for search results on the Ecosia search results page using DuckDuckGo's favicon API. 
 
