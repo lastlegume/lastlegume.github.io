@@ -1,5 +1,5 @@
 function fuzzy(guess, answer) {
-    return levenshteinDistance(guess, answer)<4;
+    return levenshteinDistance(guess, answer)<answer.length**0.5+1;
 }
 
 //uses the full matrix approach instead of just using two rows
