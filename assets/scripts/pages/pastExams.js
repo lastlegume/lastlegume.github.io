@@ -113,7 +113,6 @@ function createOption(text) {
     let option = document.createElement("option");
     option.value = text;
     option.innerText = text;
-    // option.selected = true;
     return option;
 }
 
@@ -122,7 +121,6 @@ function filter() {
     let tournaments = Array.from(tournamentSelect.selectedOptions).map((e) => e.value);
     let seasons = Array.from(seasonSelect.selectedOptions).map((e) => e.value);
     for (r of rows) {
-        console.log(r.children[0].innerText);
         if ((tournaments.includes(r.children[0].innerText) || tournaments.includes("all")) && (seasons.includes(r.children[1].innerText) || seasons.includes("all")) && (events.includes(r.children[2].innerText) || events.includes("all")))
             r.style.display = "";
         else
