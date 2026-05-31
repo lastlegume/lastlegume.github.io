@@ -48,6 +48,12 @@ Accepts the PTCGL and Limitless export format. Once you have inputted the deck, 
 <div id="decks">
 
 </div>
+<h4>Probabilities for the whole deck</h4>
+<div id="generalStats">
+
+</div>
+
+<h4>Probabilities for this card</h4>
 <div id="exactOutput">
 
 </div>

@@ -10,6 +10,7 @@ const input = document.getElementById("input");
 const deckName = document.getElementById('name');
 const deckLists = document.getElementById('deckList');
 const exactOutput = document.getElementById("exactOutput");
+const generalStats = document.getElementById("generalStats");
 const toggleBasicsButton = document.getElementById("toggleBasic");
 toggleBasicsButton.addEventListener('click', toggleBasic);
 
@@ -117,6 +118,12 @@ async function populate(str) {
         }
     }
     if (totalSize == 60 && basics > 0) {
+        let mulligans = document.createElement('div');
+        let basicsData = mulliganRes.split("\n")[basics].split(",");
+        mulligans.innerHTML = `Expected number of mulligans: ${(basicsData[9]*1).toFixed(6)}<br>
+        Expected number of basics in starting hand after mulligans: ${(basicsData.slice(1, -2).reduce((p,c,i)=>1*p+1*c*i)*1).toFixed(6)}`;
+        generalStats.appendChild(mulligans);
+        
         decks.appendChild(deck);
         return true;
     }
@@ -153,6 +160,7 @@ async function getExactProbabilities(c, b, isBasic) {
     exactOutput.innerHTML = "";
     let idx = (isBasic) ? ((c) + (b * 4) + 3536) : (c) + ((b - 1) * 60);
 
+
     handText = "<h3>Exact Hand Probabilities:</h3>\n" + handRes.split("\n")[idx].split(",").slice(1).filter((v) => v > 0).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(6)}`).join("<br>");
     prizeText = "<h3>Exact Prize Probabilities:</h3>\n" + prizeRes.split("\n")[idx].split(",").slice(1).filter((v) => v > 0).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(6)}`).join("<br>");
 
@@ -164,9 +172,6 @@ async function getExactProbabilities(c, b, isBasic) {
     prize.innerHTML = prizeText;
     exactOutput.appendChild(prize);
 
-    let mulligans = document.createElement('div');
-    mulligans.innerHTML = `Expected number of mulligans + ${mulliganRes.split("\n")[b].split(",")[9]}`;
-    exactOutput.appendChild(mulligans);
 }
 
 async function loadData() {
