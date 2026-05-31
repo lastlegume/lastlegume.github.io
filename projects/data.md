@@ -32,12 +32,18 @@ Columns:
 
 A table of the probabilities of prizing some number of a specific card given that you have b basics in deck and n copies of that card. Hand probabilities refers to the probability of having some number of copies of a specific card in your starting hand.  
 To find the probability:
- - If the card is not a basic, then row (b-1)*60+n contains the probabilities.    
- - If the card is a basic, then row 3536+4*b+n contains the probabilities.    
+ - If the card is not a basic, then row `(b-1)*60+n` contains the probabilities.    
+ - If the card is a basic, then row `3536+4*b+n` contains the probabilities.    
 
-Row 0 is the headers, so these numbers will work for any programming language that starts at index 0, but will need to be 1 higher for any languages that start at 1.   
+Row `0` is the headers, so these numbers will work for any programming language that starts at index 0, but will need to be 1 higher for any languages that start at 1.
 
 Columns are labelled with the leftmost column being 0 in prizes/hand and rightmost being 6 in prizes or 7 in hand.  
 
 [Prize Probabilities](https://github.com/lastlegume/lastlegume.github.io/blob/main/assets/blog/prizeprobs/combinedPrizeProbabilities.csv)  
 [Hand Probabilities](https://github.com/lastlegume/lastlegume.github.io/blob/main/assets/blog/prizeprobs/combinedHandProbabilities.csv)  
+
+Also included is a table of the probabilities of having a certain number of basics in hand and the expected number of basics.
+
+Row `i` contains the probabilities for a deck with i basics in deck (assuming indices start at 0).
+
+[Basics in Hand](https://github.com/lastlegume/lastlegume.github.io/blob/main/assets/blog/prizeprobs/basicsInHand.csv)  
