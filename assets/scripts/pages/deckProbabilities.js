@@ -4,6 +4,7 @@ let mulliganRes = localStorage.getItem('dp++mulligan');
 
 document.getElementById("add").addEventListener('click', addDeck);
 document.getElementById("clearStorage").addEventListener('click', clearStorage);
+document.getElementById("stats").classList.add("hide");
 
 const decks = document.getElementById("decks");
 const input = document.getElementById("input");
@@ -63,6 +64,7 @@ function view(e) {
     getExactProbabilities((card.children[2].innerText) * 1, (basics - ((card.children[3].innerText === "Basic") ? ((card.children[2].innerText) * 1) : 0)), (card.children[3].innerText === "Basic"))
 }
 async function populate(str) {
+    document.getElementById("stats").classList.remove("hide");
     basics = 0;
     copies = 0;
     decks.innerHTML = "";
@@ -161,8 +163,13 @@ async function getExactProbabilities(c, b, isBasic) {
     let idx = (isBasic) ? ((c) + (b * 4) + 3536) : (c) + ((b - 1) * 60);
 
 
-    handText = "<h3>Exact Hand Probabilities:</h3>\n" + handRes.split("\n")[idx].split(",").slice(1).filter((v) => v > 0).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(6)}`).join("<br>");
-    prizeText = "<h3>Exact Prize Probabilities:</h3>\n" + prizeRes.split("\n")[idx].split(",").slice(1).filter((v) => v > 0).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(6)}`).join("<br>");
+    handText = "<h4>Exact Hand Probabilities:</h4>\n" + handRes.split("\n")[idx].split(",").slice(1).filter((v) => v > 0).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(6)}`).join("<br>");
+    prizeText = "<h4>Exact Prize Probabilities:</h4>\n" + prizeRes.split("\n")[idx].split(",").slice(1).filter((v) => v > 0).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(6)}`).join("<br>");
+
+    
+    let header = document.createElement('h3');
+    header.innerHTML = "Probabilities for this card";
+    exactOutput.appendChild(header);
 
     let hand = document.createElement('div');
     hand.innerHTML = handText;

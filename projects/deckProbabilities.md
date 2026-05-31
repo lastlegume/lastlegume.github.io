@@ -48,14 +48,15 @@ Accepts the PTCGL and Limitless export format. Once you have inputted the deck, 
 <div id="decks">
 
 </div>
-<h4>Probabilities for the whole deck</h4>
+<div id="stats">
+<h3>Probabilities for the whole deck</h3>
 <div id="generalStats">
 
 </div>
 
-<h4>Probabilities for this card</h4>
 <div id="exactOutput">
 
 </div>
+</div>
 <button class = "btn btn-submit hide" id="toggleBasic">This should be a basic</button><br>
-<button style="margin-top: 60px;" class="btn small" id="clearStorage">Clear local decks</button><br>
+<button style="margin-top: 60px;" class="btn small" id="clearStorage">Clear local decks</button>
