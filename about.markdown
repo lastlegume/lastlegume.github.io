@@ -5,9 +5,9 @@ permalink: /about/
 header: true
 ---
 
-I am just some person who likes [Scratch](https://scratch.mit.edu/) and [LaTeX](https://www.latex-project.org/). I write extensions for both [Firefox](https://addons.mozilla.org/en-US/firefox/user/17603989/) and [Chrome](https://chrome.google.com/webstore/search/lastlegume), [tools](/scioly-tools) for [Science Olympiad (Scioly)](https://www.soinc.org/) Tournaments, and am an infrequent game jam participant on [itch.io](https://itch.io/).  
+Hi! I'm Krish, an undergraduate student studying [computational biology](https://www.cbd.cmu.edu) at [Carnegie Mellon University](https://www.cmu.edu). I love [Scratch](https://scratch.mit.edu/) and [LaTeX](https://www.latex-project.org/), as well as any other tool that makes things take longer than they should. I also write extensions for both [Firefox](https://addons.mozilla.org/en-US/firefox/user/17603989/) and [Chrome](https://chrome.google.com/webstore/search/lastlegume), [tools](/scioly-tools) for [Science Olympiad (Scioly)](https://www.soinc.org/) Tournaments, and infrequently participate in games jam on [itch.io](https://itch.io/).  
 
-If you have any feedback for me, please <a href="mailto:lastlegume@gmail.com">email me</a> or leave a review on the relevant extension. I read everything that I receive and welcome any advice.
+If you have any feedback for me, please <a href="mailto:lastlegume@gmail.com">email me</a> or leave a review on the relevant extension. I read everything that I receive and welcome any feedback.
 
 <style type="text/css" media="screen">
 .inat-widget { font-family: Georgia, serif; padding: 10px; line-height: 1;}
