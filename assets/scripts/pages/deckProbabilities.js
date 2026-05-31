@@ -151,8 +151,8 @@ async function getExactProbabilities(c, b, isBasic) {
     exactOutput.innerHTML = "";
     let idx = (isBasic) ? ((c) + (b * 4) + 3536) : (c) + ((b - 1) * 60);
 
-    handText = "<h3>Exact Hand Probabilities:</h3>\n" + handRes.split("\n")[idx].split(",").slice(1).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(10)}`).join("<br>");
-    prizeText = "<h3>Exact Prize Probabilities:</h3>\n" + prizeRes.split("\n")[idx].split(",").slice(1).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(10)}`).join("<br>");
+    handText = "<h3>Exact Hand Probabilities:</h3>\n" + handRes.split("\n")[idx].split(",").slice(1).filter((v)=>v>0).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(10)}`).join("<br>");
+    prizeText = "<h3>Exact Prize Probabilities:</h3>\n" + prizeRes.split("\n")[idx].split(",").slice(1).filter((v)=>v>0).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(10)}`).join("<br>");
 
     let hand = document.createElement('div');
     hand.innerHTML = handText;
