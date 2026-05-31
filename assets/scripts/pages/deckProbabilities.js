@@ -1,5 +1,6 @@
-let handRes = localStorage.getItem('hand');
-let prizeRes = localStorage.getItem('prize');
+let handRes = localStorage.getItem('dp++hand');
+let prizeRes = localStorage.getItem('dp++prize');
+let mulliganRes = localStorage.getItem('dp++mulligan');
 
 document.getElementById("add").addEventListener('click', addDeck);
 document.getElementById("clearStorage").addEventListener('click', clearStorage);
@@ -14,7 +15,7 @@ toggleBasicsButton.addEventListener('click', toggleBasic);
 
 loadData();
 
-deckLists.addEventListener('change', function () { populate(localStorage.getItem(deckLists.value)); })
+deckLists.addEventListener('change', function () { populate(localStorage.getItem("dp++" + deckLists.value)); })
 let nameCounter = 1;
 
 let basics = 0;
@@ -24,17 +25,18 @@ async function addDeck() {
     if (populate(input.value)) {
         let opt = document.createElement('option');
         let name = deckName.value;
-        let used = localStorage.getItem(name);
+        let used = localStorage.getItem("dp++" + name);
 
         while (used || name.length == 0) {
             name = "Deck" + nameCounter;
             nameCounter++;
-            used = localStorage.getItem(name);
+            used = localStorage.getItem("dp++" + name);
         }
         opt.value = name;
         opt.innerText = name;
-        localStorage.setItem(name, input.value);
+        localStorage.setItem("dp++" + name, input.value);
         deckLists.appendChild(opt);
+        opt.selected = true;
     }
 
 
@@ -49,14 +51,14 @@ function view(e) {
         card = card.parentNode;
     }
     card.classList.add("highlight")
-    if(card.children[3].innerText === "Basic"){
+    if (card.children[3].innerText === "Basic") {
         toggleBasicsButton.innerText = "This card should not be a basic";
         toggleBasicsButton.classList.remove("hide");
-    }else if(card.children[3].innerText !== "Energy"&&card.children[3].innerText !== "Trainer"){
+    } else if (card.children[3].innerText !== "Energy" && card.children[3].innerText !== "Trainer") {
         toggleBasicsButton.innerText = "This card should be a basic";
         toggleBasicsButton.classList.remove("hide");
-    }else
-    toggleBasicsButton.classList.add("hide");
+    } else
+        toggleBasicsButton.classList.add("hide");
     getExactProbabilities((card.children[2].innerText) * 1, (basics - ((card.children[3].innerText === "Basic") ? ((card.children[2].innerText) * 1) : 0)), (card.children[3].innerText === "Basic"))
 }
 async function populate(str) {
@@ -85,7 +87,7 @@ async function populate(str) {
             let cardSet = document.createElement('div');
             cardSet.className = "set";
 
-            if (set) 
+            if (set)
                 cardSet.innerText = set[1];
             else
                 cardSet.classList.add("hide")
@@ -114,7 +116,7 @@ async function populate(str) {
 
         }
     }
-    if (totalSize == 60&&basics>0) {
+    if (totalSize == 60 && basics > 0) {
         decks.appendChild(deck);
         return true;
     }
@@ -130,11 +132,11 @@ async function getStage(name) {
     if (name.trim().includes(" V") || name.includes(" EX") || name.includes("Radiant"))
         return "Basic";
 
-    let response = localStorage.getItem('basic');
+    let response = localStorage.getItem('dp+++basic');
     if (!response) {
         response = await fetch("/assets/blog/prizeprobs/evolutionStages.csv");
         response = await response.text();
-        localStorage.setItem("basic", response);
+        localStorage.setItem("dp++basic", response);
     }
     let list = response.split("\n");
     for (let i = 0; i < list.length; i++) {
@@ -151,8 +153,8 @@ async function getExactProbabilities(c, b, isBasic) {
     exactOutput.innerHTML = "";
     let idx = (isBasic) ? ((c) + (b * 4) + 3536) : (c) + ((b - 1) * 60);
 
-    handText = "<h3>Exact Hand Probabilities:</h3>\n" + handRes.split("\n")[idx].split(",").slice(1).filter((v)=>v>0).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(10)}`).join("<br>");
-    prizeText = "<h3>Exact Prize Probabilities:</h3>\n" + prizeRes.split("\n")[idx].split(",").slice(1).filter((v)=>v>0).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(10)}`).join("<br>");
+    handText = "<h3>Exact Hand Probabilities:</h3>\n" + handRes.split("\n")[idx].split(",").slice(1).filter((v) => v > 0).map((v, i) => `${i} copies in hand: ${(v * 1).toFixed(6)}`).join("<br>");
+    prizeText = "<h3>Exact Prize Probabilities:</h3>\n" + prizeRes.split("\n")[idx].split(",").slice(1).filter((v) => v > 0).map((v, i) => `${i} copies in prizes: ${(v * 1).toFixed(6)}`).join("<br>");
 
     let hand = document.createElement('div');
     hand.innerHTML = handText;
@@ -161,23 +163,33 @@ async function getExactProbabilities(c, b, isBasic) {
     let prize = document.createElement('div');
     prize.innerHTML = prizeText;
     exactOutput.appendChild(prize);
+
+    let mulligans = document.createElement('div');
+    mulligans.innerHTML = `Expected number of mulligans + ${mulliganRes.split("\n")[b].split(",")[9]}`;
+    exactOutput.appendChild(mulligans);
 }
 
 async function loadData() {
     if (!handRes) {
         handRes = await fetch("/assets/blog/prizeprobs/combinedHandProbabilities.csv");
         handRes = await handRes.text();
-        localStorage.setItem("hand", handRes);
+        localStorage.setItem("dp++hand", handRes);
     }
     if (!prizeRes) {
         prizeRes = await fetch("/assets/blog/prizeprobs/combinedPrizeProbabilities.csv");
         prizeRes = await prizeRes.text();
-        localStorage.setItem("prize", prizeRes);
+        localStorage.setItem("dp++prize", prizeRes);
+    }
+    if (!mulliganRes) {
+        mulliganRes = await fetch("/assets/blog/prizeprobs/basicsInHand.csv");
+        mulliganRes = await mulliganRes.text();
+        localStorage.setItem("dp++mulligan", mulliganRes);
     }
     for (let i = 0; i < localStorage.length; i++) {
         let name = localStorage.key(i);
-        if (name != "basic" && name != "hand" && name != "prize") {
+        if (name.length > 4 && name.substring(0, 4) == "dp++" && name != "dp++mulligan" && name != "dp++hand" && name != "dp++prize" && name != "dp++basic") {
             let opt = document.createElement('option');
+            name = name.substring(4);
             opt.value = name;
             opt.innerText = name;
             deckLists.appendChild(opt);
@@ -190,25 +202,25 @@ function clearStorage() {
     localStorage.clear();
     deckLists.innerHTML = '<option selected ="true" disabled="true" hidden>Choose A Deck</option>';
 }
-function toggleBasic(){
+function toggleBasic() {
     let cards = document.getElementsByClassName("card");
     for (let i = 0; i < cards.length; i++) {
-        if(cards[i].classList.contains("highlight")){
-            if(cards[i].children[3].innerText === "Basic"){
-                if(basics-cards[i].children[2].innerText*1>0){
+        if (cards[i].classList.contains("highlight")) {
+            if (cards[i].children[3].innerText === "Basic") {
+                if (basics - cards[i].children[2].innerText * 1 > 0) {
                     cards[i].children[3].innerText = "Not a basic";
                     toggleBasicsButton.innerText = "This card should be a basic";
-                    basics-=cards[i].children[2].innerText*1;
+                    basics -= cards[i].children[2].innerText * 1;
                     getExactProbabilities((cards[i].children[2].innerText) * 1, (basics - ((cards[i].children[3].innerText === "Basic") ? ((cards[i].children[2].innerText) * 1) : 0)), (cards[i].children[3].innerText === "Basic"))
-                }else{
+                } else {
                     exactOutput.innerText = "You cannot remove the last basic from the deck";
                 }
 
                 return;
-            }else if(cards[i].children[3].innerText.includes("Stage ")||cards[i].children[3].innerText === "Not a basic"){
+            } else if (cards[i].children[3].innerText.includes("Stage ") || cards[i].children[3].innerText === "Not a basic") {
                 cards[i].children[3].innerText = "Basic";
                 toggleBasicsButton.innerText = "This card should not be a basic";
-                basics+=cards[i].children[2].innerText*1;
+                basics += cards[i].children[2].innerText * 1;
                 getExactProbabilities((cards[i].children[2].innerText) * 1, (basics - ((cards[i].children[3].innerText === "Basic") ? ((cards[i].children[2].innerText) * 1) : 0)), (cards[i].children[3].innerText === "Basic"))
                 return;
 
@@ -216,6 +228,6 @@ function toggleBasic(){
         }
     }
 }
-function isHeader(str){
-    return /Pok[ée]mon:\s\d+/.test(str)||/Trainer:\s\d+/.test(str)||/Energy:\s\d+/.test(str)||str.toLowerCase().includes("total cards:");
+function isHeader(str) {
+    return /Pok[ée]mon:\s\d+/.test(str) || /Trainer:\s\d+/.test(str) || /Energy:\s\d+/.test(str) || str.toLowerCase().includes("total cards:");
 }
